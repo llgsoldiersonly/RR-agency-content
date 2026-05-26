@@ -55,39 +55,43 @@
   .slide.dark { background-image: radial-gradient(140% 100% at 50% 0%, rgba(255,255,255,.05), transparent 55%); }
   .frame {
     position: absolute; inset: 0;
-    padding: 5.5cqw;
+    /* IG safe zones: top ~150px (username overlay), bottom ~165px (action
+       bar + page dots). Pad to keep all important content inside. */
+    padding: 8.5cqw 7cqw 12cqw 7cqw;
     display: flex; flex-direction: column;
   }
-  /* slide number badge */
+  /* slide number badge — sits in the IG username overlay area (acceptable
+     for a small badge, references all do this) */
   .num {
-    position: absolute; top: 4cqw; left: 4cqw;
-    width: 4.4cqw; height: 4.4cqw;
+    position: absolute; top: 3.5cqw; left: 3.5cqw;
+    width: 4cqw; height: 4cqw;
     background: var(--brass);
     color: var(--navy);
     font-family: "Inter", sans-serif; font-weight: 900;
-    font-size: 2.2cqw; line-height: 4.4cqw;
+    font-size: 2cqw; line-height: 4cqw;
     text-align: center;
     border-radius: 0.5cqw;
   }
-  /* shared logo block */
+  /* shared logo block — note bottom padding on .frame keeps this clear
+     of IG's action bar */
   .brand {
     margin-top: auto;
-    display: flex; flex-direction: column; align-items: center; gap: 0.6cqw;
+    display: flex; flex-direction: column; align-items: center; gap: 0.8cqw;
     padding-top: 2cqw;
   }
   .brand .mark {
     font-family: "Fraunces", serif; font-weight: 900;
-    font-size: 3.4cqw; letter-spacing: -0.015em;
+    font-size: 3.8cqw; letter-spacing: -0.015em;
     color: var(--brass);
   }
   .slide.light .brand .mark { color: var(--navy); }
   .brand .mark em { font-style: normal; font-weight: 500; }
   .brand .subline {
     font-family: "Inter", sans-serif; font-weight: 700;
-    font-size: 1.1cqw; letter-spacing: 0.3em; text-transform: uppercase;
+    font-size: 1.3cqw; letter-spacing: 0.3em; text-transform: uppercase;
     color: var(--brass-deep);
     border-top: 0.1cqw solid var(--brass);
-    padding-top: 0.5cqw;
+    padding-top: 0.6cqw;
   }
   .slide.dark .brand .subline { color: var(--brass-bright); border-color: var(--brass); }
   .slide.light .brand .subline { color: var(--brass-deep); border-color: var(--brass-deep); }
@@ -134,8 +138,8 @@
   }
   .s1 .h1 {
     font-family: "Fraunces", serif; font-weight: 900;
-    font-size: 11cqw; line-height: 0.92;
-    letter-spacing: -0.035em; color: #fff;
+    font-size: 8.6cqw; line-height: 0.94;
+    letter-spacing: -0.032em; color: #fff;
   }
   .s1 .h1 em { font-style: normal; color: var(--brass); }
   .s1 .sub {
@@ -149,16 +153,16 @@
 
   /* ── SLIDE 2: BRUTAL TRUTH ─────────────────────────────────────────── */
   .s2 .h1 {
-    margin-top: 6cqw;
+    margin-top: 1cqw;
     font-family: "Fraunces", serif; font-weight: 900;
-    font-size: 5.4cqw; line-height: 1; letter-spacing: -0.025em;
+    font-size: 5.6cqw; line-height: 1; letter-spacing: -0.025em;
     color: var(--navy);
   }
   .s2 .h1 em { font-style: normal; color: var(--brass-deep); }
   .s2 .sub {
-    margin-top: 1.6cqw;
+    margin-top: 1.8cqw;
     font-family: "Inter", sans-serif; font-weight: 500;
-    font-size: 2.1cqw; line-height: 1.35; color: var(--ink-mid);
+    font-size: 2.3cqw; line-height: 1.35; color: var(--ink-mid);
     max-width: 86%;
   }
   .s2 .sub strong { color: var(--navy); font-weight: 800; }
@@ -298,9 +302,9 @@
 
   /* ── SLIDE 5: COMMON MISTAKES ──────────────────────────────────────── */
   .s5 .h1 {
-    margin-top: 5cqw;
+    margin-top: 1cqw;
     font-family: "Fraunces", serif; font-weight: 900;
-    font-size: 4.6cqw; line-height: 1.05; letter-spacing: -0.022em;
+    font-size: 5cqw; line-height: 1.05; letter-spacing: -0.022em;
     color: #fff;
   }
   .s5 .h1 em { font-style: normal; color: var(--brass); }
@@ -317,43 +321,45 @@
 
   /* ── SLIDE 6: 3 SIMPLE STEPS ───────────────────────────────────────── */
   .s6 .h1 {
-    margin-top: 5cqw;
+    margin-top: 1cqw;
     font-family: "Fraunces", serif; font-weight: 900;
-    font-size: 4.8cqw; line-height: 1; letter-spacing: -0.022em;
+    font-size: 5cqw; line-height: 1; letter-spacing: -0.022em;
     color: var(--navy);
   }
   .s6 .h1 em { font-style: normal; color: var(--brass-deep); }
-  .s6 ol.steps { margin-top: 3.4cqw; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 2.2cqw; }
+  .s6 ol.steps { margin-top: 3.4cqw; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 2.4cqw; }
   .s6 ol.steps li {
-    display: grid; grid-template-columns: 5.4cqw 1fr; gap: 2cqw; align-items: center;
+    display: grid;
+    grid-template-columns: 5cqw 6cqw 1fr;
+    gap: 1.6cqw;
+    align-items: center;
+  }
+  .step-num-square {
+    width: 5cqw; height: 5cqw;
+    background: var(--brass); color: var(--navy);
+    border-radius: 0.8cqw;
+    display: flex; align-items: center; justify-content: center;
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 2.6cqw; line-height: 1;
   }
   .step-circle {
-    width: 5.4cqw; height: 5.4cqw; border-radius: 50%;
+    width: 6cqw; height: 6cqw; border-radius: 50%;
     background: var(--navy);
     display: flex; align-items: center; justify-content: center;
     color: var(--brass);
   }
-  .step-circle svg { width: 2.6cqw; height: 2.6cqw; }
-  .step-circle .stepn {
-    position: absolute;
-    background: var(--brass); color: var(--navy);
-    width: 2.4cqw; height: 2.4cqw; border-radius: 50%;
-    font-family: "Inter", sans-serif; font-weight: 900;
-    font-size: 1.3cqw; line-height: 2.4cqw;
-    text-align: center;
-    margin-top: -4cqw; margin-left: -4cqw;
-  }
+  .step-circle svg { width: 2.8cqw; height: 2.8cqw; }
   .s6 .step-body {
     font-family: "Inter", sans-serif; font-weight: 700;
-    font-size: 1.85cqw; line-height: 1.25; color: var(--navy);
+    font-size: 2cqw; line-height: 1.25; color: var(--navy);
   }
   .s6 .step-body strong { color: var(--brass-deep); }
 
   /* ── SLIDE 7: TESTIMONIALS ─────────────────────────────────────────── */
   .s7 .h1 {
-    text-align: center; margin-top: 5cqw;
+    text-align: center; margin-top: 1cqw;
     font-family: "Fraunces", serif; font-weight: 900;
-    font-size: 4.6cqw; line-height: 1.05; letter-spacing: -0.022em;
+    font-size: 5cqw; line-height: 1.05; letter-spacing: -0.022em;
     color: #fff;
   }
   .s7 .h1 em { font-style: normal; color: var(--brass); }
@@ -385,9 +391,9 @@
 
   /* ── SLIDE 8: WHY HARTMAN ──────────────────────────────────────────── */
   .s8 .h1 {
-    margin-top: 5cqw;
+    margin-top: 1cqw;
     font-family: "Fraunces", serif; font-weight: 900;
-    font-size: 5cqw; line-height: 1; letter-spacing: -0.025em;
+    font-size: 5.2cqw; line-height: 1; letter-spacing: -0.025em;
     color: var(--navy);
   }
   .s8 .h1 em { font-style: normal; color: var(--brass-deep); }
@@ -407,14 +413,14 @@
 
   /* ── SLIDE 9: URGENCY ──────────────────────────────────────────────── */
   .s9 .clock-wrap {
-    align-self: center; margin-top: 4cqw;
-    width: 13cqw; height: 13cqw; border-radius: 50%;
-    border: 0.3cqw solid var(--brass);
+    align-self: center; margin-top: 0;
+    width: 16cqw; height: 16cqw; border-radius: 50%;
+    border: 0.35cqw solid var(--brass);
     background: rgba(200,162,75,0.08);
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 0 4cqw rgba(200,162,75,0.15);
+    box-shadow: 0 0 6cqw rgba(200,162,75,0.15);
   }
-  .s9 .clock-wrap svg { width: 7cqw; height: 7cqw; }
+  .s9 .clock-wrap svg { width: 9cqw; height: 9cqw; }
   .s9 .h1 {
     text-align: center; margin-top: 3cqw;
     font-family: "Fraunces", serif; font-weight: 900;
@@ -439,9 +445,9 @@
 
   /* ── SLIDE 10: CTA ─────────────────────────────────────────────────── */
   .s10 .h1 {
-    margin-top: 4cqw;
+    margin-top: 1cqw;
     font-family: "Fraunces", serif; font-weight: 900;
-    font-size: 4.4cqw; line-height: 1.02; letter-spacing: -0.022em;
+    font-size: 4.8cqw; line-height: 1.02; letter-spacing: -0.022em;
     color: var(--navy);
   }
   .s10 .h1 em { font-style: normal; color: var(--brass-deep); }
@@ -603,18 +609,21 @@
       <h1 class="h1">Get the guide in<br><em>three steps.</em></h1>
       <ol class="steps">
         <li>
+          <div class="step-num-square">1</div>
           <div class="step-circle">
             <svg viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5 H21 V17 H7 L3 21 Z"/><line x1="7" y1="10" x2="17" y2="10"/><line x1="7" y1="13" x2="13" y2="13"/></svg>
           </div>
           <div class="step-body">DM us <strong>"REVIEW"</strong> or call <strong>(813) 555-0142</strong>.</div>
         </li>
         <li>
+          <div class="step-num-square">2</div>
           <div class="step-circle">
             <svg viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 V15"/><polyline points="7 11 12 16 17 11"/><line x1="4" y1="19" x2="20" y2="19"/></svg>
           </div>
           <div class="step-body">Get instant access to the free guide.</div>
         </li>
         <li>
+          <div class="step-num-square">3</div>
           <div class="step-circle">
             <svg viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 L20 6 V12 C20 17 16 20.5 12 21.5 C8 20.5 4 17 4 12 V6 Z"/><polyline points="9 12 11 14 15 10"/></svg>
           </div>
