@@ -97,9 +97,10 @@
   .slide.dark .brand .subline { color: var(--brass-bright); border-color: var(--brass); }
   .slide.light .brand .subline { color: var(--brass-deep); border-color: var(--brass-deep); }
 
-  /* universal closer line above brand */
+  /* universal closer line above brand. Default left-aligned to match
+     left-aligned content; centered-content slides override below. */
   .closer {
-    text-align: center;
+    text-align: left;
     font-family: "Inter", sans-serif; font-weight: 800;
     font-size: 2.4cqw; line-height: 1.15; letter-spacing: -0.005em;
     text-transform: uppercase;
@@ -110,7 +111,7 @@
   .closer em { font-style: normal; color: var(--brass); }
   .slide.light .closer em { color: var(--brass-deep); }
   .closer-banner {
-    align-self: center;
+    align-self: flex-start;
     background: var(--brass);
     color: var(--navy);
     font-family: "Inter", sans-serif; font-weight: 900;
@@ -119,6 +120,9 @@
     border-radius: 0.6cqw;
     margin-top: 3cqw;
   }
+  /* centered-content slides: re-center their closer treatments */
+  .s1 .closer, .s9 .closer { text-align: center; }
+  .s3 .closer-banner { align-self: center; }
 
   /* ── SLIDE 1: HERO ─────────────────────────────────────────────────── */
   .s1 { background: var(--navy-deep); }
