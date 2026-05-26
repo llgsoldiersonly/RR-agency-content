@@ -5,7 +5,8 @@
   "scripts": {
     "preview": "node tools/generate-preview.mjs",
     "pitch": "node tools/generate-pitch.mjs",
-    "render:slides": "node tools/render-slides.mjs"
+    "render:slides": "node tools/render-slides.mjs",
+    "carousel:studio": "node tools/carousel-studio.mjs"
   },
   "dependencies": {
     "@napi-rs/canvas": "^0.1.80",

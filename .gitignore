@@ -6,4 +6,6 @@ clients/*/content/*/reels/*.mp4
 clients/*/content/*/carousels/*.png
 clients/*/content/*/static/*.png
 remotion/out/
+# AI-generated carousel slides from tools/carousel-studio.mjs
+mockups/ai-generated/*.png
 .DS_Store
