@@ -12,20 +12,25 @@ type Props = {
   emphasisTreatment?: EmphasisTreatment;
 };
 
-// Vertical placement → padding mapping (in px from edge).
-// Pads to land inside CAPTION PREFERRED zone (x:120-900, y:720-1280) and
-// clear RIGHT RAIL (x≥900) + BOTTOM DANGER (y≥1500) + TOP DANGER (y<320).
-// Padding is asymmetric (left 120, right 180) so the caption centers on
-// CAPTION PREFERRED's center (x=510), not the frame center (x=540).
-const positionStyle = (pos: CaptionPosition): React.CSSProperties => {
+// Caption slot — explicit absolute position so the brass box geometry is
+// guaranteed, not derived from flex+padding+maxWidth (which lets inline
+// spans escape constraints under some browser/Remotion combinations).
+// Slot lives at x:160-860 — entirely inside CAPTION PREFERRED (x:120-900)
+// with 40px breathing room from RIGHT RAIL (starts at x=900) and from the
+// left safe edge. Vertical anchor matches the corresponding edge of
+// CAPTION PREFERRED (y:720-1280).
+const slotStyle = (pos: CaptionPosition): React.CSSProperties => {
+  const base: React.CSSProperties = {
+    position: "absolute", left: 160, right: 220, textAlign: "center",
+  };
   switch (pos) {
     case "top":
-      return { justifyContent: "flex-start", alignItems: "center", paddingTop: 720, paddingLeft: 120, paddingRight: 180 };
+      return { ...base, top: 740 };
     case "mid":
-      return { justifyContent: "center", alignItems: "center", paddingLeft: 120, paddingRight: 180 };
+      return { ...base, top: "50%", transform: "translateY(-50%)" };
     case "bot":
     default:
-      return { justifyContent: "flex-end", alignItems: "center", paddingBottom: 700, paddingLeft: 120, paddingRight: 180 };
+      return { ...base, bottom: 700 };
   }
 };
 
@@ -51,10 +56,11 @@ export const CaptionBlock: React.FC<Props> = ({
   const tokens = tokenize(text, emphasis);
 
   return (
-    <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", ...positionStyle(position) }}>
+    <div style={slotStyle(position)}>
       <span
         style={{
           opacity,
+          display: "inline-block",
           transform: `translateY(${translateY}px)`,
           background: brass,
           color: navy,
@@ -65,7 +71,7 @@ export const CaptionBlock: React.FC<Props> = ({
           padding: "14px 26px",
           borderRadius: 16,
           textAlign: "center",
-          maxWidth: 640,
+          maxWidth: "100%",
           WebkitBoxDecorationBreak: "clone",
           boxDecorationBreak: "clone",
         }}
