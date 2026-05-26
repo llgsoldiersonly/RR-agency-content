@@ -157,18 +157,21 @@
   .s1 .closer { color: var(--paper); opacity: 0.7; font-size: 1.6cqw; letter-spacing: 0.18em; margin-top: 4cqw; }
 
   /* ── SLIDE 2: BRUTAL TRUTH ─────────────────────────────────────────── */
+  .s2 { text-align: center; }
   .s2 .h1 {
     margin-top: 1cqw;
     font-family: "Fraunces", serif; font-weight: 900;
     font-size: 5.6cqw; line-height: 1; letter-spacing: -0.025em;
     color: var(--navy);
+    text-align: center;
   }
   .s2 .h1 em { font-style: normal; color: var(--brass-deep); }
   .s2 .sub {
-    margin-top: 1.8cqw;
+    margin: 1.8cqw auto 0;
     font-family: "Inter", sans-serif; font-weight: 500;
     font-size: 2.3cqw; line-height: 1.35; color: var(--ink-mid);
     max-width: 86%;
+    text-align: center;
   }
   .s2 .sub strong { color: var(--navy); font-weight: 800; }
   .s2 .heading {
@@ -176,18 +179,20 @@
     font-family: "Inter", sans-serif; font-weight: 900;
     font-size: 2.2cqw; letter-spacing: 0.16em; text-transform: uppercase;
     color: var(--brass-deep);
+    text-align: center;
   }
   .s2 .heading::after {
     content: ""; display: block;
     width: 5cqw; height: 0.3cqw; background: var(--brass);
-    margin-top: 0.8cqw;
+    margin: 0.8cqw auto 0;
   }
-  .s2 ul.x-list { margin-top: 2.6cqw; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 2cqw; }
+  .s2 ul.x-list { margin-top: 2.6cqw; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 2cqw; align-items: center; }
   .s2 ul.x-list li {
     display: flex; align-items: center; gap: 1.8cqw;
     font-family: "Inter", sans-serif; font-weight: 700;
     font-size: 2.5cqw; color: var(--navy);
   }
+  .s2 .closer { text-align: center; }
   .x-circle {
     flex-shrink: 0;
     width: 3.4cqw; height: 3.4cqw; border-radius: 50%;
@@ -306,14 +311,17 @@
   .s4 .body-text strong { color: var(--navy); font-weight: 800; }
 
   /* ── SLIDE 5: COMMON MISTAKES ──────────────────────────────────────── */
+  .s5 { text-align: center; }
   .s5 .h1 {
     margin-top: 1cqw;
     font-family: "Fraunces", serif; font-weight: 900;
     font-size: 5cqw; line-height: 1.05; letter-spacing: -0.022em;
     color: #fff;
+    text-align: center;
   }
   .s5 .h1 em { font-style: normal; color: var(--brass); }
-  .s5 ul.pill-list { margin-top: 3cqw; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1.8cqw; }
+  .s5 ul.pill-list { margin-top: 3cqw; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1.8cqw; align-items: center; }
+  .s5 .closer { text-align: center; }
   .s5 ul.pill-list li {
     display: flex; align-items: center; gap: 1.8cqw;
     background: rgba(245,241,232,0.06);
@@ -325,14 +333,17 @@
   }
 
   /* ── SLIDE 6: 3 SIMPLE STEPS ───────────────────────────────────────── */
+  .s6 { text-align: center; }
   .s6 .h1 {
     margin-top: 1cqw;
     font-family: "Fraunces", serif; font-weight: 900;
     font-size: 5cqw; line-height: 1; letter-spacing: -0.022em;
     color: var(--navy);
+    text-align: center;
   }
   .s6 .h1 em { font-style: normal; color: var(--brass-deep); }
-  .s6 ol.steps { margin-top: 3.4cqw; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 2.4cqw; }
+  .s6 ol.steps { margin-top: 3.4cqw; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 2.4cqw; align-items: center; }
+  .s6 .closer-banner { align-self: center; }
   .s6 ol.steps li {
     display: grid;
     grid-template-columns: 5cqw 6cqw 1fr;
@@ -395,14 +406,17 @@
   }
 
   /* ── SLIDE 8: WHY HARTMAN ──────────────────────────────────────────── */
+  .s8 { text-align: center; }
   .s8 .h1 {
     margin-top: 1cqw;
     font-family: "Fraunces", serif; font-weight: 900;
     font-size: 5.2cqw; line-height: 1; letter-spacing: -0.025em;
     color: var(--navy);
+    text-align: center;
   }
   .s8 .h1 em { font-style: normal; color: var(--brass-deep); }
-  .s8 ul.benefit-list { margin-top: 3cqw; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1.8cqw; }
+  .s8 ul.benefit-list { margin-top: 3cqw; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1.8cqw; align-items: center; }
+  .s8 .closer-banner { align-self: center; }
   .s8 ul.benefit-list li {
     display: flex; align-items: center; gap: 1.6cqw;
     font-family: "Inter", sans-serif; font-weight: 700;
@@ -449,15 +463,18 @@
   .reason-icon svg { width: 1.8cqw; height: 1.8cqw; }
 
   /* ── SLIDE 10: CTA ─────────────────────────────────────────────────── */
+  .s10 { text-align: center; }
   .s10 .h1 {
     font-family: "Fraunces", serif; font-weight: 900;
     font-size: 4.4cqw; line-height: 1.02; letter-spacing: -0.022em;
-    color: var(--navy); max-width: 90%;
+    color: var(--navy); max-width: 90%; margin-left: auto; margin-right: auto;
+    text-align: center;
   }
   .s10 .h1 em { font-style: normal; color: var(--brass-deep); }
   .s10 .offer-block {
     margin-top: 2.4cqw;
-    display: flex; flex-direction: column; align-items: flex-start;
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center;
   }
   .s10 .offer-caption {
     font-family: "Inter", sans-serif; font-weight: 700;
@@ -495,6 +512,7 @@
     font-family: "Inter", sans-serif; font-weight: 900;
     font-size: 3.6cqw; letter-spacing: -0.01em;
     width: fit-content;
+    align-self: center;
     box-shadow: 0 1.2cqw 2.2cqw -0.8cqw rgba(200,162,75,0.5);
   }
   .phone-button svg { width: 3.2cqw; height: 3.2cqw; }
