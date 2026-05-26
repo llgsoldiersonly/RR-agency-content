@@ -1,0 +1,79 @@
+{
+  "pitch": {
+    "agency": "Beacon Legal Social",
+    "prospect": "Vega Accident & Injury Lawyers",
+    "attorney": "Marisol Vega",
+    "city": "Phoenix",
+    "practiceArea": "personal injury",
+    "brandColor": "#B8202E",
+    "cta": { "label": "Book your strategy call", "url": "https://calendly.com/beacon-legal/intro" },
+    "email": "hello@beaconlegal.social",
+    "intro": "A sample of your first month — built specifically for a Phoenix injury firm. This isn't a template; the hooks, the local angles, even the highways are yours.",
+    "generatedAt": "2026-05-26"
+  },
+  "calendar": [
+    {"day":1,"pillar":"EDU","format":"Reel","title":"First 24 hours after a Phoenix crash"},
+    {"day":2,"pillar":"TRUST","format":"Static","title":"Meet Marisol Vega"},
+    {"day":3,"pillar":"MYTH","format":"Reel","title":"The first insurance offer is rarely the real number"},
+    {"day":4,"pillar":"EDU","format":"Carousel","title":"5 mistakes that quietly hurt your claim"},
+    {"day":5,"pillar":"LEAD","format":"Reel","title":"Free post-accident checklist"},
+    {"day":6,"pillar":"AUTH","format":"Reel","title":"How we build a truck-accident case"},
+    {"day":7,"pillar":"EDU","format":"Reel (ES)","title":"Que hacer en las primeras 24 horas"},
+    {"day":8,"pillar":"TRUST","format":"Reel","title":"Why I do this work"},
+    {"day":9,"pillar":"EDU","format":"Carousel","title":"What your medical bills really mean"},
+    {"day":10,"pillar":"MYTH","format":"Static","title":"'Minor' crashes still cause real injuries"},
+    {"day":11,"pillar":"EDU","format":"Reel","title":"The 3 photos to take at the scene"},
+    {"day":12,"pillar":"LEAD","format":"Carousel","title":"Free claim-value worksheet"},
+    {"day":13,"pillar":"AUTH","format":"Reel","title":"What a lawyer actually does for you"},
+    {"day":14,"pillar":"TRUST","format":"Reel (ES)","title":"Por que hacemos este trabajo"},
+    {"day":15,"pillar":"EDU","format":"Reel","title":"The one thing not to say to the adjuster"},
+    {"day":16,"pillar":"MYTH","format":"Carousel","title":"'I can't afford a lawyer' — how fees really work"},
+    {"day":17,"pillar":"EDU","format":"Static","title":"Arizona injury claim deadline"},
+    {"day":18,"pillar":"AUTH","format":"Reel","title":"Real talk: when you DON'T need a lawyer"},
+    {"day":19,"pillar":"LEAD","format":"Reel","title":"Free 'what to do after a crash' guide"},
+    {"day":20,"pillar":"EDU","format":"Reel (ES)","title":"No le digas esto al ajustador"},
+    {"day":21,"pillar":"TRUST","format":"Carousel","title":"A week in our office"},
+    {"day":22,"pillar":"EDU","format":"Reel","title":"A gap in treatment can shrink your claim"},
+    {"day":23,"pillar":"MYTH","format":"Reel","title":"The police report isn't the final word"},
+    {"day":24,"pillar":"AUTH","format":"Static","title":"Years of Arizona injury experience"},
+    {"day":25,"pillar":"EDU","format":"Carousel","title":"Who pays your bills while the case runs"},
+    {"day":26,"pillar":"LEAD","format":"Carousel","title":"Free 'First 7 Days' checklist"},
+    {"day":27,"pillar":"EDU","format":"Reel","title":"Rideshare crash: whose insurance pays?"},
+    {"day":28,"pillar":"TRUST","format":"Reel (ES)","title":"Estamos contigo en cada paso"},
+    {"day":29,"pillar":"MYTH","format":"Reel","title":"You have more time than you think — but not much"},
+    {"day":30,"pillar":"AUTH","format":"Carousel","title":"How we work to maximize a settlement"}
+  ],
+  "samples": [
+    {
+      "id": "sample-reel", "type": "reel", "name": "Headless reel · First 24 hours",
+      "hook": "Crashes happen on the I-10 and Loop 101 every day — what you do in the first 24 hours decides what your claim is worth.",
+      "script": [
+        {"line":"See a doctor today — even if you feel fine. Adrenaline hides injuries.","onscreen":"1. Doctor TODAY"},
+        {"line":"Photograph everything: the cars, the scene, the other plate.","onscreen":"2. Photograph everything"},
+        {"line":"Hold off on a recorded statement to their insurer.","onscreen":"3. Wait on a statement"}
+      ],
+      "cta": "Hurt on a Phoenix road? Free review.",
+      "note": "Faceless — no filming. Captions + motion only, in your brand colors."
+    },
+    {
+      "id": "sample-carousel-1", "type": "carousel", "name": "Carousel · 5 mistakes that hurt your claim",
+      "slides": [
+        {"heading":"5 mistakes that quietly hurt your injury claim","body":"Most people make two of these in the first week. Swipe."},
+        {"heading":"1. Waiting to get treated","body":"A gap in treatment becomes the argument that you weren't really hurt."},
+        {"heading":"2. Posting about it","body":"An 'I'm okay!' post gets screenshotted and used against you later."},
+        {"heading":"3. Taking the first offer","body":"It's a starting point, not a fair number. Once you sign, it's done."},
+        {"heading":"Save this for someone who'll need it","body":"Hurt in Phoenix? Free review."}
+      ]
+    },
+    {
+      "id": "sample-carousel-2", "type": "carousel", "name": "Carousel · How we build your case",
+      "slides": [
+        {"heading":"How we actually build your case","body":"No dollar promises — just the work. Swipe."},
+        {"heading":"We move fast on evidence","body":"On I-10, dashcam and vehicle data get overwritten in days. We preserve it immediately."},
+        {"heading":"We find every responsible party","body":"Rarely just one driver — other parties can share fault."},
+        {"heading":"We prepare like it's going to trial","body":"Cases resolve higher when the other side knows you're ready."},
+        {"heading":"Questions about your crash?","body":"Free review — let's talk."}
+      ]
+    }
+  ]
+}

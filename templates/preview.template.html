@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Content Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper:#f6f3ec; --ink:#15110c; --muted:#6b6357; --line:#e0d9cb;
+    --navy:#0B2A4A; --brass:#C8A24B; --ok:#2f7d52; --okbg:#e7f1ea;
+    --warn:#b6741b; --warnbg:#fbf0dd; --card:#fffdf8;
+    --shadow:0 1px 0 rgba(0,0,0,.04),0 12px 30px -18px rgba(21,17,12,.35);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Newsreader",Georgia,serif;font-size:18px;line-height:1.5;
+    background-image:radial-gradient(rgba(21,17,12,.025) 1px,transparent 1px);background-size:22px 22px;}
+  .wrap{max-width:860px;margin:0 auto;padding:48px 22px 160px}
+  header.masthead{border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:8px}
+  .eyebrow{font-family:"Newsreader";text-transform:uppercase;letter-spacing:.28em;
+    font-size:12px;color:var(--muted);margin:0 0 6px}
+  h1.title{font-family:"Fraunces";font-weight:900;font-size:48px;line-height:1;margin:0;letter-spacing:-.01em}
+  .sub{color:var(--muted);margin-top:10px;font-size:16px}
+  .howto{font-size:15px;color:var(--muted);border-left:3px solid var(--brass);
+    padding:10px 16px;margin:22px 0;background:var(--card)}
+  .batch label{display:block;font-family:"Fraunces";font-weight:600;font-size:18px;margin:26px 0 8px}
+  textarea{width:100%;font-family:"Newsreader";font-size:16px;line-height:1.45;color:var(--ink);
+    background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;resize:vertical}
+  textarea:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(11,42,74,.12)}
+  .item{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--line);
+    border-radius:14px;padding:22px 22px 18px;margin:22px 0;box-shadow:var(--shadow);transition:border-color .2s}
+  .item.approved{border-left-color:var(--ok)}
+  .item.changes{border-left-color:var(--warn)}
+  .badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px}
+  .badge{font-family:"Newsreader";font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    padding:3px 9px;border-radius:999px;border:1px solid var(--line);color:var(--muted);background:#fff}
+  .badge.type{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .badge.pillar{background:var(--brass);color:#1c1404;border-color:var(--brass);font-weight:600}
+  .badge.lang{font-weight:600}
+  .item h2{font-family:"Fraunces";font-weight:600;font-size:24px;margin:2px 0 6px;line-height:1.1}
+  .hook{font-style:italic;color:var(--ink);font-size:20px;margin:0 0 14px}
+  .beat{display:grid;grid-template-columns:54px 1fr;gap:10px;padding:7px 0;border-top:1px dashed var(--line)}
+  .beat .t{font-family:"Newsreader";color:var(--brass);font-weight:600;font-size:14px;padding-top:2px}
+  .beat .os{display:block;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:3px}
+  .slides{display:grid;gap:10px;margin:6px 0}
+  .slide{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--paper)}
+  .slide .sh{font-family:"Fraunces";font-weight:600;font-size:17px;margin:0 0 2px}
+  .slide .sb{font-size:15px;color:#2c261d;margin:0}
+  .slide .snote{margin-top:8px}
+  .slide .snote input{width:100%;font-family:"Newsreader";font-size:14px;padding:7px 10px;
+    border:1px solid var(--line);border-radius:8px;background:#fff}
+  .meta{font-size:15px;color:#2c261d;margin:12px 0 0}
+  .meta b{font-family:"Newsreader";color:var(--navy)}
+  .tags{color:var(--muted);font-size:14px;margin-top:6px}
+  .cta-line{margin-top:10px;font-weight:600;color:var(--navy)}
+  .tagstrip{margin-top:14px;padding-top:9px;border-top:1px dotted var(--line);
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:var(--muted);
+    letter-spacing:.02em;line-height:1.5}
+  .tagstrip b{color:var(--brass);font-weight:600;letter-spacing:.1em;margin-right:6px}
+  .flow{margin:6px 0 0;padding-left:20px}
+  .flow li{font-size:15px;color:#2c261d;margin:2px 0}
+  .decide{display:flex;gap:8px;margin:14px 0 6px}
+  .btn{font-family:"Newsreader";font-size:14px;cursor:pointer;border:1px solid var(--line);
+    background:#fff;color:var(--ink);padding:7px 14px;border-radius:999px}
+  .btn.active-ok{background:var(--okbg);border-color:var(--ok);color:var(--ok);font-weight:600}
+  .btn.active-warn{background:var(--warnbg);border-color:var(--warn);color:var(--warn);font-weight:600}
+  .notelabel{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin:10px 0 5px}
+  .bar{position:fixed;left:0;right:0;bottom:0;background:var(--navy);color:#fff;
+    box-shadow:0 -10px 30px -18px rgba(0,0,0,.6);z-index:20}
+  .bar .inner{max-width:860px;margin:0 auto;padding:12px 22px;display:flex;align-items:center;gap:16px;justify-content:space-between}
+  .counts{font-size:14px;letter-spacing:.02em}
+  .counts b{color:var(--brass)}
+  .bar button{font-family:"Newsreader";font-size:15px;border:none;border-radius:999px;padding:10px 20px;cursor:pointer}
+  .copy{background:var(--brass);color:#1c1404;font-weight:600}
+  .reset{background:transparent;color:#cdd6e2;border:1px solid #3a5571}
+  .toast{position:fixed;bottom:74px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;
+    padding:10px 18px;border-radius:999px;font-size:14px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:30}
+  .toast.show{opacity:1}
+  @media(max-width:560px){h1.title{font-size:36px}.wrap{padding:32px 16px 150px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <p class="eyebrow" id="eyebrow">Content Review</p>
+    <h1 class="title" id="clientName">Client</h1>
+    <p class="sub" id="sub"></p>
+  </header>
+
+  <div class="howto">
+    Leave notes on anything below, set <b>Approve</b> or <b>Request changes</b> per item, then hit
+    <b>Copy all feedback</b> and send it back. Your notes save in this browser automatically.
+  </div>
+
+  <div class="batch">
+    <label for="batchNote">Overall note (whole batch)</label>
+    <textarea id="batchNote" rows="2" placeholder="Anything that applies to the whole set…"></textarea>
+  </div>
+
+  <main id="items"></main>
+</div>
+
+<div class="bar">
+  <div class="inner">
+    <div class="counts" id="counts"></div>
+    <div>
+      <button class="reset" id="resetBtn">Reset</button>
+      <button class="copy" id="copyBtn">Copy all feedback</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast">Copied — paste it back to regenerate</div>
+
+<script>
+const DATA = __INJECTED_DATA__;
+const KEY = "content_feedback_" + (DATA.project.clientSlug||"client") + "_" + (DATA.project.month||"");
+let state = load();
+
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)) || fresh(); }catch(e){ return fresh(); } }
+function fresh(){ return { batchNote:"", items:{} }; }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+function itemState(id){ if(!state.items[id]) state.items[id]={status:"",note:"",slides:{}}; return state.items[id]; }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+function render(){
+  document.getElementById("clientName").textContent = DATA.project.client || "Client";
+  document.getElementById("sub").textContent =
+    (DATA.project.month||"") + " content · " + DATA.items.length + " items · generated " + (DATA.project.generatedAt||"");
+  document.getElementById("batchNote").value = state.batchNote||"";
+
+  const root = document.getElementById("items");
+  root.innerHTML = "";
+  DATA.items.forEach(it=>{
+    const st = itemState(it.id);
+    const card = document.createElement("section");
+    card.className = "item" + (st.status==="approved"?" approved":st.status==="changes"?" changes":"");
+    card.id = "card-"+it.id;
+
+    let body = "";
+    body += '<div class="badges">';
+    body += '<span class="badge type">'+esc(it.type)+'</span>';
+    if(it.pillar) body += '<span class="badge pillar">'+esc(it.pillar)+'</span>';
+    if(it.language) body += '<span class="badge lang">'+esc(it.language.toUpperCase())+'</span>';
+    (it.platforms||[]).forEach(p=> body += '<span class="badge">'+esc(p)+'</span>');
+    body += '</div>';
+    body += '<h2>'+esc(it.name)+'</h2>';
+    if(it.hook) body += '<p class="hook">"'+esc(it.hook)+'"</p>';
+
+    if(it.script && it.script.length){
+      it.script.forEach(b=>{
+        body += '<div class="beat"><div class="t">'+esc(b.t)+'</div><div>'+esc(b.line)+
+          (b.onscreen?'<span class="os">on screen: '+esc(b.onscreen)+'</span>':'')+'</div></div>';
+      });
+    }
+    if(it.slides && it.slides.length){
+      body += '<div class="slides">';
+      it.slides.forEach((s,idx)=>{
+        body += '<div class="slide"><p class="sh">'+esc(idx+1)+'. '+esc(s.heading)+'</p><p class="sb">'+esc(s.body)+'</p>'+
+          '<div class="snote"><input data-slide="'+idx+'" data-id="'+esc(it.id)+'" placeholder="Note on slide '+(idx+1)+'…" value="'+esc(st.slides[idx]||"")+'"></div></div>';
+      });
+      body += '</div>';
+    }
+    if(it.visual) body += '<p class="meta"><b>Visual:</b> '+esc(it.visual)+'</p>';
+    if(it.resource) body += '<p class="meta"><b>Resource:</b> '+esc(it.resource)+'</p>';
+    if(it.dmKeyword) body += '<p class="meta"><b>DM keyword:</b> '+esc(it.dmKeyword)+'</p>';
+    if(it.flow && it.flow.length){ body += '<ol class="flow">'; it.flow.forEach(f=> body+='<li>'+esc(f)+'</li>'); body+='</ol>'; }
+    if(it.caption) body += '<p class="meta"><b>Caption:</b> '+esc(it.caption)+'</p>';
+    if(it.broll) body += '<p class="meta"><b>B-roll:</b> '+esc(it.broll)+'</p>';
+    if(it.hashtags && it.hashtags.length) body += '<p class="tags">'+esc(it.hashtags.join("  "))+'</p>';
+    if(it.cta) body += '<p class="cta-line">CTA: '+esc(it.cta)+'</p>';
+    if(it.tags){ const t=it.tags; const parts=[];
+      if(t.trigger) parts.push("trigger: "+t.trigger);
+      if(t.hookType) parts.push("hook: "+t.hookType);
+      if(t.funnelStage) parts.push("stage: "+t.funnelStage);
+      if(t.localRelevance) parts.push("local: "+t.localRelevance);
+      if(Array.isArray(t.platformFit)) parts.push("fit: "+t.platformFit.join("/"));
+      if(t.perfGoal) parts.push("goal: "+t.perfGoal);
+      body += '<div class="tagstrip"><b>INTERNAL</b>'+esc(parts.join("   ·   "))+'</div>';
+    }
+
+    body += '<div class="decide">'+
+      '<button class="btn ok'+(st.status==="approved"?" active-ok":"")+'" data-act="approved" data-id="'+esc(it.id)+'">✓ Approve</button>'+
+      '<button class="btn warn'+(st.status==="changes"?" active-warn":"")+'" data-act="changes" data-id="'+esc(it.id)+'">✎ Request changes</button>'+
+      '</div>';
+    body += '<div class="notelabel">Note</div>'+
+      '<textarea data-note="'+esc(it.id)+'" rows="2" placeholder="What should change?">'+esc(st.note||"")+'</textarea>';
+
+    card.innerHTML = body;
+    root.appendChild(card);
+  });
+  wire();
+  updateCounts();
+}
+
+function wire(){
+  document.querySelectorAll('[data-act]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const st = itemState(btn.dataset.id);
+      st.status = (st.status===btn.dataset.act) ? "" : btn.dataset.act;
+      save();
+      const card = document.getElementById("card-"+btn.dataset.id);
+      card.classList.toggle("approved", st.status==="approved");
+      card.classList.toggle("changes", st.status==="changes");
+      card.querySelector('.btn.ok').classList.toggle("active-ok", st.status==="approved");
+      card.querySelector('.btn.warn').classList.toggle("active-warn", st.status==="changes");
+      updateCounts();
+    };
+  });
+  document.querySelectorAll('[data-note]').forEach(t=>{
+    t.oninput = ()=>{ itemState(t.dataset.note).note = t.value; save(); };
+  });
+  document.querySelectorAll('input[data-slide]').forEach(inp=>{
+    inp.oninput = ()=>{ itemState(inp.dataset.id).slides[inp.dataset.slide] = inp.value; save(); };
+  });
+}
+
+document.getElementById("batchNote").oninput = (e)=>{ state.batchNote = e.target.value; save(); };
+
+function updateCounts(){
+  let a=0,c=0;
+  DATA.items.forEach(it=>{ const s=itemState(it.id).status; if(s==="approved")a++; else if(s==="changes")c++; });
+  const pending = DATA.items.length - a - c;
+  document.getElementById("counts").innerHTML =
+    '<b>'+a+'</b> approved · <b>'+c+'</b> changes · <b>'+pending+'</b> pending';
+}
+
+function buildBundle(){
+  let out = "FEEDBACK — "+(DATA.project.client||"")+" — "+(DATA.project.month||"")+"\n";
+  out += "(paste this back into Claude Code to regenerate the flagged items)\n\n";
+  out += "OVERALL NOTE:\n"+((state.batchNote||"").trim()||"(none)")+"\n";
+  DATA.items.forEach(it=>{
+    const st = itemState(it.id);
+    const label = st.status==="approved"?"APPROVED":st.status==="changes"?"REQUEST CHANGES":"(no decision)";
+    out += "\n— "+it.id+" · "+it.name+" · "+it.type.toUpperCase()+" —\n";
+    out += "STATUS: "+label+"\n";
+    if((st.note||"").trim()) out += "NOTE: "+st.note.trim()+"\n";
+    Object.keys(st.slides||{}).forEach(k=>{ if((st.slides[k]||"").trim()) out += "  slide "+(Number(k)+1)+": "+st.slides[k].trim()+"\n"; });
+  });
+  return out;
+}
+
+document.getElementById("copyBtn").onclick = async ()=>{
+  const text = buildBundle();
+  try{ await navigator.clipboard.writeText(text); toast("Copied — paste it back to regenerate"); }
+  catch(e){
+    const ta=document.createElement("textarea"); ta.value=text; document.body.appendChild(ta);
+    ta.select(); document.execCommand("copy"); ta.remove(); toast("Copied — paste it back to regenerate");
+  }
+};
+document.getElementById("resetBtn").onclick = ()=>{
+  if(confirm("Clear all your notes and decisions for this review?")){ state=fresh(); save(); render(); }
+};
+let toastTimer;
+function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove("show"),2200); }
+
+render();
+</script>
+</body>
+</html>

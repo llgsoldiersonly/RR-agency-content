@@ -1,0 +1,12 @@
+# Prospect intake (sales demo) — fill in ~2 min, then: node tools/generate-pitch.mjs demos/<slug>/pitch-content.json
+agency: Beacon Legal Social                 # your agency (edit once, reuse)
+agency_cta_label: Book your strategy call
+agency_cta_url: https://calendly.com/beacon-legal/intro
+agency_email: hello@beaconlegal.social      # powers the optional "email us a note" button
+prospect_firm: Vega Accident & Injury Lawyers
+prospect_attorney: Marisol Vega
+city: Phoenix
+practice_area: personal injury              # routes hook energy -> skills/hooks/<area>.md
+brand_color: "#B8202E"                       # their brand color if known
+case_type_wanted: car & truck accidents
+local_notes: I-10, Loop 101, monsoon dust storms, Banner Health   # optional local color
