@@ -6,9 +6,14 @@ client's filmed footage. The MP4 render needs a headless browser, so run it on y
 
 ## Setup (once)
 ```bash
-cd remotion
-npm install          # pulls remotion + @remotion/bundler + @remotion/renderer (keep all @remotion/* on the SAME version)
+# from the repo root — installs @remotion/google-fonts (used by skill templates outside remotion/)
+npm install
+
+# from remotion/ — installs Remotion itself (bundler, renderer, react, etc.)
+cd remotion && npm install        # keep all @remotion/* on the SAME version
 ```
+Both installs are needed: the skill templates live above `remotion/` and need to resolve npm deps
+from the repo root, while Remotion Studio/renderer itself lives in `remotion/`.
 
 ## Preview a reel live (Remotion Studio)
 ```bash
