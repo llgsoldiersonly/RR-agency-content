@@ -13,15 +13,17 @@ type Props = {
 };
 
 // Vertical placement → padding mapping (in px from edge).
+// Pads to land inside CAPTION PREFERRED zone (x:120-900, y:720-1280) and
+// clear RIGHT RAIL (x≥900) + BOTTOM DANGER (y≥1500) + TOP DANGER (y<320).
 const positionStyle = (pos: CaptionPosition): React.CSSProperties => {
   switch (pos) {
     case "top":
-      return { justifyContent: "flex-start", alignItems: "center", paddingTop: 380, paddingLeft: 70, paddingRight: 70 };
+      return { justifyContent: "flex-start", alignItems: "center", paddingTop: 720, paddingLeft: 180, paddingRight: 180 };
     case "mid":
-      return { justifyContent: "center", alignItems: "center", paddingLeft: 70, paddingRight: 70 };
+      return { justifyContent: "center", alignItems: "center", paddingLeft: 180, paddingRight: 180 };
     case "bot":
     default:
-      return { justifyContent: "flex-end", alignItems: "center", paddingBottom: 360, paddingLeft: 70, paddingRight: 70 };
+      return { justifyContent: "flex-end", alignItems: "center", paddingBottom: 640, paddingLeft: 180, paddingRight: 180 };
   }
 };
 
@@ -61,7 +63,7 @@ export const CaptionBlock: React.FC<Props> = ({
           padding: "14px 26px",
           borderRadius: 16,
           textAlign: "center",
-          maxWidth: 820,
+          maxWidth: 700,
           WebkitBoxDecorationBreak: "clone",
           boxDecorationBreak: "clone",
         }}

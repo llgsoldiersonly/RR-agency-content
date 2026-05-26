@@ -14,8 +14,8 @@ export const CTAEndCard: React.FC<Props> = ({ cta, brass, navy, subline = "Link 
   const { fps } = useVideoConfig();
   const s = spring({ frame: f, fps, config: { damping: 200 } });
   return (
-    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", padding: 90 }}>
-      <div style={{ opacity: s, transform: `scale(${0.9 + s * 0.1})`, textAlign: "center", maxWidth: 900 }}>
+    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", padding: "90px 180px" }}>
+      <div style={{ opacity: s, transform: `scale(${0.9 + s * 0.1})`, textAlign: "center", maxWidth: 720 }}>
         <div style={{
           color: "#fff", fontFamily: "Georgia, serif", fontWeight: 700,
           fontSize: 60, lineHeight: 1.12,

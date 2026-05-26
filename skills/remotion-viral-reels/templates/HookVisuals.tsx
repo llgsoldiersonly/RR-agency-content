@@ -21,11 +21,11 @@ export const HookPunchIn: React.FC<CommonProps> = ({ text, brass, navy, tier = "
   const drift = interpolate(f, [9, 78], [max, max * 0.97], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const opacity = interpolate(f, [0, 6], [0, 1], { extrapolateRight: "clamp" });
   return (
-    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", padding: 90 }}>
+    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", padding: "90px 180px" }}>
       <h1 style={{
         opacity, transform: `scale(${f < 9 ? scale : drift})`,
         color: "#fff", fontFamily: "Georgia, 'Times New Roman', serif",
-        fontWeight: 900, fontSize: 92, lineHeight: 1.04, textAlign: "center", margin: 0, maxWidth: 900,
+        fontWeight: 900, fontSize: 92, lineHeight: 1.04, textAlign: "center", margin: 0, maxWidth: 720,
       }}>
         {text}
       </h1>
@@ -38,10 +38,10 @@ export const HookBoldCaption: React.FC<CommonProps> = ({ text, brass, navy }) =>
   const f = useCurrentFrame();
   const opacity = interpolate(f, [0, 6], [0, 1], { extrapolateRight: "clamp" });
   return (
-    <AbsoluteFill style={{ backgroundColor: navy, justifyContent: "center", alignItems: "center", padding: 90 }}>
+    <AbsoluteFill style={{ backgroundColor: navy, justifyContent: "center", alignItems: "center", padding: "90px 180px" }}>
       <h1 style={{
         opacity, color: "#fff", fontFamily: "Georgia, serif", fontWeight: 900,
-        fontSize: 96, lineHeight: 1.05, textAlign: "center", margin: 0, maxWidth: 920,
+        fontSize: 96, lineHeight: 1.05, textAlign: "center", margin: 0, maxWidth: 720,
       }}>
         {text}
       </h1>
@@ -58,10 +58,10 @@ export const HookPatternInterrupt: React.FC<CommonProps> = ({ text, brass, navy,
   return (
     <AbsoluteFill>
       <AbsoluteFill style={{ background: brass, opacity: flashOpacity }} />
-      <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", padding: 90 }}>
+      <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", padding: "90px 180px" }}>
         <h1 style={{
           opacity: textOpacity, color: "#fff", fontFamily: "Georgia, serif",
-          fontWeight: 900, fontSize: 92, lineHeight: 1.04, textAlign: "center", margin: 0, maxWidth: 900,
+          fontWeight: 900, fontSize: 92, lineHeight: 1.04, textAlign: "center", margin: 0, maxWidth: 720,
         }}>
           {text}
         </h1>
@@ -82,7 +82,7 @@ export const HookBigNumber: React.FC<CommonProps> = ({ text, brass, navy, tier =
   const restOpacity = interpolate(f, [15, 24], [0, 1], { extrapolateRight: "clamp" });
   const max = SCALE_MAX[tier];
   return (
-    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", padding: 60 }}>
+    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", padding: "60px 180px" }}>
       <div style={{
         transform: `scale(${numScale * max})`, color: brass,
         fontFamily: "Georgia, serif", fontWeight: 900, fontSize: 280, lineHeight: 1,
@@ -90,7 +90,7 @@ export const HookBigNumber: React.FC<CommonProps> = ({ text, brass, navy, tier =
       <div style={{
         opacity: restOpacity, color: "#fff", marginTop: 24,
         fontFamily: "Georgia, serif", fontWeight: 800, fontSize: 76, lineHeight: 1.08,
-        textAlign: "center", maxWidth: 900,
+        textAlign: "center", maxWidth: 720,
       }}>{rest}</div>
     </AbsoluteFill>
   );
@@ -104,7 +104,7 @@ export const HookBeforeAfter: React.FC<CommonProps> = ({ text, brass, navy }) =>
   const bOp = interpolate(f, [10, 18], [0, 1], { extrapolateRight: "clamp" });
   const cell: React.CSSProperties = {
     flex: 1, display: "flex", justifyContent: "center", alignItems: "center",
-    padding: 60, color: "#fff", fontFamily: "Georgia, serif", fontWeight: 900,
+    padding: "60px 180px", color: "#fff", fontFamily: "Georgia, serif", fontWeight: 900,
     fontSize: 72, textAlign: "center", lineHeight: 1.1,
   };
   return (
@@ -122,11 +122,11 @@ export const HookBlurToFocus: React.FC<CommonProps> = ({ text, brass, navy }) =>
   const blur = interpolate(f, [0, 12], [16, 0], { extrapolateRight: "clamp" });
   const opacity = interpolate(f, [4, 14], [0, 1], { extrapolateRight: "clamp" });
   return (
-    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", padding: 90 }}>
+    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", padding: "90px 180px" }}>
       <h1 style={{
         opacity, filter: `blur(${blur}px)`, color: "#fff",
         fontFamily: "Georgia, serif", fontWeight: 900, fontSize: 92,
-        lineHeight: 1.05, textAlign: "center", margin: 0, maxWidth: 920,
+        lineHeight: 1.05, textAlign: "center", margin: 0, maxWidth: 720,
       }}>
         {text}
       </h1>

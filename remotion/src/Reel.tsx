@@ -2,13 +2,18 @@
 // skills/remotion-viral-reels/templates/ReelScaffold.tsx so the V1 schema
 // (hook/beats/cta/brand + new optional fields) lands cleanly on the
 // reusable templates.
+//
+// `./skill` is a symlink to ../../skills/remotion-viral-reels/templates.
+// We import via the symlink (not the real path) so module paths stay
+// inside the Remotion project root — required for Remotion Studio's
+// file server. See remotion.config.ts (resolve.symlinks: false).
 import {
   ReelScaffold, FPS, reelDurationInFrames,
-} from "../../skills/remotion-viral-reels/templates/ReelScaffold";
+} from "./skill/ReelScaffold";
 import {
   computeMotionTier, MotionTier, ScriptBeat, PracticeArea,
-} from "../../skills/remotion-viral-reels/templates/types";
-import type { HookVisualKind } from "../../skills/remotion-viral-reels/templates/HookVisuals";
+} from "./skill/types";
+import type { HookVisualKind } from "./skill/HookVisuals";
 
 export { FPS, reelDurationInFrames };
 
