@@ -7,5 +7,8 @@
     "pitch": "node tools/generate-pitch.mjs",
     "render:slides": "node tools/render-slides.mjs"
   },
-  "dependencies": { "@napi-rs/canvas": "^0.1.80" }
+  "dependencies": {
+    "@napi-rs/canvas": "^0.1.80",
+    "@remotion/google-fonts": "^4.0.467"
+  }
 }

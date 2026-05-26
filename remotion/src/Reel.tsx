@@ -28,6 +28,7 @@ export type ReelProps = {
   brand: { navy: string; brass: string };
   footage?: string;
   music?: string;
+  attorney?: { name: string; role?: string };  // brand chip — fades in after hook
   // Tier resolution — any one path works:
   tier?: MotionTier;                    // explicit override (item.motionTier)
   area?: PracticeArea;                  // computed via 3-dial matrix
@@ -53,6 +54,7 @@ export const Reel: React.FC<ReelProps> = (props) => {
       tier={tier}
       footage={props.footage}
       music={props.music}
+      attorney={props.attorney}
     />
   );
 };

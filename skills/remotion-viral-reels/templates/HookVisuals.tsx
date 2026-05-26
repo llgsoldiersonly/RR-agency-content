@@ -1,5 +1,6 @@
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import type { MotionTier } from "./types";
+import { DISPLAY_FONT } from "./fonts";
 
 type CommonProps = {
   text: string;
@@ -24,7 +25,7 @@ export const HookPunchIn: React.FC<CommonProps> = ({ text, brass, navy, tier = "
     <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", padding: "90px 180px" }}>
       <h1 style={{
         opacity, transform: `scale(${f < 9 ? scale : drift})`,
-        color: "#fff", fontFamily: "Georgia, 'Times New Roman', serif",
+        color: "#fff", fontFamily: `${DISPLAY_FONT}, Georgia, serif`,
         fontWeight: 900, fontSize: 92, lineHeight: 1.04, textAlign: "center", margin: 0, maxWidth: 720,
       }}>
         {text}
@@ -40,7 +41,7 @@ export const HookBoldCaption: React.FC<CommonProps> = ({ text, brass, navy }) =>
   return (
     <AbsoluteFill style={{ backgroundColor: navy, justifyContent: "center", alignItems: "center", padding: "90px 180px" }}>
       <h1 style={{
-        opacity, color: "#fff", fontFamily: "Georgia, serif", fontWeight: 900,
+        opacity, color: "#fff", fontFamily: `${DISPLAY_FONT}, Georgia, serif`, fontWeight: 900,
         fontSize: 96, lineHeight: 1.05, textAlign: "center", margin: 0, maxWidth: 720,
       }}>
         {text}
@@ -60,7 +61,7 @@ export const HookPatternInterrupt: React.FC<CommonProps> = ({ text, brass, navy,
       <AbsoluteFill style={{ background: brass, opacity: flashOpacity }} />
       <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", padding: "90px 180px" }}>
         <h1 style={{
-          opacity: textOpacity, color: "#fff", fontFamily: "Georgia, serif",
+          opacity: textOpacity, color: "#fff", fontFamily: `${DISPLAY_FONT}, Georgia, serif`,
           fontWeight: 900, fontSize: 92, lineHeight: 1.04, textAlign: "center", margin: 0, maxWidth: 720,
         }}>
           {text}
@@ -85,11 +86,11 @@ export const HookBigNumber: React.FC<CommonProps> = ({ text, brass, navy, tier =
     <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", padding: "60px 180px" }}>
       <div style={{
         transform: `scale(${numScale * max})`, color: brass,
-        fontFamily: "Georgia, serif", fontWeight: 900, fontSize: 280, lineHeight: 1,
+        fontFamily: `${DISPLAY_FONT}, Georgia, serif`, fontWeight: 900, fontSize: 280, lineHeight: 1,
       }}>{num}</div>
       <div style={{
         opacity: restOpacity, color: "#fff", marginTop: 24,
-        fontFamily: "Georgia, serif", fontWeight: 800, fontSize: 76, lineHeight: 1.08,
+        fontFamily: `${DISPLAY_FONT}, Georgia, serif`, fontWeight: 800, fontSize: 76, lineHeight: 1.08,
         textAlign: "center", maxWidth: 720,
       }}>{rest}</div>
     </AbsoluteFill>
@@ -104,7 +105,7 @@ export const HookBeforeAfter: React.FC<CommonProps> = ({ text, brass, navy }) =>
   const bOp = interpolate(f, [10, 18], [0, 1], { extrapolateRight: "clamp" });
   const cell: React.CSSProperties = {
     flex: 1, display: "flex", justifyContent: "center", alignItems: "center",
-    padding: "60px 180px", color: "#fff", fontFamily: "Georgia, serif", fontWeight: 900,
+    padding: "60px 180px", color: "#fff", fontFamily: `${DISPLAY_FONT}, Georgia, serif`, fontWeight: 900,
     fontSize: 72, textAlign: "center", lineHeight: 1.1,
   };
   return (
@@ -125,7 +126,7 @@ export const HookBlurToFocus: React.FC<CommonProps> = ({ text, brass, navy }) =>
     <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", padding: "90px 180px" }}>
       <h1 style={{
         opacity, filter: `blur(${blur}px)`, color: "#fff",
-        fontFamily: "Georgia, serif", fontWeight: 900, fontSize: 92,
+        fontFamily: `${DISPLAY_FONT}, Georgia, serif`, fontWeight: 900, fontSize: 92,
         lineHeight: 1.05, textAlign: "center", margin: 0, maxWidth: 720,
       }}>
         {text}

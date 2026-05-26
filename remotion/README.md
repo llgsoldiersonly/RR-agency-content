@@ -25,11 +25,35 @@ Duration is computed from the number of script beats (hook + beats + CTA), so a 
 6-beat reel come out the right length automatically.
 
 ## Faceless vs. real footage
-- **Faceless (default):** nothing to do — captions animate over the brand background.
-- **Over client footage:** drop the clip in `remotion/public/` and add `"footage": "clip.mp4"` to the
-  reel item in `content.json`. Same for a licensed track via `"music": "track.mp3"`.
+
+### Faceless (default — no clip required)
+Captions animate over the brand background. The "background" is no longer flat navy — the scaffold
+layers a radial gradient, a subtle SVG noise grain, and a vignette so it reads as a produced shot,
+not a colored slide. Good enough to ship without ever filming.
+
+### Over real footage (the big visual lift)
+1. Drop the clip in `remotion/public/` (e.g. `hartman-broll-traffic.mp4`).
+2. Add `"footage": "hartman-broll-traffic.mp4"` to the reel item in `content.json`.
+3. The scaffold auto-overlays a navy gradient so captions stay readable on any footage.
+
+**Sourcing b-roll cheaply:**
+- Pexels / Pixabay — free, license-permissive, plenty of intersection / highway / paperwork shots
+- Storyblocks / Artgrid — paid but huge legal-relevant catalog
+- Filmed by the firm — phone footage of their office, intake desk, signing, courthouse exterior
+
+Aim for ~10s clips at 1080×1920 (or any resolution — Remotion downscales). Motion in the clip
+(traffic, pen moving, door opening) reads as energy without competing with captions.
+
+### Music
+Same workflow: drop `track.mp3` in `remotion/public/`, add `"music": "track.mp3"` to the reel.
+
+### Attorney brand chip
+Set `project.attorney` in `content.json` (`{ "name": "Dana Hartman", "role": "Founding Attorney" }`)
+and every reel renders a small top-left chip after the hook — works as the firm's station ID across
+the whole month. Per-item `attorney` overrides the project default if you ever co-brand.
 
 ## Notes
 - Output is H.264 (universally upload-friendly — better than the HEVC your CapCut export used).
-- Brand fonts: the demo uses system serif/sans. To use the firm's fonts, load them with
-  `@remotion/google-fonts` or a local `@font-face` and swap the `fontFamily` values in `src/Reel.tsx`.
+- Display font is **Fraunces** (variable-weight serif, loaded via `@remotion/google-fonts`), used
+  for hooks and the CTA card. Captions stay on Arial Black system stack — that's what reads as a
+  native Reels/TikTok overlay.

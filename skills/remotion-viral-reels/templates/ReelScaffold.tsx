@@ -2,6 +2,7 @@ import {
   AbsoluteFill, Audio, OffthreadVideo, Sequence,
   staticFile, useVideoConfig,
 } from "remotion";
+import { AttorneyLowerThird } from "./AttorneyLowerThird";
 import { CaptionBlock } from "./CaptionBlock";
 import { CTAEndCard } from "./CTAEndCard";
 import { HookVisual, HookVisualKind } from "./HookVisuals";
@@ -19,6 +20,7 @@ export type ReelScaffoldProps = {
   tier: MotionTier;             // computed via computeMotionTier(area, pillar, platform)
   footage?: string;
   music?: string;
+  attorney?: { name: string; role?: string };  // optional brand chip
 };
 
 export const FPS = 30;
@@ -31,12 +33,23 @@ export const reelDurationInFrames = (beatCount: number) =>
 
 const isDev = process.env.REMOTION_DEV_SAFEZONES === "1";
 
+// SVG noise texture as a data URI. Used as a subtle grain layer over the
+// no-footage background so the reel doesn't read as "flat color slide."
+// 240×240 tile, fractal noise, baked into a single base64-encoded string.
+const GRAIN_SVG = encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240">' +
+  '<filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3"/>' +
+  '<feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0"/></filter>' +
+  '<rect width="240" height="240" filter="url(#n)"/></svg>'
+);
+const GRAIN_URL = `url("data:image/svg+xml;utf8,${GRAIN_SVG}")`;
+
 // Drop-in production scaffold. Use this from your project's RemotionRoot.
 // Wires hook visual → beats (with motion + emphasis + position) → CTA end card,
-// plus optional B-roll and music, plus dev safe-zone overlay.
+// plus optional B-roll and music, plus the attorney chip, plus dev safe-zone overlay.
 export const ReelScaffold: React.FC<ReelScaffoldProps> = ({
   hook, hookVisual = "punch-in", beats, cta, ctaSubline,
-  brand, tier, footage, music,
+  brand, tier, footage, music, attorney,
 }) => {
   const { durationInFrames } = useVideoConfig();
   const hookF = Math.round(HOOK_S * FPS);
@@ -53,9 +66,23 @@ export const ReelScaffold: React.FC<ReelScaffoldProps> = ({
           }} />
         </AbsoluteFill>
       ) : (
-        <AbsoluteFill style={{
-          background: "radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.08), transparent 60%)",
-        }} />
+        <>
+          <AbsoluteFill style={{
+            background: "radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.08), transparent 60%)",
+          }} />
+          {/* Subtle grain — keeps the no-footage background from reading as a flat slide */}
+          <AbsoluteFill style={{
+            backgroundImage: GRAIN_URL,
+            opacity: 0.14,
+            mixBlendMode: "overlay",
+            pointerEvents: "none",
+          }} />
+          {/* Soft vignette for cinematic depth */}
+          <AbsoluteFill style={{
+            background: "radial-gradient(120% 100% at 50% 60%, transparent 55%, rgba(0,0,0,0.45) 100%)",
+            pointerEvents: "none",
+          }} />
+        </>
       )}
 
       <Sequence durationInFrames={hookF}>
@@ -80,6 +107,18 @@ export const ReelScaffold: React.FC<ReelScaffoldProps> = ({
       <Sequence from={durationInFrames - ctaF} durationInFrames={ctaF}>
         <CTAEndCard cta={cta} brass={brand.brass} navy={brand.navy} subline={ctaSubline} />
       </Sequence>
+
+      {/* Attorney chip — sits between TOP DANGER and CAPTION PREFERRED. Fades in after the
+          hook so it doesn't compete with the headline, then holds for the rest of the reel. */}
+      {attorney ? (
+        <AttorneyLowerThird
+          name={attorney.name}
+          role={attorney.role}
+          navy={brand.navy}
+          brass={brand.brass}
+          delayFrames={hookF}
+        />
+      ) : null}
 
       {music ? <Audio src={music.startsWith("http") ? music : staticFile(music)} volume={0.4} /> : null}
 

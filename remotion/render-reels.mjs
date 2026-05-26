@@ -12,6 +12,7 @@ const contentDir = dirname(dataAbs);
 const data = JSON.parse(readFileSync(dataAbs, "utf8"));
 const brand = (data.project && data.project.brand) || { navy: "#0B2A4A", brass: "#C8A24B" };
 const projectArea = (data.project && data.project.practiceArea) || "personal-injury";
+const projectAttorney = data.project && data.project.attorney;  // { name, role } — optional brand chip
 
 // reels = items of type reel, plus lead-magnets that carry a script (they're reels too)
 const reels = (data.items || []).filter((i) => i.type === "reel" || (i.type === "lead-magnet" && Array.isArray(i.script)));
@@ -41,6 +42,7 @@ for (const r of reels) {
     brand,
     footage: r.footage,                        // optional: place clip in remotion/public, set item.footage
     music: r.music,                            // optional: licensed track in remotion/public
+    attorney: r.attorney || projectAttorney,   // optional brand chip; per-item override > project default
     // Tier resolution (any one works; explicit wins):
     tier: r.motionTier,                        // explicit per-item override
     area: r.practiceArea || projectArea,       // computed via 3-dial matrix

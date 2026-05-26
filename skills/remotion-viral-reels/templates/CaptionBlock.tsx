@@ -56,7 +56,7 @@ export const CaptionBlock: React.FC<Props> = ({
   const tokens = tokenize(text, emphasis);
 
   return (
-    <div style={slotStyle(position)}>
+    <div style={{ ...slotStyle(position), filter: "drop-shadow(0 14px 26px rgba(0,0,0,0.45))" }}>
       <span
         style={{
           opacity,

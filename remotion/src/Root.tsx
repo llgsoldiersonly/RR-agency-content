@@ -17,6 +17,7 @@ const demoProps: ReelProps = {
   cta: "Free review",
   ctaSubline: "Comment REVIEW",
   brand: { navy: "#0B2A4A", brass: "#C8A24B" },
+  attorney: { name: "Dana Hartman", role: "Founding Attorney" },
 };
 
 export const RemotionRoot: React.FC = () => (
