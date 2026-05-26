@@ -2,7 +2,6 @@ import {
   AbsoluteFill, Audio, OffthreadVideo, Sequence,
   staticFile, useVideoConfig,
 } from "remotion";
-import { AttorneyLowerThird } from "./AttorneyLowerThird";
 import { CaptionBlock } from "./CaptionBlock";
 import { CTAEndCard } from "./CTAEndCard";
 import { HookVisual, HookVisualKind } from "./HookVisuals";
@@ -20,7 +19,7 @@ export type ReelScaffoldProps = {
   tier: MotionTier;             // computed via computeMotionTier(area, pillar, platform)
   footage?: string;
   music?: string;
-  attorney?: { name: string; role?: string };  // optional brand chip
+  attorney?: { name: string; role?: string };  // rendered prominently on the CTA card
 };
 
 export const FPS = 30;
@@ -105,20 +104,14 @@ export const ReelScaffold: React.FC<ReelScaffoldProps> = ({
       ))}
 
       <Sequence from={durationInFrames - ctaF} durationInFrames={ctaF}>
-        <CTAEndCard cta={cta} brass={brand.brass} navy={brand.navy} subline={ctaSubline} />
-      </Sequence>
-
-      {/* Attorney chip — sits between TOP DANGER and CAPTION PREFERRED. Fades in after the
-          hook so it doesn't compete with the headline, then holds for the rest of the reel. */}
-      {attorney ? (
-        <AttorneyLowerThird
-          name={attorney.name}
-          role={attorney.role}
-          navy={brand.navy}
+        <CTAEndCard
+          cta={cta}
           brass={brand.brass}
-          delayFrames={hookF}
+          navy={brand.navy}
+          subline={ctaSubline}
+          attorney={attorney}
         />
-      ) : null}
+      </Sequence>
 
       {music ? <Audio src={music.startsWith("http") ? music : staticFile(music)} volume={0.4} /> : null}
 
