@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Hartman carousel mockup — How a settlement gets bigger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Inter:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0B2A4A;
+    --navy-deep: #07223D;
+    --navy-line: #1A3A60;
+    --brass: #C8A24B;
+    --brass-bright: #E4BC60;
+    --paper: #F5F1E8;
+    --white-soft: #E8E2D3;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1f2e;
+    font-family: "Inter", -apple-system, sans-serif;
+    padding: 32px;
+    color: #ddd;
+  }
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 28px;
+    max-width: 1480px;
+    margin: 0 auto;
+  }
+  .gallery > h1 {
+    grid-column: 1 / -1;
+    font-family: "Fraunces", serif;
+    font-weight: 700;
+    color: #fff;
+    font-size: 28px;
+    margin-bottom: 4px;
+  }
+  .gallery > p.sub {
+    grid-column: 1 / -1;
+    font-size: 14px;
+    color: #aaa;
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+  .slide {
+    width: 100%;
+    aspect-ratio: 1080 / 1350;
+    background: var(--navy);
+    background-image: radial-gradient(140% 100% at 50% 0%, rgba(255,255,255,.04), transparent 55%);
+    color: var(--paper);
+    position: relative;
+    overflow: hidden;
+    border-radius: 14px;
+    box-shadow: 0 24px 50px -22px rgba(0,0,0,0.6);
+    /* every dimension below is in 1080px coordinate space, then scaled */
+    container-type: inline-size;
+  }
+  /* cqw lets us write px in the original 1080 frame coords */
+  .frame {
+    position: absolute; inset: 0;
+    padding: 6cqw 6cqw;
+    display: flex; flex-direction: column;
+  }
+  /* common chrome */
+  .topbar {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 1.6cqw; font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .handle { color: var(--brass); font-family: "Inter", sans-serif; font-weight: 700; }
+  .pageno { color: var(--paper); opacity: 0.5; font-family: "Inter", sans-serif; }
+  .topbar::after { display: none; }
+  .topbar-divider {
+    width: 7cqw; height: 0.35cqw; background: var(--brass);
+    margin-top: 1.4cqw;
+  }
+  .tagline-bot {
+    margin-top: auto; color: var(--brass);
+    font-family: "Fraunces", serif; font-weight: 700;
+    font-size: 2.2cqw; letter-spacing: -0.005em;
+  }
+
+  /* ── SLIDE 1: hero ────────────────────────────────────── */
+  .s1 .body { margin: auto 0; }
+  .s1 .eyebrow {
+    font-family: "Inter", sans-serif; font-weight: 800;
+    font-size: 1.6cqw; letter-spacing: 0.3em;
+    color: var(--brass); text-transform: uppercase;
+    margin-bottom: 2cqw;
+  }
+  .s1 .h1 {
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 7.8cqw; line-height: 0.96;
+    letter-spacing: -0.025em; color: #fff;
+    max-width: 80%;
+  }
+  .s1 .h1 em { font-style: normal; color: var(--brass); }
+  .s1 .sub {
+    font-family: "Fraunces", serif; font-weight: 500;
+    font-size: 2.5cqw; line-height: 1.3;
+    color: var(--white-soft); margin-top: 2.4cqw; max-width: 70%;
+  }
+  .s1 .swipe {
+    margin-top: 4cqw;
+    font-family: "Inter", sans-serif; font-weight: 800;
+    font-size: 1.5cqw; letter-spacing: 0.24em;
+    color: var(--brass-bright); text-transform: uppercase;
+    display: flex; align-items: center; gap: 0.8cqw;
+  }
+  .s1 .swipe::after {
+    content: ""; display: block;
+    width: 4cqw; height: 0.18cqw; background: currentColor;
+  }
+
+  /* ── SLIDE 2: numbered step + icon ──────────────────────── */
+  .s2 .icon-wrap {
+    width: 8cqw; height: 8cqw; border-radius: 50%;
+    border: 0.22cqw solid var(--brass);
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 6cqw;
+  }
+  .s2 .icon-wrap svg { width: 4.5cqw; height: 4.5cqw; }
+  .s2 .stepnum {
+    margin-top: 4cqw;
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 4cqw; color: var(--brass);
+    letter-spacing: 0.05em;
+  }
+  .s2 .h2 {
+    margin-top: 0.4cqw;
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 6.4cqw; line-height: 1.0;
+    color: #fff; letter-spacing: -0.015em;
+    max-width: 88%;
+  }
+  .s2 .body-text {
+    margin-top: 3cqw;
+    font-family: "Fraunces", serif; font-weight: 500;
+    font-size: 2.3cqw; line-height: 1.35;
+    color: var(--white-soft); max-width: 80%;
+  }
+  .s2 .checklist {
+    margin-top: 4cqw;
+    list-style: none; padding: 0;
+    display: flex; flex-direction: column; gap: 1.6cqw;
+  }
+  .s2 .checklist li {
+    display: flex; align-items: flex-start; gap: 1.4cqw;
+    font-family: "Inter", sans-serif; font-weight: 500;
+    font-size: 2cqw; line-height: 1.3;
+    color: var(--paper);
+  }
+  .s2 .checklist .dot {
+    flex-shrink: 0; width: 1cqw; height: 1cqw; border-radius: 50%;
+    background: var(--brass); margin-top: 0.7cqw;
+  }
+
+  /* ── SLIDE 3: two-column compare ─────────────────────── */
+  .s3 .stepnum {
+    margin-top: 4cqw;
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 4cqw; color: var(--brass); letter-spacing: 0.05em;
+  }
+  .s3 .h2 {
+    margin-top: 0.4cqw;
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 6cqw; line-height: 1.0; color: #fff;
+    letter-spacing: -0.015em;
+  }
+  .s3 .compare {
+    margin-top: 4.5cqw;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 2cqw;
+  }
+  .s3 .col {
+    border: 0.15cqw solid var(--navy-line);
+    border-radius: 1.4cqw;
+    padding: 2.8cqw 2.4cqw;
+    background: rgba(7,34,61,0.5);
+  }
+  .s3 .col.weak { border-color: rgba(200,162,75,0.18); }
+  .s3 .col.strong { border-color: var(--brass); background: rgba(200,162,75,0.06); }
+  .s3 .col h4 {
+    font-family: "Inter", sans-serif; font-weight: 800;
+    font-size: 1.5cqw; letter-spacing: 0.18em; text-transform: uppercase;
+    margin-bottom: 2cqw;
+  }
+  .s3 .col.weak h4 { color: rgba(245,241,232,0.5); }
+  .s3 .col.strong h4 { color: var(--brass); }
+  .s3 .col ul { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1.4cqw; }
+  .s3 .col li {
+    font-family: "Inter", sans-serif; font-weight: 500;
+    font-size: 1.9cqw; line-height: 1.3;
+    color: var(--paper);
+    display: flex; align-items: flex-start; gap: 1cqw;
+  }
+  .s3 .col.weak li { color: rgba(245,241,232,0.55); }
+  .s3 .col .mark {
+    flex-shrink: 0; width: 1.5cqw; height: 1.5cqw; margin-top: 0.4cqw;
+  }
+
+  /* ── SLIDE 4: shield + statement ─────────────────────── */
+  .s4 .body { margin: auto 0; text-align: center; display: flex; flex-direction: column; align-items: center; }
+  .s4 .shield-wrap {
+    width: 14cqw; height: 14cqw; border-radius: 50%;
+    border: 0.25cqw solid var(--brass);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 4cqw;
+  }
+  .s4 .shield-wrap svg { width: 7cqw; height: 7cqw; }
+  .s4 .stepnum {
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 3cqw; color: var(--brass); letter-spacing: 0.1em;
+    margin-bottom: 1cqw;
+  }
+  .s4 .h2 {
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 7cqw; line-height: 1.0; color: #fff;
+    letter-spacing: -0.02em; max-width: 86%;
+  }
+  .s4 .quote {
+    margin-top: 3.4cqw;
+    font-family: "Fraunces", serif; font-weight: 500; font-style: italic;
+    font-size: 2.6cqw; line-height: 1.35;
+    color: var(--white-soft); max-width: 70%;
+  }
+
+  /* ── SLIDE 5: pull-quote pattern interrupt ───────────── */
+  .s5 { background: var(--navy-deep); }
+  .s5 .body { margin: auto 0; }
+  .s5 .quote-mark {
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 14cqw; line-height: 1; color: var(--brass);
+    margin-bottom: -2cqw;
+  }
+  .s5 .pull {
+    font-family: "Fraunces", serif; font-weight: 700;
+    font-size: 5.2cqw; line-height: 1.12;
+    letter-spacing: -0.018em;
+    color: #fff;
+    max-width: 90%;
+  }
+  .s5 .pull em { font-style: normal; color: var(--brass); }
+  .s5 .attribution {
+    margin-top: 4cqw;
+    display: flex; align-items: center; gap: 1.4cqw;
+  }
+  .s5 .att-line {
+    width: 3cqw; height: 0.18cqw; background: var(--brass);
+  }
+  .s5 .att-text {
+    font-family: "Inter", sans-serif; font-weight: 700;
+    font-size: 1.7cqw; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--brass);
+  }
+
+  /* ── SLIDE 6: CTA ────────────────────────────────────── */
+  .s6 .body { margin: auto 0; }
+  .s6 .eyebrow {
+    font-family: "Inter", sans-serif; font-weight: 800;
+    font-size: 1.6cqw; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--brass); margin-bottom: 2cqw;
+  }
+  .s6 .h1 {
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 7.2cqw; line-height: 0.98; color: #fff;
+    letter-spacing: -0.022em; max-width: 88%;
+  }
+  .s6 .sub {
+    margin-top: 2.6cqw;
+    font-family: "Fraunces", serif; font-weight: 500;
+    font-size: 2.5cqw; line-height: 1.3;
+    color: var(--white-soft); max-width: 72%;
+  }
+  .s6 .actions {
+    margin-top: 4.5cqw;
+    display: flex; flex-direction: column; gap: 1.5cqw;
+  }
+  .s6 .cta-primary {
+    background: var(--brass); color: var(--navy);
+    border-radius: 999px;
+    padding: 2.4cqw 3.2cqw;
+    font-family: "Inter", sans-serif; font-weight: 800;
+    font-size: 2.4cqw; letter-spacing: 0.02em;
+    display: inline-flex; align-items: center; gap: 1cqw;
+    align-self: flex-start;
+    box-shadow: 0 2cqw 3cqw -1.5cqw rgba(200,162,75,0.5);
+  }
+  .s6 .cta-secondary {
+    color: var(--paper); opacity: 0.85;
+    font-family: "Inter", sans-serif; font-weight: 500;
+    font-size: 1.9cqw;
+  }
+  .s6 .cta-secondary strong {
+    color: var(--brass-bright); font-weight: 800;
+  }
+
+  .label {
+    grid-column: 1 / -1;
+    color: #888; font-size: 12px;
+    text-transform: uppercase; letter-spacing: 0.15em;
+    margin-top: 24px; padding-top: 14px;
+    border-top: 1px solid #333;
+  }
+</style>
+</head>
+<body>
+
+<div class="gallery">
+  <h1>Hartman carousel mockup — “How a settlement gets bigger”</h1>
+  <p class="sub">
+    Six slides, six distinct layouts. Same palette throughout (navy + brass + warm white).
+    Restrained: no painted strokes, no competing accent colors, generous whitespace.
+    Type-driven hierarchy instead of decoration-driven.
+  </p>
+
+  <!-- SLIDE 1: HERO -->
+  <div class="slide s1"><div class="frame">
+    <div class="topbar">
+      <span class="handle">@hartmaninjurylaw</span>
+      <span class="pageno">1 / 6</span>
+    </div>
+    <div class="topbar-divider"></div>
+    <div class="body">
+      <div class="eyebrow">A guide from your corner</div>
+      <h1 class="h1">How a settlement<br>gets <em>bigger</em>.</h1>
+      <p class="sub">It’s process, not a magic number. No promises — here’s the work that moves the number.</p>
+      <div class="swipe">Swipe</div>
+    </div>
+    <div class="tagline-bot">Hurt? Get Hartman.</div>
+  </div></div>
+
+  <!-- SLIDE 2: STEP 01 + ICON + CHECKLIST -->
+  <div class="slide s2"><div class="frame">
+    <div class="topbar">
+      <span class="handle">@hartmaninjurylaw</span>
+      <span class="pageno">2 / 6</span>
+    </div>
+    <div class="topbar-divider"></div>
+    <div class="icon-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="5" y="3" width="14" height="18" rx="2"/>
+        <line x1="8" y1="8" x2="16" y2="8"/>
+        <line x1="8" y1="12" x2="16" y2="12"/>
+        <line x1="8" y1="16" x2="13" y2="16"/>
+      </svg>
+    </div>
+    <div class="stepnum">01</div>
+    <h2 class="h2">Document the full harm.</h2>
+    <p class="body-text">Not just today’s bills — future care, lost income, and how life actually changed.</p>
+    <ul class="checklist">
+      <li><span class="dot"></span>Medical bills, past and projected.</li>
+      <li><span class="dot"></span>Lost wages and reduced earning capacity.</li>
+      <li><span class="dot"></span>Routines, relationships, sleep, mood.</li>
+    </ul>
+    <div class="tagline-bot">Hurt? Get Hartman.</div>
+  </div></div>
+
+  <!-- SLIDE 3: STEP 02 + COMPARE -->
+  <div class="slide s3"><div class="frame">
+    <div class="topbar">
+      <span class="handle">@hartmaninjurylaw</span>
+      <span class="pageno">3 / 6</span>
+    </div>
+    <div class="topbar-divider"></div>
+    <div class="stepnum">02</div>
+    <h2 class="h2">Build it before we ask.</h2>
+    <div class="compare">
+      <div class="col weak">
+        <h4>A phone call</h4>
+        <ul>
+          <li><svg class="mark" viewBox="0 0 24 24" fill="none" stroke="rgba(245,241,232,0.45)" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>Story, not paper.</li>
+          <li><svg class="mark" viewBox="0 0 24 24" fill="none" stroke="rgba(245,241,232,0.45)" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>Easy to lowball.</li>
+          <li><svg class="mark" viewBox="0 0 24 24" fill="none" stroke="rgba(245,241,232,0.45)" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>No leverage to walk.</li>
+        </ul>
+      </div>
+      <div class="col strong">
+        <h4>Organized demand</h4>
+        <ul>
+          <li><svg class="mark" viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg>Records, photos, timeline.</li>
+          <li><svg class="mark" viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg>Numbers tied to bills.</li>
+          <li><svg class="mark" viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg>Reads as trial-ready.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tagline-bot">Hurt? Get Hartman.</div>
+  </div></div>
+
+  <!-- SLIDE 4: STEP 03 + SHIELD + QUOTE -->
+  <div class="slide s4"><div class="frame">
+    <div class="topbar">
+      <span class="handle">@hartmaninjurylaw</span>
+      <span class="pageno">4 / 6</span>
+    </div>
+    <div class="topbar-divider"></div>
+    <div class="body">
+      <div class="shield-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3 L20 6 V12 C20 17 16 20.5 12 21.5 C8 20.5 4 17 4 12 V6 Z"/>
+          <polyline points="9 12 11 14 15 10"/>
+        </svg>
+      </div>
+      <div class="stepnum">03</div>
+      <h2 class="h2">Be ready to say no.</h2>
+      <p class="quote">Cases tend to resolve higher when the other side believes we’ll go the distance.</p>
+    </div>
+    <div class="tagline-bot">Hurt? Get Hartman.</div>
+  </div></div>
+
+  <!-- SLIDE 5: PULL QUOTE — pattern interrupt -->
+  <div class="slide s5"><div class="frame">
+    <div class="topbar">
+      <span class="handle">@hartmaninjurylaw</span>
+      <span class="pageno">5 / 6</span>
+    </div>
+    <div class="topbar-divider"></div>
+    <div class="body">
+      <div class="quote-mark">“</div>
+      <p class="pull">The case that gets <em>paid the most</em> is the case that was already <em>ready for trial</em>.</p>
+      <div class="attribution">
+        <span class="att-line"></span>
+        <span class="att-text">Dana Hartman · Founding Attorney</span>
+      </div>
+    </div>
+    <div class="tagline-bot">Hurt? Get Hartman.</div>
+  </div></div>
+
+  <!-- SLIDE 6: CTA -->
+  <div class="slide s6"><div class="frame">
+    <div class="topbar">
+      <span class="handle">@hartmaninjurylaw</span>
+      <span class="pageno">6 / 6</span>
+    </div>
+    <div class="topbar-divider"></div>
+    <div class="body">
+      <div class="eyebrow">Hurt in a Tampa crash?</div>
+      <h1 class="h1">Let’s see what your case is actually worth.</h1>
+      <p class="sub">Free review. You pay nothing unless we win.</p>
+      <div class="actions">
+        <span class="cta-primary">
+          DM us “REVIEW”
+          <svg width="22" height="14" viewBox="0 0 22 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="2" y1="7" x2="20" y2="7"/>
+            <polyline points="14 1 20 7 14 13"/>
+          </svg>
+        </span>
+        <span class="cta-secondary">or call <strong>(813) 555-0142</strong></span>
+      </div>
+    </div>
+    <div class="tagline-bot">Hurt? Get Hartman.</div>
+  </div></div>
+
+  <div class="label">Six layouts: hero · numbered-step+icon · two-column compare · centered shield+quote · pull-quote · CTA</div>
+</div>
+
+</body>
+</html>
