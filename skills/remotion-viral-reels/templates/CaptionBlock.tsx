@@ -49,7 +49,7 @@ export const CaptionBlock: React.FC<Props> = ({
   const tokens = tokenize(text, emphasis);
 
   return (
-    <div style={{ position: "absolute", inset: 0, display: "flex", ...positionStyle(position) }}>
+    <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", ...positionStyle(position) }}>
       <span
         style={{
           opacity,
