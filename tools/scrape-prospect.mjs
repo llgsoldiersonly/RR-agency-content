@@ -56,14 +56,32 @@ const firmName = ogSite || ogTitle || titleTag || h1 || base.hostname.replace(/^
 
 // ── logo candidates (visible page logos beat favicons — apple-touch-icon
 //    is just a 180×180 square crop, not the horizontal logotype we want
-//    showing in a pitch hero) ────────────────────────────────────────
+//    showing in a pitch hero). We also explicitly reject URLs that look
+//    like favicons (cropped-*Favicon* is WordPress's auto-generated
+//    icon naming pattern) until we've exhausted every real-logo option.
+const isFaviconUrl = (u) => /favicon|cropped-.*-(?:32|180|192|512)x\d+/i.test(u || "");
+
 const logoCandidates = [
+  // explicit "logo" attribution
   $('img[alt*="logo" i]').first().attr("src"),
+  $('img.custom-logo').first().attr("src"),                // WordPress standard
   $('img[class*="logo" i]').first().attr("src"),
   $('img[id*="logo" i]').first().attr("src"),
   $('img[src*="logo" i]').first().attr("src"),
-  $('header img').first().attr("src"),
+  // logo containers (img nested inside something tagged as logo/brand)
+  $('[class*="logo" i] img').first().attr("src"),
+  $('[id*="logo" i] img').first().attr("src"),
+  $('[class*="brand" i] img').first().attr("src"),
+  $('.site-title img, .site-branding img').first().attr("src"),
+  // home-link image — overwhelmingly the firm's header mark
+  $('a[href="/"] img').first().attr("src"),
+  $('a[href$="' + base.hostname + '"] img').first().attr("src"),
+  $('a[href$="' + base.hostname + '/"] img').first().attr("src"),
+  // first img anywhere inside header/nav
+  $('header img, nav img').first().attr("src"),
+  // social card (often the firm's mark with their tagline)
   $('meta[property="og:image"]').attr("content"),
+  // last resort: square favicons
   $('link[rel="apple-touch-icon"]').attr("href"),
   $('link[rel="apple-touch-icon-precomposed"]').attr("href"),
   $('link[rel="icon"][sizes*="192"]').attr("href"),
@@ -72,8 +90,13 @@ const logoCandidates = [
   "/assets/logo.png", "/wp-content/uploads/logo.png",
 ].map(abs).filter(Boolean);
 
+// Split into "looks like a real logo" vs "looks like a favicon". Try
+// real logos first; only fall through to favicons if every real one fails.
+const realLogoCandidates = logoCandidates.filter((u) => !isFaviconUrl(u));
+const faviconCandidates  = logoCandidates.filter((u) =>  isFaviconUrl(u));
+
 let logoBuf = null, logoUrl = null;
-for (const u of logoCandidates) {
+for (const u of [...realLogoCandidates, ...faviconCandidates]) {
   const buf = await fetchBuf(u);
   if (buf) { logoBuf = buf; logoUrl = u; break; }
 }
