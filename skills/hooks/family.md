@@ -1,5 +1,7 @@
 # Skill: Family Law Hooks  — read `../hook-library.md` first
 
+`motion_baseline: conservative` — governs the visual tier in `remotion-viral-reels` (matrix lookup).
+
 ## Energy / tone
 Emotional stability, empathy, protection, calm authority. This niche must NEVER sound like PI.
 No aggression, no "destroy your ex." Emotional intelligence first — kids are usually involved.

@@ -1,5 +1,7 @@
 # Skill: Workers' Comp Hooks  — read `../hook-library.md` first
 
+`motion_baseline: medium` — governs the visual tier in `remotion-viral-reels` (matrix lookup).
+
 ## Energy / tone
 Worker advocacy, protection, righteous (trust-safe) frustration with employer/insurer TACTICS — not
 "all employers are evil." Validate the injured worker; empower them with their rights.

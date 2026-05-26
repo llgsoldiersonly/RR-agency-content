@@ -1,14 +1,21 @@
 import { Composition } from "remotion";
 import { Reel, ReelProps, reelDurationInFrames, FPS } from "./Reel";
 
+// Demo props exercise the upgraded fields: hookVisual, emphasis per beat,
+// motion intent per beat, position variation, and the 3-dial tier matrix.
 const demoProps: ReelProps = {
-  hook: "Crashes happen on I-275 and I-4 every day — the first 24 hours decide what your claim is worth.",
+  hook: "Most people quietly hurt their own claim on the first call.",
+  hookVisual: "punch-in",
+  area: "personal-injury",
+  pillar: "MYTH",
+  platform: "tiktok",
   beats: [
-    { onscreen: "1. See a doctor TODAY" },
-    { onscreen: "2. Photograph everything" },
-    { onscreen: "3. Wait on a statement" },
+    { onscreen: "Step 1: See a doctor today", emphasis: ["today"],     motion: "punch-in", position: "bot" },
+    { onscreen: "Step 2: Photograph everything", emphasis: ["everything"], motion: "punch-in", position: "bot" },
+    { onscreen: "Step 3: Don't give a statement", emphasis: ["Don't"],  motion: "pop",      position: "mid" },
   ],
   cta: "Free review",
+  ctaSubline: "Comment REVIEW",
   brand: { navy: "#0B2A4A", brass: "#C8A24B" },
 };
 

@@ -1,5 +1,7 @@
 # Skill: Lemon Law Hooks  — read `../hook-library.md` first
 
+`motion_baseline: medium` — governs the visual tier in `remotion-viral-reels` (matrix lookup).
+
 ## Energy / tone
 Consumer empowerment + righteous (trust-safe) outrage + validation. "You may be owed something and
 not know it." Energizing, not unhinged. Anti-defective-product-tactics, not "all dealers are crooks."

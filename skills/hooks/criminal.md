@@ -1,5 +1,7 @@
 # Skill: Criminal Defense Hooks  — read `../hook-library.md` first
 
+`motion_baseline: medium` — governs the visual tier in `remotion-viral-reels` (matrix lookup).
+
 ## Energy / tone
 Immediate, calm, high-stakes, reassuring. Authority that lowers the viewer's panic, not raises it.
 The audience is often scared — be the steady voice. Never imply you can beat any charge.

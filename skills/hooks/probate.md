@@ -1,5 +1,7 @@
 # Skill: Probate / Estate Hooks  — read `../hook-library.md` first
 
+`motion_baseline: conservative` — governs the visual tier in `remotion-viral-reels` (matrix lookup).
+
 ## Energy / tone
 Simplify chaos, protect the family, avoid conflict, calm. An underrated, low-competition niche.
 Almost zero fear — the win is making a confusing, emotional topic feel handleable.

@@ -1,5 +1,7 @@
 # Skill: Immigration Hooks  — read `../hook-library.md` first
 
+`motion_baseline: conservative` — governs the visual tier in `remotion-viral-reels` (matrix lookup).
+
 ## Energy / tone
 Hope, clarity, reassurance, gentle urgency. The audience is ALREADY anxious — give certainty, never
 amplify fear. Avoid robotic informational tone. Warm, human, authoritative-but-kind.

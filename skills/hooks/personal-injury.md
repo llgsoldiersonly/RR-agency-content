@@ -1,5 +1,7 @@
 # Skill: Personal Injury Hooks  — read `../hook-library.md` first
 
+`motion_baseline: medium` — governs the visual tier in `remotion-viral-reels` (matrix lookup).
+
 ## Energy / tone
 Protective, justice-oriented, confident, urgent. Anti-insurance-*tactics* — never anti-people,
 never absolute villains, never ambulance-chasing or fear-farming. Plain-spoken.

@@ -11,6 +11,7 @@ const dataAbs = resolve(process.cwd(), dataPath);
 const contentDir = dirname(dataAbs);
 const data = JSON.parse(readFileSync(dataAbs, "utf8"));
 const brand = (data.project && data.project.brand) || { navy: "#0B2A4A", brass: "#C8A24B" };
+const projectArea = (data.project && data.project.practiceArea) || "personal-injury";
 
 // reels = items of type reel, plus lead-magnets that carry a script (they're reels too)
 const reels = (data.items || []).filter((i) => i.type === "reel" || (i.type === "lead-magnet" && Array.isArray(i.script)));
@@ -26,11 +27,25 @@ let n = 0;
 for (const r of reels) {
   const inputProps = {
     hook: r.hook,
-    beats: (r.script || []).map((s) => ({ onscreen: s.onscreen, line: s.line })),
+    hookVisual: r.hookVisual,                  // optional: punch-in|bold-caption|pattern-interrupt|big-number|before-after|blur-to-focus
+    // Pass per-beat richness through to the composition (emphasis/motion/position handled there).
+    beats: (r.script || []).map((s) => ({
+      onscreen: s.onscreen,
+      line: s.line,
+      emphasis: s.emphasis,
+      motion: s.motion,
+      position: s.position,
+    })),
     cta: r.cta || "Free review",
+    ctaSubline: r.ctaSubline,                  // e.g. "Link in bio", "Comment REVIEW"
     brand,
-    footage: r.footage,   // optional: place the clip in remotion/public and set item.footage
-    music: r.music,       // optional: place a licensed track in remotion/public
+    footage: r.footage,                        // optional: place clip in remotion/public, set item.footage
+    music: r.music,                            // optional: licensed track in remotion/public
+    // Tier resolution (any one works; explicit wins):
+    tier: r.motionTier,                        // explicit per-item override
+    area: r.practiceArea || projectArea,       // computed via 3-dial matrix
+    pillar: r.pillar,
+    platform: (r.platforms && r.platforms[0]) || "instagram",
   };
   const composition = await selectComposition({ serveUrl, id: "Reel", inputProps });
   const out = join(outDir, r.id + ".mp4");
