@@ -1,11 +1,15 @@
 {
   "name": "agency-content-engine",
   "private": true,
-  "description": "V1 content engine — preview generator (no deps), slide renderer (@napi-rs/canvas)",
+  "description": "V1 content engine — preview generator (no deps), slide renderer (@napi-rs/canvas), prospect scraper (cheerio)",
   "scripts": {
     "preview": "node tools/generate-preview.mjs",
     "pitch": "node tools/generate-pitch.mjs",
-    "render:slides": "node tools/render-slides.mjs"
+    "render:slides": "node tools/render-slides.mjs",
+    "scrape:prospect": "node tools/scrape-prospect.mjs"
   },
-  "dependencies": { "@napi-rs/canvas": "^0.1.80" }
+  "dependencies": {
+    "@napi-rs/canvas": "^0.1.80",
+    "cheerio": "^1.0.0"
+  }
 }

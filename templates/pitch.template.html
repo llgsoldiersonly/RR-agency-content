@@ -19,6 +19,11 @@
   .wrap{max-width:980px;margin:0 auto;padding:0 22px}
   .eyebrow{text-transform:uppercase;letter-spacing:.3em;font-size:12px;color:var(--brand);font-weight:600;margin:0}
 
+  /* prospect logo — shown in hero + outro when pitch-content.json provides a path */
+  .prospect-logo{max-height:72px;width:auto;display:block;border-radius:8px}
+  .prospect-logo.hero-logo{margin-bottom:22px}
+  .prospect-logo.close-logo{margin:0 auto 22px}
+
   /* hero */
   .hero{padding:64px 0 44px;border-bottom:1px solid var(--line)}
   .hero h1{font-family:"Fraunces";font-weight:900;font-size:clamp(40px,7vw,76px);line-height:.98;
@@ -102,6 +107,7 @@
 <div class="wrap">
 
   <header class="hero">
+    <img class="prospect-logo hero-logo" id="prospectLogoHero" alt="" hidden>
     <p class="eyebrow" id="agencyEyebrow">Agency</p>
     <h1>Your first month,<br><span class="firm" id="firmName">your firm</span></h1>
     <p class="lede" id="intro"></p>
@@ -140,6 +146,7 @@
   </section>
 
   <section class="close">
+    <img class="prospect-logo close-logo" id="prospectLogoClose" alt="" hidden>
     <h2 id="closeHead">Ready to make this your month?</h2>
     <p id="closeSub"></p>
     <a class="btn" id="ctaBottom" href="#">Book a call</a>
@@ -153,6 +160,16 @@ const DATA = __PITCH_DATA__;
 const P = DATA.pitch || {};
 document.documentElement.style.setProperty("--brand", P.brandColor || "#B8202E");
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+
+// prospect logo (scraped via tools/scrape-prospect.mjs, then referenced as
+// `prospectLogo: "assets/logo.png"` in pitch-content.json). Optional.
+if (P.prospectLogo) {
+  document.querySelectorAll(".prospect-logo").forEach(img => {
+    img.src = P.prospectLogo;
+    img.alt = (P.prospect || "Prospect") + " logo";
+    img.removeAttribute("hidden");
+  });
+}
 
 // hero
 document.getElementById("agencyEyebrow").textContent = (P.agency||"") + " · built for you";
