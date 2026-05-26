@@ -54,51 +54,72 @@ const ogTitle  = cleanTitle($('meta[property="og:title"]').attr("content"));
 const h1       = $("h1").first().text().trim();
 const firmName = ogSite || ogTitle || titleTag || h1 || base.hostname.replace(/^www\./, "");
 
-// ── logo candidates (visible page logos beat favicons — apple-touch-icon
-//    is just a 180×180 square crop, not the horizontal logotype we want
-//    showing in a pitch hero). We also explicitly reject URLs that look
-//    like favicons (cropped-*Favicon* is WordPress's auto-generated
-//    icon naming pattern) until we've exhausted every real-logo option.
+// ── logo candidates — score-based picker ──────────────────────────────
+// Legal sites are messy: their actual header logo might be text-only
+// (CSS, no img), while their footer carries 5+ credential badges (bar
+// associations, Super Lawyers, AV Preeminent, BBB). The first <img>
+// whose src contains "logo" is often one of those badges, not the firm.
+//
+// Score each candidate by where it came from (selector strength) and
+// what its URL looks like (firm-name match = boost, credential keywords
+// = heavy penalty), then try highest-scoring first.
+const FIRM_SLUG = base.hostname.replace(/^www\./, "").split(".")[0].toLowerCase();
 const isFaviconUrl = (u) => /favicon|cropped-.*-(?:32|180|192|512)x\d+/i.test(u || "");
+const isCredentialBadge = (u) => /(bar[\s\-_.]?association|super[\s\-_]?lawyers?|av[\s\-_]?preeminent|preeminent|bbb|better[\s\-_]?business|million[\s\-_]?dollar|top[\s\-_]?\d+|state[\s\-_]?bar|accredited|certification|membership|client[\s\-_]?choice|martindale|hubbell|expertise|trial[\s\-_]?lawyer|naela|abota|justia[\s\-_]?badge)/i.test(u || "");
+const isCredentialPath  = (u) => /\/(?:footer|badges?|awards?|credentials?|memberships?|associations?|certifications?|affiliations?)\//i.test(u || "");
 
-const logoCandidates = [
-  // explicit "logo" attribution
-  $('img[alt*="logo" i]').first().attr("src"),
-  $('img.custom-logo').first().attr("src"),                // WordPress standard
-  $('img[class*="logo" i]').first().attr("src"),
-  $('img[id*="logo" i]').first().attr("src"),
-  $('img[src*="logo" i]').first().attr("src"),
-  // logo containers (img nested inside something tagged as logo/brand)
-  $('[class*="logo" i] img').first().attr("src"),
-  $('[id*="logo" i] img').first().attr("src"),
-  $('[class*="brand" i] img').first().attr("src"),
-  $('.site-title img, .site-branding img').first().attr("src"),
-  // home-link image — overwhelmingly the firm's header mark
-  $('a[href="/"] img').first().attr("src"),
-  $('a[href$="' + base.hostname + '"] img').first().attr("src"),
-  $('a[href$="' + base.hostname + '/"] img').first().attr("src"),
-  // first img anywhere inside header/nav
-  $('header img, nav img').first().attr("src"),
-  // social card (often the firm's mark with their tagline)
-  $('meta[property="og:image"]').attr("content"),
-  // last resort: square favicons
-  $('link[rel="apple-touch-icon"]').attr("href"),
-  $('link[rel="apple-touch-icon-precomposed"]').attr("href"),
-  $('link[rel="icon"][sizes*="192"]').attr("href"),
-  $('link[rel="icon"]').attr("href"),
-  "/logo.svg", "/logo.png", "/images/logo.svg", "/images/logo.png",
-  "/assets/logo.png", "/wp-content/uploads/logo.png",
-].map(abs).filter(Boolean);
+const candidates = [];
+const add = (url, source, base) => {
+  if (!url) return;
+  const a = abs(url);
+  if (a) candidates.push({ url: a, source, score: base });
+};
+// explicit "logo" attribution
+add($('img[alt*="logo" i]').first().attr("src"),       "img[alt~=logo]", 25);
+add($('img.custom-logo').first().attr("src"),          "img.custom-logo", 35);
+add($('img[class*="logo" i]').first().attr("src"),     "img[class~=logo]", 25);
+add($('img[id*="logo" i]').first().attr("src"),        "img[id~=logo]", 25);
+add($('img[src*="logo" i]').first().attr("src"),       "img[src~=logo]", 12);
+// logo containers
+add($('[class*="logo" i] img').first().attr("src"),    ".logo img", 22);
+add($('[id*="logo" i] img').first().attr("src"),       "#logo img", 22);
+add($('[class*="brand" i] img').first().attr("src"),   ".brand img", 20);
+add($('.site-title img, .site-branding img').first().attr("src"), "site-title img", 28);
+// home-link image
+add($('a[href="/"] img').first().attr("src"),          'a[href="/"] img', 22);
+// first img in header/nav
+add($('header img').first().attr("src"),               "header img", 20);
+add($('nav img').first().attr("src"),                  "nav img", 18);
+// social card — often the firm's mark
+add($('meta[property="og:image"]').attr("content"),    "og:image", 18);
+// last resort: square favicons
+add($('link[rel="apple-touch-icon"]').attr("href"),    "apple-touch-icon", 5);
+add($('link[rel="apple-touch-icon-precomposed"]').attr("href"), "apple-touch-icon-precomposed", 5);
+add($('link[rel="icon"][sizes*="192"]').attr("href"),  "icon-192", 5);
+add($('link[rel="icon"]').attr("href"),                "icon", 3);
+// hardcoded path guesses
+["/logo.svg","/logo.png","/images/logo.svg","/images/logo.png","/assets/logo.png","/wp-content/uploads/logo.png"]
+  .forEach(p => add(p, "fallback-path " + p, 5));
 
-// Split into "looks like a real logo" vs "looks like a favicon". Try
-// real logos first; only fall through to favicons if every real one fails.
-const realLogoCandidates = logoCandidates.filter((u) => !isFaviconUrl(u));
-const faviconCandidates  = logoCandidates.filter((u) =>  isFaviconUrl(u));
+// Apply URL-based scoring tweaks
+for (const c of candidates) {
+  const u = c.url.toLowerCase();
+  if (isCredentialBadge(u)) c.score -= 100;       // bar associations etc.
+  if (isCredentialPath(u))  c.score -= 50;        // /awards/, /credentials/
+  if (isFaviconUrl(u))      c.score -= 30;        // cropped-X-180x180 pattern
+  if (FIRM_SLUG.length >= 4 && u.includes(FIRM_SLUG)) c.score += 35;   // firm-name match
+}
 
-let logoBuf = null, logoUrl = null;
-for (const u of [...realLogoCandidates, ...faviconCandidates]) {
-  const buf = await fetchBuf(u);
-  if (buf) { logoBuf = buf; logoUrl = u; break; }
+// Dedupe + sort
+const seen = new Set();
+const ranked = candidates
+  .filter(c => { if (seen.has(c.url)) return false; seen.add(c.url); return true; })
+  .sort((a, b) => b.score - a.score);
+
+let logoBuf = null, logoUrl = null, logoSource = "";
+for (const c of ranked) {
+  const buf = await fetchBuf(c.url);
+  if (buf) { logoBuf = buf; logoUrl = c.url; logoSource = c.source; break; }
 }
 
 // ── brand color (meta theme-color only — logo color extraction is V2) ─
@@ -263,6 +284,7 @@ const yaml = [
   "# phone:       " + (phone || "(not found)"),
   "# email:       " + (email || "(not found)"),
   "# logo_source: " + (logoUrl || "(not found)"),
+  "# logo_picker: " + (logoSource || "(none)"),
   "# logo_saved:  " + (logoPath || "(none)"),
   "",
 ].join("\n");
