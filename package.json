@@ -1,0 +1,16 @@
+{
+  "name": "agency-content-engine",
+  "private": true,
+  "description": "V1 content engine — preview generator (no deps), slide renderer (@napi-rs/canvas)",
+  "scripts": {
+    "preview": "node tools/generate-preview.mjs",
+    "pitch": "node tools/generate-pitch.mjs",
+    "render:slides": "node tools/render-slides.mjs",
+    "carousel:studio": "node tools/carousel-studio.mjs"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "^0.1.80",
+    "@remotion/google-fonts": "^4.0.467",
+    "puppeteer": "^25.1.0"
+  }
+}

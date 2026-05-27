@@ -1,0 +1,787 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Hartman carousel v2 — lead-magnet 10-slide template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0B2A4A;
+    --navy-deep: #06192E;
+    --navy-line: #1A3A60;
+    --brass: #C8A24B;
+    --brass-bright: #E4BC60;
+    --brass-deep: #9C7E36;
+    --paper: #F5F1E8;
+    --paper-deep: #EFEAD8;
+    --ink: #0D1B2F;
+    --ink-mid: #4A5468;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #14181f;
+    font-family: "Inter", -apple-system, sans-serif;
+    padding: 32px;
+    color: #ddd;
+  }
+  .gallery { max-width: 1600px; margin: 0 auto; }
+  .gallery h1 {
+    font-family: "Fraunces", serif; font-weight: 700;
+    color: #fff; font-size: 28px; margin-bottom: 6px;
+  }
+  .gallery p.sub {
+    font-size: 14px; color: #aaa; margin-bottom: 24px; line-height: 1.5; max-width: 800px;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+  .slide {
+    width: 100%;
+    aspect-ratio: 1080 / 1440;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 20px 40px -18px rgba(0,0,0,0.7);
+    container-type: inline-size;
+  }
+  .slide.dark { background: var(--navy); color: var(--paper); }
+  .slide.dark.deep { background: var(--navy-deep); }
+  .slide.light { background: var(--paper); color: var(--ink); }
+  .slide.dark { background-image: radial-gradient(140% 100% at 50% 0%, rgba(255,255,255,.05), transparent 55%); }
+  .frame {
+    position: absolute; inset: 0;
+    /* IG safe zones: top ~150px (username overlay), bottom ~165px (action
+       bar + page dots). Pad to keep all important content inside. */
+    padding: 8.5cqw 7cqw 12cqw 7cqw;
+    display: flex; flex-direction: column;
+    justify-content: center;     /* vertically distribute content; brand still pulled to bottom via its margin-top:auto */
+  }
+  /* slide number badge — sits in the IG username overlay area (acceptable
+     for a small badge, references all do this) */
+  .num {
+    position: absolute; top: 3.5cqw; left: 3.5cqw;
+    width: 4cqw; height: 4cqw;
+    background: var(--brass);
+    color: var(--navy);
+    font-family: "Inter", sans-serif; font-weight: 900;
+    font-size: 2cqw; line-height: 4cqw;
+    text-align: center;
+    border-radius: 0.5cqw;
+  }
+  /* shared logo block — note bottom padding on .frame keeps this clear
+     of IG's action bar */
+  .brand {
+    margin-top: auto;
+    display: flex; flex-direction: column; align-items: center; gap: 0.8cqw;
+    padding-top: 2cqw;
+  }
+  .brand .mark {
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 3.8cqw; letter-spacing: -0.015em;
+    color: var(--brass);
+  }
+  .slide.light .brand .mark { color: var(--navy); }
+  .brand .mark em { font-style: normal; font-weight: 500; }
+  .brand .subline {
+    font-family: "Inter", sans-serif; font-weight: 700;
+    font-size: 1.3cqw; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--brass-deep);
+    border-top: 0.1cqw solid var(--brass);
+    padding-top: 0.6cqw;
+  }
+  .slide.dark .brand .subline { color: var(--brass-bright); border-color: var(--brass); }
+  .slide.light .brand .subline { color: var(--brass-deep); border-color: var(--brass-deep); }
+
+  /* universal closer line above brand. Default left-aligned to match
+     left-aligned content; centered-content slides override below. */
+  .closer {
+    text-align: left;
+    font-family: "Inter", sans-serif; font-weight: 800;
+    font-size: 2.4cqw; line-height: 1.15; letter-spacing: -0.005em;
+    text-transform: uppercase;
+    margin-top: 3cqw;
+  }
+  .slide.dark .closer { color: var(--paper); }
+  .slide.light .closer { color: var(--navy); }
+  .closer em { font-style: normal; color: var(--brass); }
+  .slide.light .closer em { color: var(--brass-deep); }
+  .closer-banner {
+    align-self: flex-start;
+    background: var(--brass);
+    color: var(--navy);
+    font-family: "Inter", sans-serif; font-weight: 900;
+    font-size: 2.4cqw; letter-spacing: 0.01em; text-transform: uppercase;
+    padding: 1.4cqw 3cqw;
+    border-radius: 0.6cqw;
+    margin-top: 3cqw;
+  }
+  /* centered-content slides: re-center their closer treatments */
+  .s1 .closer, .s9 .closer { text-align: center; }
+  .s3 .closer-banner { align-self: center; }
+
+  /* ── SLIDE 1: HERO ─────────────────────────────────────────────────── */
+  .s1 { background: var(--navy-deep); }
+  .s1::before {
+    content: ""; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 100% 0%, rgba(11,42,74,0.3), transparent 60%),
+      linear-gradient(135deg, #0a1b2e 0%, #16314e 50%, #0a1b2e 100%);
+    opacity: 0.85;
+  }
+  .s1 .body { margin: auto 0; padding-top: 6cqw; }
+  .s1 .lede {
+    font-family: "Inter", sans-serif; font-weight: 600;
+    font-size: 2cqw; line-height: 1.25; letter-spacing: 0.04em;
+    color: var(--paper); opacity: 0.85;
+    text-transform: uppercase;
+    margin-bottom: 2.4cqw;
+  }
+  .s1 .h1 {
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 8.6cqw; line-height: 0.94;
+    letter-spacing: -0.032em; color: #fff;
+  }
+  .s1 .h1 em { font-style: normal; color: var(--brass); }
+  .s1 .sub {
+    margin-top: 3cqw;
+    font-family: "Inter", sans-serif; font-weight: 500;
+    font-size: 2.4cqw; line-height: 1.35;
+    color: var(--paper); opacity: 0.92; max-width: 88%;
+  }
+  .s1 .sub strong { color: var(--brass-bright); font-weight: 800; }
+  .s1 .closer { color: var(--paper); opacity: 0.7; font-size: 1.6cqw; letter-spacing: 0.18em; margin-top: 4cqw; }
+
+  /* ── SLIDE 2: BRUTAL TRUTH ─────────────────────────────────────────── */
+  .s2 { text-align: center; }
+  .s2 .h1 {
+    margin-top: 1cqw;
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 5.6cqw; line-height: 1; letter-spacing: -0.025em;
+    color: var(--navy);
+    text-align: center;
+  }
+  .s2 .h1 em { font-style: normal; color: var(--brass-deep); }
+  .s2 .sub {
+    margin: 1.8cqw auto 0;
+    font-family: "Inter", sans-serif; font-weight: 500;
+    font-size: 2.3cqw; line-height: 1.35; color: var(--ink-mid);
+    max-width: 86%;
+    text-align: center;
+  }
+  .s2 .sub strong { color: var(--navy); font-weight: 800; }
+  .s2 .heading {
+    margin-top: 3.6cqw;
+    font-family: "Inter", sans-serif; font-weight: 900;
+    font-size: 2.2cqw; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--brass-deep);
+    text-align: center;
+  }
+  .s2 .heading::after {
+    content: ""; display: block;
+    width: 5cqw; height: 0.3cqw; background: var(--brass);
+    margin: 0.8cqw auto 0;
+  }
+  .s2 ul.x-list { margin-top: 2.6cqw; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 2cqw; align-items: center; }
+  .s2 ul.x-list li {
+    display: flex; align-items: center; gap: 1.8cqw;
+    font-family: "Inter", sans-serif; font-weight: 700;
+    font-size: 2.5cqw; color: var(--navy);
+  }
+  .s2 .closer { text-align: center; }
+  .x-circle {
+    flex-shrink: 0;
+    width: 3.4cqw; height: 3.4cqw; border-radius: 50%;
+    background: var(--brass);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .x-circle svg { width: 1.8cqw; height: 1.8cqw; }
+
+  /* ── SLIDE 3: FREE GUIDE ───────────────────────────────────────────── */
+  .s3 .banner-top {
+    align-self: center;
+    background: var(--brass);
+    color: var(--navy);
+    font-family: "Inter", sans-serif; font-weight: 900;
+    font-size: 3.2cqw; letter-spacing: 0.03em; text-transform: uppercase;
+    padding: 1.4cqw 3cqw; border-radius: 0.5cqw;
+    margin-top: 4cqw;
+  }
+  .s3 .caption {
+    text-align: center; margin-top: 3cqw;
+    font-family: "Inter", sans-serif; font-weight: 700;
+    font-size: 1.8cqw; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--paper); opacity: 0.85;
+  }
+  .s3 .h1 {
+    text-align: center; margin-top: 1.2cqw;
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 5.6cqw; line-height: 1; letter-spacing: -0.025em;
+    color: #fff;
+  }
+  .s3 .h1 em { font-style: normal; color: var(--brass); }
+  .s3 .grid { margin-top: 4cqw; display: grid; grid-template-columns: 1fr 0.6fr; gap: 3cqw; align-items: center; }
+  .s3 .inside {
+    font-family: "Inter", sans-serif; font-weight: 900;
+    font-size: 1.7cqw; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--brass);
+    margin-bottom: 1.6cqw;
+  }
+  .s3 ul.check-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1.8cqw; }
+  .s3 ul.check-list li {
+    display: flex; align-items: flex-start; gap: 1.4cqw;
+    font-family: "Inter", sans-serif; font-weight: 600;
+    font-size: 1.9cqw; line-height: 1.3; color: var(--paper);
+  }
+  .check-circle {
+    flex-shrink: 0; margin-top: 0.3cqw;
+    width: 2.6cqw; height: 2.6cqw; border-radius: 50%;
+    background: var(--brass);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .check-circle svg { width: 1.4cqw; height: 1.4cqw; }
+  .s3 .book {
+    width: 100%; aspect-ratio: 3/4;
+    background: #0d2440;
+    border: 0.4cqw solid var(--brass);
+    box-shadow: 1.5cqw 1.5cqw 0 -0.4cqw var(--brass);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 2cqw;
+    text-align: center;
+  }
+  .s3 .book-title {
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 1.7cqw; line-height: 1.1; letter-spacing: -0.01em;
+    color: #fff;
+  }
+  .s3 .book-title em { font-style: normal; color: var(--brass-bright); }
+  .s3 .book-mark {
+    margin-top: 1.6cqw;
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 1.4cqw; color: var(--brass);
+  }
+
+  /* ── SLIDE 4: BIG STAT ─────────────────────────────────────────────── */
+  .s4 .stat-caption {
+    margin-top: 5cqw;
+    text-align: center;
+    font-family: "Inter", sans-serif; font-weight: 800;
+    font-size: 1.8cqw; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--brass-deep);
+  }
+  .s4 .bignum {
+    text-align: center; margin-top: 1cqw;
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 16cqw; line-height: 1; letter-spacing: -0.045em;
+    color: var(--navy);
+  }
+  .s4 .bignum em { font-style: normal; color: var(--brass-deep); }
+  .s4 .stat-label {
+    text-align: center; margin-top: 1.4cqw;
+    font-family: "Inter", sans-serif; font-weight: 800;
+    font-size: 2.2cqw; letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--navy);
+  }
+  .s4 .badges { margin-top: 5cqw; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1cqw; }
+  .s4 .badge { display: flex; flex-direction: column; align-items: center; gap: 1.2cqw; padding: 1cqw; }
+  .s4 .badge .b-icon {
+    width: 6cqw; height: 6cqw; border-radius: 50%;
+    background: var(--paper-deep);
+    border: 0.25cqw solid var(--brass);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .s4 .badge .b-icon svg { width: 3.2cqw; height: 3.2cqw; }
+  .s4 .badge .b-label {
+    text-align: center;
+    font-family: "Inter", sans-serif; font-weight: 800;
+    font-size: 1.4cqw; line-height: 1.2; color: var(--navy);
+    letter-spacing: 0.02em;
+  }
+  .s4 .body-text {
+    margin-top: 3cqw;
+    text-align: center;
+    font-family: "Inter", sans-serif; font-weight: 500;
+    font-size: 1.8cqw; line-height: 1.4;
+    color: var(--ink-mid); max-width: 88%; margin-left: auto; margin-right: auto;
+  }
+  .s4 .body-text strong { color: var(--navy); font-weight: 800; }
+
+  /* ── SLIDE 5: COMMON MISTAKES ──────────────────────────────────────── */
+  .s5 { text-align: center; }
+  .s5 .h1 {
+    margin-top: 1cqw;
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 5cqw; line-height: 1.05; letter-spacing: -0.022em;
+    color: #fff;
+    text-align: center;
+  }
+  .s5 .h1 em { font-style: normal; color: var(--brass); }
+  .s5 ul.pill-list { margin-top: 3cqw; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1.8cqw; align-items: center; }
+  .s5 .closer { text-align: center; }
+  .s5 ul.pill-list li {
+    display: flex; align-items: center; gap: 1.8cqw;
+    background: rgba(245,241,232,0.06);
+    border: 0.15cqw solid rgba(200,162,75,0.25);
+    border-radius: 1.2cqw;
+    padding: 1.8cqw 2.2cqw;
+    font-family: "Inter", sans-serif; font-weight: 700;
+    font-size: 2.1cqw; color: var(--paper);
+  }
+
+  /* ── SLIDE 6: 3 SIMPLE STEPS ───────────────────────────────────────── */
+  .s6 { text-align: center; }
+  .s6 .h1 {
+    margin-top: 1cqw;
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 5cqw; line-height: 1; letter-spacing: -0.022em;
+    color: var(--navy);
+    text-align: center;
+  }
+  .s6 .h1 em { font-style: normal; color: var(--brass-deep); }
+  .s6 ol.steps { margin-top: 3.4cqw; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 2.4cqw; align-items: center; }
+  .s6 .closer-banner { align-self: center; }
+  .s6 ol.steps li {
+    display: grid;
+    grid-template-columns: 5cqw 6cqw 1fr;
+    gap: 1.6cqw;
+    align-items: center;
+  }
+  .step-num-square {
+    width: 5cqw; height: 5cqw;
+    background: var(--brass); color: var(--navy);
+    border-radius: 0.8cqw;
+    display: flex; align-items: center; justify-content: center;
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 2.6cqw; line-height: 1;
+  }
+  .step-circle {
+    width: 6cqw; height: 6cqw; border-radius: 50%;
+    background: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--brass);
+  }
+  .step-circle svg { width: 2.8cqw; height: 2.8cqw; }
+  .s6 .step-body {
+    font-family: "Inter", sans-serif; font-weight: 700;
+    font-size: 2cqw; line-height: 1.25; color: var(--navy);
+  }
+  .s6 .step-body strong { color: var(--brass-deep); }
+
+  /* ── SLIDE 7: TESTIMONIALS ─────────────────────────────────────────── */
+  .s7 .h1 {
+    text-align: center; margin-top: 1cqw;
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 5cqw; line-height: 1.05; letter-spacing: -0.022em;
+    color: #fff;
+  }
+  .s7 .h1 em { font-style: normal; color: var(--brass); }
+  .s7 .cards { margin-top: 3cqw; display: flex; flex-direction: column; gap: 1.8cqw; }
+  .s7 .card {
+    display: grid; grid-template-columns: 6cqw 1fr; gap: 2cqw; align-items: center;
+    background: rgba(245,241,232,0.06);
+    border: 0.15cqw solid rgba(200,162,75,0.2);
+    border-radius: 1.4cqw;
+    padding: 1.8cqw;
+  }
+  .s7 .avatar {
+    width: 6cqw; height: 6cqw; border-radius: 50%;
+    background: linear-gradient(135deg, #2a4a6e, #6a8aa8);
+    border: 0.25cqw solid var(--brass);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--brass-bright);
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 2.6cqw;
+  }
+  .s7 .quote {
+    font-family: "Inter", sans-serif; font-weight: 600;
+    font-size: 1.85cqw; line-height: 1.3; color: var(--paper);
+  }
+  .s7 .stars {
+    color: var(--brass-bright); font-size: 1.5cqw;
+    letter-spacing: 0.15em; margin-bottom: 0.3cqw;
+  }
+
+  /* ── SLIDE 8: WHY HARTMAN ──────────────────────────────────────────── */
+  .s8 { text-align: center; }
+  .s8 .h1 {
+    margin-top: 1cqw;
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 5.2cqw; line-height: 1; letter-spacing: -0.025em;
+    color: var(--navy);
+    text-align: center;
+  }
+  .s8 .h1 em { font-style: normal; color: var(--brass-deep); }
+  .s8 ul.benefit-list { margin-top: 3cqw; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1.8cqw; align-items: center; }
+  .s8 .closer-banner { align-self: center; }
+  .s8 ul.benefit-list li {
+    display: flex; align-items: center; gap: 1.6cqw;
+    font-family: "Inter", sans-serif; font-weight: 700;
+    font-size: 2.05cqw; color: var(--navy);
+  }
+  .benefit-check {
+    flex-shrink: 0;
+    width: 2.8cqw; height: 2.8cqw; border-radius: 50%;
+    background: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .benefit-check svg { width: 1.4cqw; height: 1.4cqw; }
+
+  /* ── SLIDE 9: URGENCY ──────────────────────────────────────────────── */
+  .s9 .clock-wrap {
+    align-self: center; margin-top: 0;
+    width: 16cqw; height: 16cqw; border-radius: 50%;
+    border: 0.35cqw solid var(--brass);
+    background: rgba(200,162,75,0.08);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 6cqw rgba(200,162,75,0.15);
+  }
+  .s9 .clock-wrap svg { width: 9cqw; height: 9cqw; }
+  .s9 .h1 {
+    text-align: center; margin-top: 3cqw;
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 5.4cqw; line-height: 1; letter-spacing: -0.025em;
+    color: #fff;
+  }
+  .s9 .h1 em { font-style: normal; color: var(--brass); }
+  .s9 .reasons { margin-top: 3cqw; display: flex; flex-direction: column; gap: 1.6cqw; }
+  .s9 .reason {
+    display: flex; align-items: center; gap: 1.6cqw;
+    font-family: "Inter", sans-serif; font-weight: 600;
+    font-size: 1.95cqw; color: var(--paper);
+  }
+  .reason-icon {
+    flex-shrink: 0;
+    width: 3.4cqw; height: 3.4cqw; border-radius: 50%;
+    background: rgba(245,241,232,0.08);
+    border: 0.15cqw solid var(--brass);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .reason-icon svg { width: 1.8cqw; height: 1.8cqw; }
+
+  /* ── SLIDE 10: CTA ─────────────────────────────────────────────────── */
+  .s10 { text-align: center; }
+  .s10 .h1 {
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 4.4cqw; line-height: 1.02; letter-spacing: -0.022em;
+    color: var(--navy); max-width: 90%; margin-left: auto; margin-right: auto;
+    text-align: center;
+  }
+  .s10 .h1 em { font-style: normal; color: var(--brass-deep); }
+  .s10 .offer-block {
+    margin-top: 2.4cqw;
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center;
+  }
+  .s10 .offer-caption {
+    font-family: "Inter", sans-serif; font-weight: 700;
+    font-size: 2.2cqw; color: var(--ink-mid);
+  }
+  .s10 .offer-caption strong { color: var(--navy); font-weight: 900; }
+  .s10 .offer-big {
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 13.5cqw; line-height: 0.9; letter-spacing: -0.045em;
+    color: var(--brass-deep);
+    margin-top: -0.4cqw;
+  }
+  .s10 .offer-detail {
+    margin-top: -0.6cqw;
+    font-family: "Inter", sans-serif; font-weight: 800;
+    font-size: 2.4cqw; line-height: 1.18; color: var(--navy);
+  }
+  .s10 .offer-detail em {
+    font-style: normal; font-family: "Fraunces", serif; font-weight: 700;
+    color: var(--brass-deep);
+  }
+  .s10 .or-call {
+    margin-top: 3cqw;
+    font-family: "Inter", sans-serif; font-weight: 800;
+    font-size: 1.5cqw; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--ink-mid);
+  }
+  .s10 .phone-button {
+    margin-top: 1.2cqw;
+    display: flex; align-items: center; gap: 1.6cqw;
+    background: var(--brass);
+    color: var(--navy);
+    padding: 2.2cqw 3cqw;
+    border-radius: 1.2cqw;
+    font-family: "Inter", sans-serif; font-weight: 900;
+    font-size: 3.6cqw; letter-spacing: -0.01em;
+    width: fit-content;
+    align-self: center;
+    box-shadow: 0 1.2cqw 2.2cqw -0.8cqw rgba(200,162,75,0.5);
+  }
+  .phone-button svg { width: 3.2cqw; height: 3.2cqw; }
+
+  .label {
+    color: #888; font-size: 12px; text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin-top: 32px; padding-top: 14px; border-top: 1px solid #333;
+  }
+</style>
+</head>
+<body>
+
+<div class="gallery">
+  <h1>Hartman carousel v2 — lead-magnet template (10 slides)</h1>
+  <p class="sub">
+    Same layout sequence as Jacoby/Azizi/Gaslamp, executed in Hartman's calmer voice:
+    serif headlines + brass accents (no aggressive red), but matching their density,
+    visual anchors, and per-slide payoff lines. Alternating dark/light for rhythm.
+  </p>
+
+  <div class="row">
+
+    <!-- SLIDE 1: HERO -->
+    <div class="slide s1 dark"><div class="frame">
+      <div class="num">1</div>
+      <div class="body">
+        <div class="lede">Insurance offered you pennies?</div>
+        <h1 class="h1">YOU'RE<br>OWED<br><em>MUCH MORE.</em></h1>
+        <p class="sub">They count on you settling fast. <strong>You don't have to.</strong></p>
+      </div>
+      <div class="closer">Tampa &amp; Hillsborough County</div>
+      <div class="brand">
+        <div class="mark">Hartman <em>Injury Law</em></div>
+        <div class="subline">Hurt? Get Hartman.</div>
+      </div>
+    </div></div>
+
+    <!-- SLIDE 2: BRUTAL TRUTH -->
+    <div class="slide s2 light"><div class="frame">
+      <div class="num">2</div>
+      <h1 class="h1">The <em>uncomfortable</em><br>truth.</h1>
+      <p class="sub">Insurance companies want to pay you <strong>as little as legally possible.</strong></p>
+      <div class="heading">They hope you</div>
+      <ul class="x-list">
+        <li><span class="x-circle"><svg viewBox="0 0 24 24" fill="none" stroke="#0B2A4A" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></span>Say the wrong thing on the call.</li>
+        <li><span class="x-circle"><svg viewBox="0 0 24 24" fill="none" stroke="#0B2A4A" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></span>Post about the crash online.</li>
+        <li><span class="x-circle"><svg viewBox="0 0 24 24" fill="none" stroke="#0B2A4A" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></span>Accept their first offer.</li>
+      </ul>
+      <div class="closer">Don't <em>let them win.</em></div>
+      <div class="brand">
+        <div class="mark">Hartman <em>Injury Law</em></div>
+        <div class="subline">Hurt? Get Hartman.</div>
+      </div>
+    </div></div>
+
+    <!-- SLIDE 3: FREE GUIDE -->
+    <div class="slide s3 dark"><div class="frame">
+      <div class="num">3</div>
+      <div class="banner-top">Free guide</div>
+      <div class="caption">Get our complete guide:</div>
+      <h1 class="h1">What <em>NOT</em> to do<br>after a crash.</h1>
+      <div class="grid">
+        <div>
+          <div class="inside">Inside you'll find:</div>
+          <ul class="check-list">
+            <li><span class="check-circle"><svg viewBox="0 0 24 24" fill="none" stroke="#0B2A4A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg></span>The 7 biggest mistakes that quietly kill your claim.</li>
+            <li><span class="check-circle"><svg viewBox="0 0 24 24" fill="none" stroke="#0B2A4A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg></span>What to say (and never say) to the adjuster.</li>
+            <li><span class="check-circle"><svg viewBox="0 0 24 24" fill="none" stroke="#0B2A4A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg></span>How to preserve evidence in the first 24 hours.</li>
+          </ul>
+        </div>
+        <div class="book">
+          <div class="book-title">WHAT<br><em>NOT</em><br>TO DO<br>AFTER A<br>CRASH</div>
+          <div class="book-mark">H · Hartman</div>
+        </div>
+      </div>
+      <div class="closer-banner">100% Free</div>
+      <div class="brand">
+        <div class="mark">Hartman <em>Injury Law</em></div>
+        <div class="subline">Hurt? Get Hartman.</div>
+      </div>
+    </div></div>
+
+    <!-- SLIDE 4: BIG STAT -->
+    <div class="slide s4 light"><div class="frame">
+      <div class="num">4</div>
+      <div class="stat-caption">Proven results for Tampa</div>
+      <div class="bignum"><em>$</em>30M<em>+</em></div>
+      <div class="stat-label">recovered for injured Floridians</div>
+      <div class="badges">
+        <div class="badge">
+          <div class="b-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#0B2A4A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 L20 6 V12 C20 17 16 20.5 12 21.5 C8 20.5 4 17 4 12 V6 Z"/><polyline points="9 12 11 14 15 10"/></svg>
+          </div>
+          <div class="b-label">25+ Years<br>Experience</div>
+        </div>
+        <div class="badge">
+          <div class="b-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#0B2A4A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3"/><path d="M5 21 V19 C5 16 8 14 12 14 C16 14 19 16 19 19 V21"/></svg>
+          </div>
+          <div class="b-label">Hundreds of<br>Florida Clients</div>
+        </div>
+        <div class="badge">
+          <div class="b-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#0B2A4A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="3" x2="12" y2="21"/><path d="M5 8 L12 6 L19 8"/><path d="M3 14 L7 8 L11 14 M13 14 L17 8 L21 14"/></svg>
+          </div>
+          <div class="b-label">Trial-Ready<br>Every Case</div>
+        </div>
+      </div>
+      <p class="body-text">We've seen <strong>every trick</strong> insurance carriers use in Hillsborough &amp; Pinellas. Now we're handing you the playbook.</p>
+      <div class="brand">
+        <div class="mark">Hartman <em>Injury Law</em></div>
+        <div class="subline">Hurt? Get Hartman.</div>
+      </div>
+    </div></div>
+
+    <!-- SLIDE 5: COMMON MISTAKES -->
+    <div class="slide s5 dark"><div class="frame">
+      <div class="num">5</div>
+      <h1 class="h1">Common mistakes<br>that cost victims<br><em>thousands.</em></h1>
+      <ul class="pill-list">
+        <li><span class="x-circle"><svg viewBox="0 0 24 24" fill="none" stroke="#0B2A4A" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></span>Apologizing at the scene.</li>
+        <li><span class="x-circle"><svg viewBox="0 0 24 24" fill="none" stroke="#0B2A4A" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></span>Giving a recorded statement.</li>
+        <li><span class="x-circle"><svg viewBox="0 0 24 24" fill="none" stroke="#0B2A4A" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></span>Posting crash photos online.</li>
+        <li><span class="x-circle"><svg viewBox="0 0 24 24" fill="none" stroke="#0B2A4A" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></span>Signing anything too soon.</li>
+      </ul>
+      <div class="closer">Protect <em>your rights.</em></div>
+      <div class="brand">
+        <div class="mark">Hartman <em>Injury Law</em></div>
+        <div class="subline">Hurt? Get Hartman.</div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="row">
+
+    <!-- SLIDE 6: 3 STEPS -->
+    <div class="slide s6 light"><div class="frame">
+      <div class="num">6</div>
+      <h1 class="h1">Get the guide in<br><em>three steps.</em></h1>
+      <ol class="steps">
+        <li>
+          <div class="step-num-square">1</div>
+          <div class="step-circle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5 H21 V17 H7 L3 21 Z"/><line x1="7" y1="10" x2="17" y2="10"/><line x1="7" y1="13" x2="13" y2="13"/></svg>
+          </div>
+          <div class="step-body">DM us <strong>"REVIEW"</strong> or call <strong>(813) 555-0142</strong>.</div>
+        </li>
+        <li>
+          <div class="step-num-square">2</div>
+          <div class="step-circle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 V15"/><polyline points="7 11 12 16 17 11"/><line x1="4" y1="19" x2="20" y2="19"/></svg>
+          </div>
+          <div class="step-body">Get instant access to the free guide.</div>
+        </li>
+        <li>
+          <div class="step-num-square">3</div>
+          <div class="step-circle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 L20 6 V12 C20 17 16 20.5 12 21.5 C8 20.5 4 17 4 12 V6 Z"/><polyline points="9 12 11 14 15 10"/></svg>
+          </div>
+          <div class="step-body">Free case review if you want maximum compensation.</div>
+        </li>
+      </ol>
+      <div class="closer-banner">No cost. No obligation.</div>
+      <div class="brand">
+        <div class="mark">Hartman <em>Injury Law</em></div>
+        <div class="subline">Hurt? Get Hartman.</div>
+      </div>
+    </div></div>
+
+    <!-- SLIDE 7: TESTIMONIALS -->
+    <div class="slide s7 dark"><div class="frame">
+      <div class="num">7</div>
+      <h1 class="h1">Real Floridians,<br><em>real results.</em></h1>
+      <div class="cards">
+        <div class="card">
+          <div class="avatar">M</div>
+          <div>
+            <div class="stars">★ ★ ★ ★ ★</div>
+            <div class="quote">"Dana saw the case my last lawyer missed. Got me 4x the first offer."</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="avatar">J</div>
+          <div>
+            <div class="stars">★ ★ ★ ★ ★</div>
+            <div class="quote">"Calm, organized, didn't blink when the insurer pushed back."</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="avatar">A</div>
+          <div>
+            <div class="stars">★ ★ ★ ★ ★</div>
+            <div class="quote">"Honest from day one. Told me what my case was actually worth."</div>
+          </div>
+        </div>
+      </div>
+      <div class="brand">
+        <div class="mark">Hartman <em>Injury Law</em></div>
+        <div class="subline">Hurt? Get Hartman.</div>
+      </div>
+    </div></div>
+
+    <!-- SLIDE 8: WHY HARTMAN -->
+    <div class="slide s8 light"><div class="frame">
+      <div class="num">8</div>
+      <h1 class="h1">Why <em>Hartman</em><br>Injury Law?</h1>
+      <ul class="benefit-list">
+        <li><span class="benefit-check"><svg viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg></span>25+ years against Florida insurers.</li>
+        <li><span class="benefit-check"><svg viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg></span>No win, no fee — guaranteed.</li>
+        <li><span class="benefit-check"><svg viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg></span>Every case built as if it's going to trial.</li>
+        <li><span class="benefit-check"><svg viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg></span>Bilingual (English + Español).</li>
+        <li><span class="benefit-check"><svg viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg></span>Local — Tampa born, Tampa practiced.</li>
+      </ul>
+      <div class="closer-banner">You heal. We fight.</div>
+      <div class="brand">
+        <div class="mark">Hartman <em>Injury Law</em></div>
+        <div class="subline">Hurt? Get Hartman.</div>
+      </div>
+    </div></div>
+
+    <!-- SLIDE 9: URGENCY -->
+    <div class="slide s9 dark deep"><div class="frame">
+      <div class="num">9</div>
+      <div class="clock-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><polyline points="12 8 12 13 16 15"/><line x1="9" y1="3" x2="15" y2="3"/></svg>
+      </div>
+      <h1 class="h1">Every day you wait<br><em>= less leverage.</em></h1>
+      <div class="reasons">
+        <div class="reason">
+          <span class="reason-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><circle cx="12" cy="12.5" r="3.5"/></svg></span>Evidence disappears — skid marks, witnesses, cameras.
+        </div>
+        <div class="reason">
+          <span class="reason-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="13"/><line x1="12" y1="16" x2="12" y2="16.5"/></svg></span>Florida has strict claim deadlines.
+        </div>
+        <div class="reason">
+          <span class="reason-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><polyline points="15 6 21 12 15 18"/></svg></span>Insurance carriers count on you delaying.
+        </div>
+      </div>
+      <div class="closer">Act now. <em>Protect your case.</em></div>
+      <div class="brand">
+        <div class="mark">Hartman <em>Injury Law</em></div>
+        <div class="subline">Hurt? Get Hartman.</div>
+      </div>
+    </div></div>
+
+    <!-- SLIDE 10: CTA -->
+    <div class="slide s10 light"><div class="frame">
+      <div class="num">10</div>
+      <h1 class="h1">Stop letting insurers<br>take <em>advantage</em> of you.</h1>
+      <div class="offer-block">
+        <span class="offer-caption">DM <strong>"REVIEW"</strong> for your</span>
+        <span class="offer-big">FREE</span>
+        <span class="offer-detail">complete guide:<br><em>What NOT to do after a crash.</em></span>
+      </div>
+      <div class="or-call">or call</div>
+      <div class="phone-button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0B2A4A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.86 19.86 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.92.31 1.83.57 2.71a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.37-1.13a2 2 0 0 1 2.11-.45c.88.26 1.79.45 2.71.57A2 2 0 0 1 22 16.92z"/></svg>
+        (813) 555-0142
+      </div>
+      <div class="brand">
+        <div class="mark">Hartman <em>Injury Law</em></div>
+        <div class="subline">Tampa &middot; Hillsborough &middot; Pinellas</div>
+      </div>
+    </div></div>
+
+  </div>
+
+  <div class="label">Sequence: hero · brutal truth · free guide · big stat · common mistakes · 3 steps · testimonials · why us · urgency · CTA</div>
+</div>
+</body>
+</html>

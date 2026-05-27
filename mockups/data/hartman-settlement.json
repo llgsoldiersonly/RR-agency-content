@@ -1,0 +1,194 @@
+{
+  "client_slug": "hartman-injury-law",
+  "carousel_id": "settlement-guide",
+  "title": "How a settlement gets bigger",
+  "format": "instagram-carousel-4-5",
+  "brand": {
+    "navy": "#0B2A4A",
+    "navy_deep": "#06192E",
+    "brass": "#C8A24B",
+    "brass_deep": "#9C7E36",
+    "paper": "#F5F1E8",
+    "wordmark_main": "Hartman",
+    "wordmark_sub": "Injury Law",
+    "handle": "@hartmaninjurylaw",
+    "tagline": "Hurt? Get Hartman.",
+    "geo_subtitle": "Tampa · Hillsborough · Pinellas"
+  },
+  "slides": [
+    {
+      "n": 1,
+      "layout": "hero",
+      "theme": "dark",
+      "fields": {
+        "lede": "Insurance offered you pennies?",
+        "headline_line1": "YOU'RE",
+        "headline_line2": "OWED",
+        "headline_line3": "MUCH MORE.",
+        "headline_highlight_line": 3,
+        "sub_pre": "They count on you settling fast. ",
+        "sub_strong": "You don't have to.",
+        "closer": "Tampa & Hillsborough County"
+      }
+    },
+    {
+      "n": 2,
+      "layout": "brutal-truth",
+      "theme": "light",
+      "fields": {
+        "headline_pre": "The ",
+        "headline_highlight": "uncomfortable",
+        "headline_post": " truth.",
+        "sub_pre": "Insurance companies want to pay you ",
+        "sub_strong": "as little as legally possible.",
+        "list_heading": "They hope you",
+        "items": [
+          "Say the wrong thing on the call.",
+          "Post about the crash online.",
+          "Accept their first offer."
+        ],
+        "closer_pre": "Don't ",
+        "closer_highlight": "let them win."
+      }
+    },
+    {
+      "n": 3,
+      "layout": "free-guide",
+      "theme": "dark",
+      "fields": {
+        "top_banner": "Free guide",
+        "caption": "Get our complete guide:",
+        "headline_pre": "What ",
+        "headline_highlight": "NOT",
+        "headline_post": " to do after a crash.",
+        "list_heading": "Inside you'll find:",
+        "items": [
+          "The 7 biggest mistakes that quietly kill your claim.",
+          "What to say (and never say) to the adjuster.",
+          "How to preserve evidence in the first 24 hours."
+        ],
+        "book_title_lines": ["WHAT", "NOT", "TO DO", "AFTER A", "CRASH"],
+        "book_mark": "H · Hartman",
+        "closer_banner": "100% Free"
+      }
+    },
+    {
+      "n": 4,
+      "layout": "big-stat",
+      "theme": "light",
+      "fields": {
+        "stat_caption": "Proven results for Tampa",
+        "stat_currency": "$",
+        "stat_number": "30M",
+        "stat_plus": "+",
+        "stat_label": "recovered for injured Floridians",
+        "badges": [
+          { "label_line1": "25+ Years", "label_line2": "Experience", "icon": "shield" },
+          { "label_line1": "Hundreds of", "label_line2": "Florida Clients", "icon": "people" },
+          { "label_line1": "Trial-Ready", "label_line2": "Every Case", "icon": "scales" }
+        ],
+        "body_pre": "We've seen ",
+        "body_strong": "every trick",
+        "body_post": " insurance carriers use in Hillsborough & Pinellas. Now we're handing you the playbook."
+      }
+    },
+    {
+      "n": 5,
+      "layout": "common-mistakes",
+      "theme": "dark",
+      "fields": {
+        "headline_pre": "Common mistakes that cost victims ",
+        "headline_highlight": "thousands.",
+        "items": [
+          "Apologizing at the scene.",
+          "Giving a recorded statement.",
+          "Posting crash photos online.",
+          "Signing anything too soon."
+        ],
+        "closer_pre": "Protect ",
+        "closer_highlight": "your rights."
+      }
+    },
+    {
+      "n": 6,
+      "layout": "three-steps",
+      "theme": "light",
+      "fields": {
+        "headline_pre": "Get the guide in ",
+        "headline_highlight": "three steps.",
+        "steps": [
+          { "n": 1, "icon": "chat",     "body_pre": "DM us ",       "body_strong1": "\"REVIEW\"", "body_mid": " or call ", "body_strong2": "(813) 555-0142", "body_post": "." },
+          { "n": 2, "icon": "download", "body_pre": "",             "body_strong1": "",          "body_mid": "Get instant access to the free guide.", "body_strong2": "", "body_post": "" },
+          { "n": 3, "icon": "shield",   "body_pre": "",             "body_strong1": "",          "body_mid": "Free case review if you want maximum compensation.", "body_strong2": "", "body_post": "" }
+        ],
+        "closer_banner": "No cost. No obligation."
+      }
+    },
+    {
+      "n": 7,
+      "layout": "testimonials",
+      "theme": "dark",
+      "fields": {
+        "headline_pre": "Real Floridians, ",
+        "headline_highlight": "real results.",
+        "cards": [
+          { "initial": "M", "quote": "Dana saw the case my last lawyer missed. Got me 4x the first offer." },
+          { "initial": "J", "quote": "Calm, organized, didn't blink when the insurer pushed back." },
+          { "initial": "A", "quote": "Honest from day one. Told me what my case was actually worth." }
+        ]
+      }
+    },
+    {
+      "n": 8,
+      "layout": "why-us",
+      "theme": "light",
+      "fields": {
+        "headline_pre": "Why ",
+        "headline_highlight": "Hartman",
+        "headline_post": " Injury Law?",
+        "items": [
+          "25+ years against Florida insurers.",
+          "No win, no fee — guaranteed.",
+          "Every case built as if it's going to trial.",
+          "Bilingual (English + Español).",
+          "Local — Tampa born, Tampa practiced."
+        ],
+        "closer_banner": "You heal. We fight."
+      }
+    },
+    {
+      "n": 9,
+      "layout": "urgency",
+      "theme": "dark-deep",
+      "fields": {
+        "headline_pre": "Every day you wait ",
+        "headline_highlight": "= less leverage.",
+        "reasons": [
+          { "icon": "camera",   "text": "Evidence disappears — skid marks, witnesses, cameras." },
+          { "icon": "alert",    "text": "Florida has strict claim deadlines." },
+          { "icon": "arrow",    "text": "Insurance carriers count on you delaying." }
+        ],
+        "closer_pre": "Act now. ",
+        "closer_highlight": "Protect your case."
+      }
+    },
+    {
+      "n": 10,
+      "layout": "cta",
+      "theme": "light",
+      "fields": {
+        "headline_pre": "Stop letting insurers take ",
+        "headline_highlight": "advantage",
+        "headline_post": " of you.",
+        "offer_caption_pre": "DM ",
+        "offer_caption_strong": "\"REVIEW\"",
+        "offer_caption_post": " for your",
+        "offer_big": "FREE",
+        "offer_detail_pre": "complete guide:",
+        "offer_detail_em": "What NOT to do after a crash.",
+        "phone_label": "or call",
+        "phone_number": "(813) 555-0142"
+      }
+    }
+  ]
+}

@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Design Carousels — Preview &amp; Feedback</title>
+<script>
+  // Read theme preference BEFORE first paint so the page doesn't flash.
+  (function () {
+    try {
+      const saved = localStorage.getItem("studio-theme");
+      if (saved === "light") document.documentElement.dataset.theme = "light";
+    } catch (e) { /* localStorage blocked — ignore */ }
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e1015;
+    --panel: #14181f;
+    --panel-2: #1a2030;
+    --line: #232a3a;
+    --ink: #e8eaef;
+    --mute: #7a8095;
+    --brass: #C8A24B;
+    --brass-bright: #E4BC60;
+    --brass-deep: #9C7E36;
+    --green: #36c47b;
+    --warn: #ff9d3d;
+    --slide-navy: #0B2A4A;
+    --slide-navy-deep: #06192E;
+    --slide-paper: #F5F1E8;
+    --slide-paper-deep: #EFEAD8;
+    --slide-ink: #0D1B2F;
+    --slide-ink-mid: #4A5468;
+  }
+  html[data-theme="light"] {
+    --bg: #f5f5f7;
+    --panel: #ffffff;
+    --panel-2: #f1f3f7;
+    --line: #e1e4ec;
+    --ink: #1a1f2e;
+    --mute: #5a6275;
+    --brass-bright: var(--brass-deep);     /* brighter brass hurts on light bg */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: "Inter", -apple-system, sans-serif;
+    font-size: 14px; line-height: 1.5;
+  }
+  .wrap { max-width: 1400px; margin: 0 auto; padding: 32px; }
+
+  /* ── header ────────────────────────────────────────────────────── */
+  header { margin-bottom: 36px; }
+  header h1 {
+    font-family: "Fraunces", serif; font-weight: 700;
+    font-size: 32px; letter-spacing: -0.015em;
+  }
+  header h1 .accent { color: var(--brass); }
+  header p.sub { color: var(--mute); margin-top: 8px; max-width: 920px; }
+
+  .actions {
+    display: flex; align-items: center; gap: 12px;
+    margin-top: 22px; flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--brass); color: var(--slide-navy);
+    border: 0; padding: 11px 22px; border-radius: 8px;
+    font-weight: 800; font-size: 14px; cursor: pointer;
+    box-shadow: 0 8px 20px -10px rgba(200,162,75,0.5);
+  }
+  .btn-primary:hover { background: var(--brass-bright); }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-primary.copied { background: var(--green); color: #fff; }
+  .btn-ghost {
+    background: transparent; color: var(--ink);
+    border: 1px solid var(--line);
+    padding: 10px 18px; border-radius: 8px;
+    font-weight: 700; font-size: 13px; cursor: pointer;
+  }
+  .btn-ghost:hover { border-color: var(--brass); color: var(--brass-bright); }
+  .counter {
+    background: var(--panel); color: var(--mute);
+    padding: 9px 16px; border-radius: 999px;
+    font-weight: 700; font-size: 13px;
+    border: 1px solid var(--line);
+  }
+  .counter strong { color: var(--ink); margin-right: 4px; }
+  .save-tag {
+    margin-left: auto;
+    color: var(--mute); font-size: 12px; letter-spacing: 0.02em;
+  }
+  .save-tag::before {
+    content: ""; display: inline-block; width: 6px; height: 6px;
+    background: var(--green); border-radius: 50%; margin-right: 6px;
+    vertical-align: middle;
+  }
+  .theme-toggle {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 38px; height: 38px; padding: 0; flex-shrink: 0;
+  }
+  .theme-toggle .theme-icon-light { display: none; }
+  html[data-theme="light"] .theme-toggle .theme-icon-dark { display: none; }
+  html[data-theme="light"] .theme-toggle .theme-icon-light { display: block; }
+
+  /* ── section grouping ──────────────────────────────────────────── */
+  .section-title {
+    margin: 36px 0 16px;
+    font-family: "Inter", sans-serif; font-weight: 800;
+    font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--brass);
+    padding-bottom: 10px; border-bottom: 1px solid var(--line);
+  }
+
+  /* ── carousel card ─────────────────────────────────────────────── */
+  .carousel-card {
+    background: var(--panel);
+    border: 1px solid var(--line); border-radius: 14px;
+    padding: 24px; margin-bottom: 22px;
+  }
+  .carousel-card.approved { border-color: rgba(54,196,123,0.35); background: rgba(54,196,123,0.04); }
+  .carousel-card.needs-changes { border-color: rgba(255,157,61,0.35); background: rgba(255,157,61,0.04); }
+
+  .card-head {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 16px; margin-bottom: 16px;
+  }
+  .card-head h2 {
+    font-family: "Fraunces", serif; font-weight: 700;
+    font-size: 22px; letter-spacing: -0.01em;
+  }
+  .card-head .meta {
+    color: var(--mute); font-size: 13px; margin-top: 4px;
+  }
+  .card-actions { display: flex; gap: 8px; flex-shrink: 0; }
+  .status-pill {
+    background: transparent; color: var(--ink);
+    border: 1px solid var(--line);
+    padding: 7px 14px; border-radius: 999px;
+    font-weight: 700; font-size: 12px; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .status-pill:hover { border-color: var(--brass); color: var(--brass-bright); }
+  .status-pill.active.approve { background: var(--green); color: #fff; border-color: var(--green); }
+  .status-pill.active.changes { background: var(--warn); color: var(--slide-navy); border-color: var(--warn); }
+
+  .whole-note-label {
+    color: var(--mute); font-size: 12px; margin-bottom: 6px;
+  }
+  textarea.note {
+    width: 100%; background: var(--bg); color: var(--ink);
+    border: 1px solid var(--line); border-radius: 8px;
+    padding: 10px 12px;
+    font-family: inherit; font-size: 13px; line-height: 1.45;
+    resize: vertical; min-height: 60px;
+    outline: none; transition: border-color 0.12s;
+  }
+  textarea.note:focus { border-color: var(--brass); }
+  textarea.note.has-content { border-color: rgba(200,162,75,0.4); }
+
+  /* ── slide thumbnail grid ──────────────────────────────────────── */
+  .slides-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px; margin-top: 18px;
+  }
+  @media (max-width: 760px) {
+    .slides-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  .slide-cell { display: flex; flex-direction: column; gap: 8px; }
+  .slide-thumb {
+    width: 100%; aspect-ratio: 1080 / 1440;
+    position: relative; overflow: hidden;
+    border-radius: 8px;
+    container-type: inline-size;
+    border: 1px solid var(--line);
+  }
+  .slide-thumb.has-note { border-color: var(--brass); box-shadow: 0 0 0 2px rgba(200,162,75,0.18); }
+  .slide-thumb .badge {
+    position: absolute; top: 6px; left: 6px;
+    background: rgba(20,24,31,0.92); color: var(--brass-bright);
+    width: 24px; height: 24px; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 11px;
+    z-index: 5;
+  }
+  .slide-thumb .note-dot {
+    position: absolute; top: 6px; right: 6px;
+    width: 10px; height: 10px; background: var(--brass);
+    border-radius: 50%; z-index: 5;
+    display: none;
+  }
+  .slide-thumb.has-note .note-dot { display: block; }
+  .slide-label {
+    color: var(--mute); font-size: 12px;
+  }
+  .slide-label strong { color: var(--ink); display: block; font-size: 13px; }
+  textarea.slide-note {
+    width: 100%; background: var(--bg); color: var(--ink);
+    border: 1px solid var(--line); border-radius: 6px;
+    padding: 8px 10px;
+    font-family: inherit; font-size: 12px;
+    resize: vertical; min-height: 48px;
+    outline: none; transition: border-color 0.12s;
+  }
+  textarea.slide-note:focus { border-color: var(--brass); }
+  textarea.slide-note.has-content { border-color: rgba(200,162,75,0.4); }
+
+  /* ── flash + toast ─────────────────────────────────────────────── */
+  .toast {
+    position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%);
+    background: var(--green); color: #fff;
+    padding: 12px 22px; border-radius: 999px;
+    font-weight: 800; font-size: 13px;
+    box-shadow: 0 12px 30px -12px rgba(54,196,123,0.5);
+    opacity: 0; transition: opacity 0.18s;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; }
+
+  /* ── empty state ───────────────────────────────────────────────── */
+  .empty {
+    text-align: center; padding: 60px 0; color: var(--mute);
+  }
+
+  /* ────────────────────────────────────────────────────────────────
+     SLIDE RENDERING — copied from the editor template so thumbnails
+     show the actual designed slides at a fraction of their full size.
+     ──────────────────────────────────────────────────────────────── */
+  .slide-thumb.dark { background: var(--slide-navy); color: var(--slide-paper); background-image: radial-gradient(140% 100% at 50% 0%, rgba(255,255,255,.05), transparent 55%); }
+  .slide-thumb.dark.deep { background: var(--slide-navy-deep); }
+  .slide-thumb.light { background: var(--slide-paper); color: var(--slide-ink); }
+
+  .slide-thumb .frame {
+    position: absolute; inset: 0;
+    /* Strict design spec: 120px top, 100px sides, 40px bottom. CSS Grid
+       rows 1fr/auto/1fr/auto centers content in row 2 and pins the
+       logo to row 4 at the bottom — height-independent. */
+    padding: 11.1cqw 9.3cqw 3.7cqw 9.3cqw;
+    display: grid;
+    grid-template-rows: 1fr auto 1fr auto;
+    place-items: center;
+    text-align: center;
+  }
+  .slide-thumb .content {
+    grid-row: 2;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    width: 100%;
+    gap: 2.4cqw;
+  }
+  .slide-thumb .num {
+    position: absolute; top: 3.5cqw; left: 3.5cqw;
+    width: 4cqw; height: 4cqw; background: var(--brass);
+    color: var(--slide-navy); font-weight: 900;
+    font-size: 2cqw; line-height: 4cqw; text-align: center;
+    border-radius: 0.5cqw;
+  }
+  .slide-thumb .brand { grid-row: 4; display: flex; flex-direction: column; align-items: center; gap: 0.8cqw; }
+  .slide-thumb .brand .mark { font-family: "Fraunces",serif; font-weight: 900; font-size: 3.8cqw; color: var(--brass); }
+  .slide-thumb.light .brand .mark { color: var(--slide-navy); }
+  .slide-thumb .brand .mark em { font-style: normal; font-weight: 500; }
+  .slide-thumb .brand .subline { font-family: "Inter",sans-serif; font-weight: 700; font-size: 1.3cqw; letter-spacing: 0.3em; text-transform: uppercase; color: var(--brass-deep); border-top: 0.1cqw solid var(--brass); padding-top: 0.6cqw; }
+
+  .slide-thumb .closer { text-align: left; font-family: "Inter",sans-serif; font-weight: 800; font-size: 2.4cqw; line-height: 1.15; text-transform: uppercase; margin-top: 3cqw; }
+  .slide-thumb.dark .closer { color: var(--slide-paper); }
+  .slide-thumb.light .closer { color: var(--slide-navy); }
+  .slide-thumb .closer em { font-style: normal; color: var(--brass); }
+  .slide-thumb.light .closer em { color: var(--brass-deep); }
+  .slide-thumb .closer-banner { align-self: flex-start; background: var(--brass); color: var(--slide-navy); font-family: "Inter",sans-serif; font-weight: 900; font-size: 2.4cqw; text-transform: uppercase; padding: 1.4cqw 3cqw; border-radius: 0.6cqw; margin-top: 3cqw; }
+
+  .slide-thumb[data-layout="hero"] { background: var(--slide-navy-deep); }
+  .slide-thumb[data-layout="hero"] .body { display: contents; }
+  .slide-thumb[data-layout="hero"] .lede { font-family: "Inter",sans-serif; font-weight: 600; font-size: 2cqw; letter-spacing: 0.04em; color: var(--slide-paper); opacity: 0.85; text-transform: uppercase; margin-bottom: 2.4cqw; }
+  .slide-thumb[data-layout="hero"] .h1 { font-family: "Fraunces",serif; font-weight: 900; font-size: 8.6cqw; line-height: 0.94; letter-spacing: -0.032em; color: #fff; }
+  .slide-thumb[data-layout="hero"] .h1 em { font-style: normal; color: var(--brass); }
+  .slide-thumb[data-layout="hero"] .sub { margin-top: 3cqw; font-family: "Inter",sans-serif; font-weight: 500; font-size: 2.4cqw; line-height: 1.35; color: var(--slide-paper); opacity: 0.92; max-width: 88%; }
+  .slide-thumb[data-layout="hero"] .sub strong { color: var(--brass-bright); font-weight: 800; }
+  .slide-thumb[data-layout="hero"] .closer { color: var(--slide-paper); opacity: 0.7; font-size: 1.6cqw; letter-spacing: 0.18em; margin-top: 4cqw; text-align: center; }
+
+  .slide-thumb[data-layout="brutal-truth"] { text-align: center; }
+  .slide-thumb[data-layout="brutal-truth"] .h1 { margin-top: 1cqw; font-family: "Fraunces",serif; font-weight: 900; font-size: 7cqw; line-height: 1; letter-spacing: -0.025em; color: var(--slide-navy); text-align: center; }
+  .slide-thumb[data-layout="brutal-truth"] .h1 em { font-style: normal; color: var(--brass-deep); }
+  .slide-thumb[data-layout="brutal-truth"] .sub { margin: 1.8cqw auto 0; font-family: "Inter",sans-serif; font-weight: 500; font-size: 2.3cqw; line-height: 1.35; color: var(--slide-ink-mid); max-width: 86%; text-align: center; }
+  .slide-thumb[data-layout="brutal-truth"] .sub strong { color: var(--slide-navy); font-weight: 800; }
+  .slide-thumb[data-layout="brutal-truth"] .heading { margin-top: 3.6cqw; font-family: "Inter",sans-serif; font-weight: 900; font-size: 2.2cqw; letter-spacing: 0.16em; text-transform: uppercase; color: var(--brass-deep); text-align: center; }
+  .slide-thumb[data-layout="brutal-truth"] .heading::after { content:""; display:block; width: 5cqw; height: 0.3cqw; background: var(--brass); margin: 0.8cqw auto 0; }
+  .slide-thumb[data-layout="brutal-truth"] ul.x-list { margin-top: 2.6cqw; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 2cqw; align-items: center; }
+  .slide-thumb[data-layout="brutal-truth"] ul.x-list li { display: flex; align-items: center; gap: 1.8cqw; font-family: "Inter",sans-serif; font-weight: 700; font-size: 2.5cqw; color: var(--slide-navy); }
+  .slide-thumb[data-layout="brutal-truth"] .closer { text-align: center; }
+
+  .x-circle { flex-shrink: 0; width: 3.4cqw; height: 3.4cqw; border-radius: 50%; background: var(--brass); display: flex; align-items: center; justify-content: center; }
+  .x-circle svg { width: 1.8cqw; height: 1.8cqw; }
+  .check-circle { flex-shrink: 0; width: 2.6cqw; height: 2.6cqw; border-radius: 50%; background: var(--brass); display: flex; align-items: center; justify-content: center; margin-top: 0.3cqw; }
+  .check-circle svg { width: 1.4cqw; height: 1.4cqw; }
+
+  .slide-thumb[data-layout="free-guide"] .banner-top { align-self: center; background: var(--brass); color: var(--slide-navy); font-family: "Inter",sans-serif; font-weight: 900; font-size: 3.2cqw; letter-spacing: 0.03em; text-transform: uppercase; padding: 1.4cqw 3cqw; border-radius: 0.5cqw; margin-top: 4cqw; }
+  .slide-thumb[data-layout="free-guide"] .caption { text-align: center; margin-top: 3cqw; font-family: "Inter",sans-serif; font-weight: 700; font-size: 1.8cqw; letter-spacing: 0.16em; text-transform: uppercase; color: var(--slide-paper); opacity: 0.85; }
+  .slide-thumb[data-layout="free-guide"] .h1 { text-align: center; margin-top: 1.2cqw; font-family: "Fraunces",serif; font-weight: 900; font-size: 7cqw; line-height: 1; letter-spacing: -0.025em; color: #fff; }
+  .slide-thumb[data-layout="free-guide"] .h1 em { font-style: normal; color: var(--brass); }
+  .slide-thumb[data-layout="free-guide"] .grid { margin-top: 4cqw; display: grid; grid-template-columns: 1fr 0.6fr; gap: 3cqw; align-items: center; }
+  .slide-thumb[data-layout="free-guide"] .inside { font-family: "Inter",sans-serif; font-weight: 900; font-size: 1.7cqw; letter-spacing: 0.18em; text-transform: uppercase; color: var(--brass); margin-bottom: 1.6cqw; }
+  .slide-thumb[data-layout="free-guide"] ul.check-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1.8cqw; }
+  .slide-thumb[data-layout="free-guide"] ul.check-list li { display: flex; align-items: flex-start; gap: 1.4cqw; font-family: "Inter",sans-serif; font-weight: 600; font-size: 1.9cqw; line-height: 1.3; color: var(--slide-paper); }
+  .slide-thumb[data-layout="free-guide"] .book { width: 100%; aspect-ratio: 3/4; background: #0d2440; border: 0.4cqw solid var(--brass); box-shadow: 1.5cqw 1.5cqw 0 -0.4cqw var(--brass); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2cqw; text-align: center; }
+  .slide-thumb[data-layout="free-guide"] .book-title { font-family: "Fraunces",serif; font-weight: 900; font-size: 1.7cqw; line-height: 1.1; color: #fff; }
+  .slide-thumb[data-layout="free-guide"] .book-title em { font-style: normal; color: var(--brass-bright); }
+  .slide-thumb[data-layout="free-guide"] .book-mark { margin-top: 1.6cqw; font-family: "Fraunces",serif; font-weight: 900; font-size: 1.4cqw; color: var(--brass); }
+  .slide-thumb[data-layout="free-guide"] .closer-banner { align-self: center; }
+
+  .slide-thumb[data-layout="big-stat"] .stat-caption { margin-top: 5cqw; text-align: center; font-family: "Inter",sans-serif; font-weight: 800; font-size: 1.8cqw; letter-spacing: 0.16em; text-transform: uppercase; color: var(--brass-deep); }
+  .slide-thumb[data-layout="big-stat"] .bignum { text-align: center; margin-top: 1cqw; font-family: "Fraunces",serif; font-weight: 900; font-size: 16cqw; line-height: 1; letter-spacing: -0.045em; color: var(--slide-navy); }
+  .slide-thumb[data-layout="big-stat"] .bignum em { font-style: normal; color: var(--brass-deep); }
+  .slide-thumb[data-layout="big-stat"] .stat-label { text-align: center; margin-top: 1.4cqw; font-family: "Inter",sans-serif; font-weight: 800; font-size: 2.2cqw; letter-spacing: 0.04em; text-transform: uppercase; color: var(--slide-navy); }
+  .slide-thumb[data-layout="big-stat"] .badges { margin-top: 5cqw; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1cqw; }
+  .slide-thumb[data-layout="big-stat"] .badge { display: flex; flex-direction: column; align-items: center; gap: 1.2cqw; padding: 1cqw; }
+  .slide-thumb[data-layout="big-stat"] .badge .b-icon { width: 6cqw; height: 6cqw; border-radius: 50%; background: var(--slide-paper-deep); border: 0.25cqw solid var(--brass); display: flex; align-items: center; justify-content: center; }
+  .slide-thumb[data-layout="big-stat"] .badge .b-icon svg { width: 3.2cqw; height: 3.2cqw; }
+  .slide-thumb[data-layout="big-stat"] .badge .b-label { text-align: center; font-family: "Inter",sans-serif; font-weight: 800; font-size: 1.4cqw; line-height: 1.2; color: var(--slide-navy); }
+  .slide-thumb[data-layout="big-stat"] .body-text { margin: 3cqw auto 0; text-align: center; font-family: "Inter",sans-serif; font-weight: 500; font-size: 1.8cqw; line-height: 1.4; color: var(--slide-ink-mid); max-width: 88%; }
+  .slide-thumb[data-layout="big-stat"] .body-text strong { color: var(--slide-navy); font-weight: 800; }
+
+  .slide-thumb[data-layout="common-mistakes"] .h1 { margin-top: 1cqw; font-family: "Fraunces",serif; font-weight: 900; font-size: 7cqw; line-height: 1.05; letter-spacing: -0.022em; color: #fff; text-align: center; }
+  .slide-thumb[data-layout="common-mistakes"] .h1 em { font-style: normal; color: var(--brass); }
+  .slide-thumb[data-layout="common-mistakes"] ul.pill-list { margin-top: 3cqw; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1.8cqw; align-items: center; }
+  .slide-thumb[data-layout="common-mistakes"] ul.pill-list li { display: flex; align-items: center; gap: 1.8cqw; background: rgba(245,241,232,0.06); border: 0.15cqw solid rgba(200,162,75,0.25); border-radius: 1.2cqw; padding: 1.8cqw 2.2cqw; font-family: "Inter",sans-serif; font-weight: 700; font-size: 2.1cqw; color: var(--slide-paper); }
+  .slide-thumb[data-layout="common-mistakes"] .closer { text-align: center; }
+
+  .slide-thumb[data-layout="three-steps"] .h1 { margin-top: 1cqw; font-family: "Fraunces",serif; font-weight: 900; font-size: 7cqw; line-height: 1; letter-spacing: -0.022em; color: var(--slide-navy); text-align: center; }
+  .slide-thumb[data-layout="three-steps"] .h1 em { font-style: normal; color: var(--brass-deep); }
+  .slide-thumb[data-layout="three-steps"] ol.steps { margin-top: 3.4cqw; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 2.4cqw; align-items: center; }
+  .slide-thumb[data-layout="three-steps"] ol.steps li { display: grid; grid-template-columns: 5cqw 6cqw 1fr; gap: 1.6cqw; align-items: center; max-width: 90%; }
+  .step-num-square { width: 5cqw; height: 5cqw; background: var(--brass); color: var(--slide-navy); border-radius: 0.8cqw; display: flex; align-items: center; justify-content: center; font-family: "Fraunces",serif; font-weight: 900; font-size: 2.6cqw; line-height: 1; }
+  .step-circle { width: 6cqw; height: 6cqw; border-radius: 50%; background: var(--slide-navy); display: flex; align-items: center; justify-content: center; color: var(--brass); }
+  .step-circle svg { width: 2.8cqw; height: 2.8cqw; }
+  .slide-thumb[data-layout="three-steps"] .step-body { font-family: "Inter",sans-serif; font-weight: 700; font-size: 2cqw; line-height: 1.25; color: var(--slide-navy); }
+  .slide-thumb[data-layout="three-steps"] .step-body strong { color: var(--brass-deep); }
+  .slide-thumb[data-layout="three-steps"] .closer-banner { align-self: center; }
+
+  .slide-thumb[data-layout="testimonials"] .h1 { text-align: center; margin-top: 1cqw; font-family: "Fraunces",serif; font-weight: 900; font-size: 7cqw; line-height: 1.05; letter-spacing: -0.022em; color: #fff; }
+  .slide-thumb[data-layout="testimonials"] .h1 em { font-style: normal; color: var(--brass); }
+  .slide-thumb[data-layout="testimonials"] .cards { margin-top: 3cqw; display: flex; flex-direction: column; gap: 1.8cqw; }
+  .slide-thumb[data-layout="testimonials"] .card { display: grid; grid-template-columns: 6cqw 1fr; gap: 2cqw; align-items: center; background: rgba(245,241,232,0.06); border: 0.15cqw solid rgba(200,162,75,0.2); border-radius: 1.4cqw; padding: 1.8cqw; }
+  .slide-thumb[data-layout="testimonials"] .avatar { width: 6cqw; height: 6cqw; border-radius: 50%; background: linear-gradient(135deg, #2a4a6e, #6a8aa8); border: 0.25cqw solid var(--brass); display: flex; align-items: center; justify-content: center; color: var(--brass-bright); font-family: "Fraunces",serif; font-weight: 900; font-size: 2.6cqw; }
+  .slide-thumb[data-layout="testimonials"] .quote { font-family: "Inter",sans-serif; font-weight: 600; font-size: 1.85cqw; line-height: 1.3; color: var(--slide-paper); }
+  .slide-thumb[data-layout="testimonials"] .stars { color: var(--brass-bright); font-size: 1.5cqw; letter-spacing: 0.15em; margin-bottom: 0.3cqw; }
+
+  .slide-thumb[data-layout="why-us"] .h1 { margin-top: 1cqw; font-family: "Fraunces",serif; font-weight: 900; font-size: 7cqw; line-height: 1; letter-spacing: -0.025em; color: var(--slide-navy); text-align: center; }
+  .slide-thumb[data-layout="why-us"] .h1 em { font-style: normal; color: var(--brass-deep); }
+  .slide-thumb[data-layout="why-us"] ul.benefit-list { margin-top: 3cqw; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1.8cqw; align-items: center; }
+  .slide-thumb[data-layout="why-us"] ul.benefit-list li { display: flex; align-items: center; gap: 1.6cqw; font-family: "Inter",sans-serif; font-weight: 700; font-size: 2.05cqw; color: var(--slide-navy); }
+  .benefit-check { flex-shrink: 0; width: 2.8cqw; height: 2.8cqw; border-radius: 50%; background: var(--slide-navy); display: flex; align-items: center; justify-content: center; }
+  .benefit-check svg { width: 1.4cqw; height: 1.4cqw; }
+  .slide-thumb[data-layout="why-us"] .closer-banner { align-self: center; }
+
+  .slide-thumb[data-layout="urgency"] { background: var(--slide-navy-deep); }
+  .slide-thumb[data-layout="urgency"] .clock-wrap { align-self: center; margin-top: 0; width: 16cqw; height: 16cqw; border-radius: 50%; border: 0.35cqw solid var(--brass); background: rgba(200,162,75,0.08); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 6cqw rgba(200,162,75,0.15); }
+  .slide-thumb[data-layout="urgency"] .clock-wrap svg { width: 9cqw; height: 9cqw; }
+  .slide-thumb[data-layout="urgency"] .h1 { text-align: center; margin-top: 3cqw; font-family: "Fraunces",serif; font-weight: 900; font-size: 7.2cqw; line-height: 1; letter-spacing: -0.025em; color: #fff; }
+  .slide-thumb[data-layout="urgency"] .h1 em { font-style: normal; color: var(--brass); }
+  .slide-thumb[data-layout="urgency"] .reasons { margin-top: 3cqw; display: flex; flex-direction: column; gap: 1.6cqw; }
+  .slide-thumb[data-layout="urgency"] .reason { display: flex; align-items: center; gap: 1.6cqw; font-family: "Inter",sans-serif; font-weight: 600; font-size: 1.95cqw; color: var(--slide-paper); }
+  .reason-icon { flex-shrink: 0; width: 3.4cqw; height: 3.4cqw; border-radius: 50%; background: rgba(245,241,232,0.08); border: 0.15cqw solid var(--brass); display: flex; align-items: center; justify-content: center; }
+  .reason-icon svg { width: 1.8cqw; height: 1.8cqw; }
+  .slide-thumb[data-layout="urgency"] .closer { text-align: center; }
+
+  .slide-thumb[data-layout="cta"] .h1 { font-family: "Fraunces",serif; font-weight: 900; font-size: 6.8cqw; line-height: 1.02; letter-spacing: -0.022em; color: var(--slide-navy); max-width: 90%; }
+  .slide-thumb[data-layout="cta"] .h1 em { font-style: normal; color: var(--brass-deep); }
+  .slide-thumb[data-layout="cta"] .offer-block { margin-top: 2.4cqw; display: flex; flex-direction: column; align-items: flex-start; }
+  .slide-thumb[data-layout="cta"] .offer-caption { font-family: "Inter",sans-serif; font-weight: 700; font-size: 2.2cqw; color: var(--slide-ink-mid); }
+  .slide-thumb[data-layout="cta"] .offer-caption strong { color: var(--slide-navy); font-weight: 900; }
+  .slide-thumb[data-layout="cta"] .offer-big { font-family: "Fraunces",serif; font-weight: 900; font-size: 13.5cqw; line-height: 0.9; letter-spacing: -0.045em; color: var(--brass-deep); margin-top: -0.4cqw; }
+  .slide-thumb[data-layout="cta"] .offer-detail { margin-top: -0.6cqw; font-family: "Inter",sans-serif; font-weight: 800; font-size: 2.4cqw; line-height: 1.18; color: var(--slide-navy); }
+  .slide-thumb[data-layout="cta"] .offer-detail em { font-style: normal; font-family: "Fraunces",serif; font-weight: 700; color: var(--brass-deep); }
+  .slide-thumb[data-layout="cta"] .or-call { margin-top: 3cqw; font-family: "Inter",sans-serif; font-weight: 800; font-size: 1.5cqw; letter-spacing: 0.25em; text-transform: uppercase; color: var(--slide-ink-mid); }
+  .slide-thumb[data-layout="cta"] .phone-button { margin-top: 1.2cqw; display: flex; align-items: center; gap: 1.6cqw; background: var(--brass); color: var(--slide-navy); padding: 2.2cqw 3cqw; border-radius: 1.2cqw; font-family: "Inter",sans-serif; font-weight: 900; font-size: 3.6cqw; width: fit-content; box-shadow: 0 1.2cqw 2.2cqw -0.8cqw rgba(200,162,75,0.5); }
+  .slide-thumb[data-layout="cta"] .phone-button svg { width: 3.2cqw; height: 3.2cqw; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1>Design Carousels <span class="accent">Preview &amp; Feedback</span></h1>
+    <p class="sub" id="subtitle">Loading…</p>
+    <div class="actions">
+      <button class="btn-primary" id="copy-all">Copy All Feedback</button>
+      <button class="btn-ghost" id="clear-all">Clear All</button>
+      <span class="counter"><strong id="note-count">0</strong>notes</span>
+      <span class="counter"><strong id="approved-count">0</strong>approved</span>
+      <span class="save-tag">Auto-saved to your browser · refresh-safe</span>
+      <button class="btn-ghost theme-toggle" id="theme-toggle" title="Toggle light / dark mode" aria-label="Toggle theme">
+        <svg class="theme-icon theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+          <circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.07" y2="4.93"/>
+        </svg>
+        <svg class="theme-icon theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+  <main id="sections"></main>
+</div>
+<div class="toast" id="toast">Copied to clipboard</div>
+
+<script>
+/* ────────────────────────────────────────────────────────────────
+   Client-facing review dashboard.
+
+   Loads project data from /api/project. Lets reviewer leave notes
+   per slide AND per carousel, set an approval status per carousel,
+   then click "Copy All Feedback" to bundle everything as readable
+   markdown and copy it to clipboard. Notes persist in localStorage
+   keyed by project + carousel + slide so refreshing is safe.
+   ──────────────────────────────────────────────────────────────── */
+
+const ICONS = {
+  x:        '<svg viewBox="0 0 24 24" fill="none" stroke="#0B2A4A" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>',
+  check:    '<svg viewBox="0 0 24 24" fill="none" stroke="#0B2A4A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg>',
+  check_b:  '<svg viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg>',
+  shield:   '<svg viewBox="0 0 24 24" fill="none" stroke="#0B2A4A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 L20 6 V12 C20 17 16 20.5 12 21.5 C8 20.5 4 17 4 12 V6 Z"/><polyline points="9 12 11 14 15 10"/></svg>',
+  people:   '<svg viewBox="0 0 24 24" fill="none" stroke="#0B2A4A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3"/><path d="M5 21 V19 C5 16 8 14 12 14 C16 14 19 16 19 19 V21"/></svg>',
+  scales:   '<svg viewBox="0 0 24 24" fill="none" stroke="#0B2A4A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="3" x2="12" y2="21"/><path d="M5 8 L12 6 L19 8"/><path d="M3 14 L7 8 L11 14 M13 14 L17 8 L21 14"/></svg>',
+  chat:     '<svg viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5 H21 V17 H7 L3 21 Z"/><line x1="7" y1="10" x2="17" y2="10"/><line x1="7" y1="13" x2="13" y2="13"/></svg>',
+  download: '<svg viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 V15"/><polyline points="7 11 12 16 17 11"/><line x1="4" y1="19" x2="20" y2="19"/></svg>',
+  shield_b: '<svg viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 L20 6 V12 C20 17 16 20.5 12 21.5 C8 20.5 4 17 4 12 V6 Z"/><polyline points="9 12 11 14 15 10"/></svg>',
+  clock:    '<svg viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><polyline points="12 8 12 13 16 15"/><line x1="9" y1="3" x2="15" y2="3"/></svg>',
+  camera:   '<svg viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><circle cx="12" cy="12.5" r="3.5"/></svg>',
+  alert:    '<svg viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="13"/><line x1="12" y1="16" x2="12" y2="16.5"/></svg>',
+  arrow:    '<svg viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><polyline points="15 6 21 12 15 18"/></svg>',
+  phone:    '<svg viewBox="0 0 24 24" fill="none" stroke="#0B2A4A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.86 19.86 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.92.31 1.83.57 2.71a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.37-1.13a2 2 0 0 1 2.11-.45c.88.26 1.79.45 2.71.57A2 2 0 0 1 22 16.92z"/></svg>',
+};
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ── per-layout thumbnail renderers (no editable bindings) ────── */
+function renderBrand(b) {
+  return `<div class="brand"><div class="mark">${esc(b.wordmark_main)} <em>${esc(b.wordmark_sub)}</em></div><div class="subline">${esc(b.tagline)}</div></div>`;
+}
+const LAYOUTS = {
+  hero: (s, b) => `<div class="frame"><div class="num">${s.n}</div><div class="content"><div class="body"><div class="lede">${esc(s.fields.lede)}</div><h1 class="h1">${esc(s.fields.headline_line1)}<br>${esc(s.fields.headline_line2)}<br>${s.fields.headline_highlight_line === 3 ? `<em>${esc(s.fields.headline_line3)}</em>` : esc(s.fields.headline_line3)}</h1><p class="sub">${esc(s.fields.sub_pre)}<strong>${esc(s.fields.sub_strong)}</strong></p></div><div class="closer">${esc(s.fields.closer)}</div></div>${renderBrand(b)}</div>`,
+  'brutal-truth': (s, b) => `<div class="frame"><div class="num">${s.n}</div><div class="content"><h1 class="h1">${esc(s.fields.headline_pre)}<em>${esc(s.fields.headline_highlight)}</em>${esc(s.fields.headline_post)}</h1><p class="sub">${esc(s.fields.sub_pre)}<strong>${esc(s.fields.sub_strong)}</strong></p><div class="heading">${esc(s.fields.list_heading)}</div><ul class="x-list">${s.fields.items.map(it => `<li><span class="x-circle">${ICONS.x}</span>${esc(it)}</li>`).join('')}</ul><div class="closer">${esc(s.fields.closer_pre)}<em>${esc(s.fields.closer_highlight)}</em></div></div>${renderBrand(b)}</div>`,
+  'free-guide': (s, b) => `<div class="frame"><div class="num">${s.n}</div><div class="content"><div class="banner-top">${esc(s.fields.top_banner)}</div><div class="caption">${esc(s.fields.caption)}</div><h1 class="h1">${esc(s.fields.headline_pre)}<em>${esc(s.fields.headline_highlight)}</em>${esc(s.fields.headline_post)}</h1><div class="grid"><div><div class="inside">${esc(s.fields.list_heading)}</div><ul class="check-list">${s.fields.items.map(it => `<li><span class="check-circle">${ICONS.check}</span>${esc(it)}</li>`).join('')}</ul></div><div class="book"><div class="book-title">${s.fields.book_title_lines.map(esc).join('<br>')}</div><div class="book-mark">${esc(s.fields.book_mark)}</div></div></div><div class="closer-banner">${esc(s.fields.closer_banner)}</div></div>${renderBrand(b)}</div>`,
+  'big-stat': (s, b) => `<div class="frame"><div class="num">${s.n}</div><div class="content"><div class="stat-caption">${esc(s.fields.stat_caption)}</div><div class="bignum"><em>${esc(s.fields.stat_currency)}</em>${esc(s.fields.stat_number)}<em>${esc(s.fields.stat_plus)}</em></div><div class="stat-label">${esc(s.fields.stat_label)}</div><div class="badges">${s.fields.badges.map(bd => `<div class="badge"><div class="b-icon">${ICONS[bd.icon] || ICONS.shield}</div><div class="b-label">${esc(bd.label_line1)}<br>${esc(bd.label_line2)}</div></div>`).join('')}</div><p class="body-text">${esc(s.fields.body_pre)}<strong>${esc(s.fields.body_strong)}</strong>${esc(s.fields.body_post)}</p></div>${renderBrand(b)}</div>`,
+  'common-mistakes': (s, b) => `<div class="frame"><div class="num">${s.n}</div><div class="content"><h1 class="h1">${esc(s.fields.headline_pre)}<em>${esc(s.fields.headline_highlight)}</em></h1><ul class="pill-list">${s.fields.items.map(it => `<li><span class="x-circle">${ICONS.x}</span>${esc(it)}</li>`).join('')}</ul><div class="closer">${esc(s.fields.closer_pre)}<em>${esc(s.fields.closer_highlight)}</em></div></div>${renderBrand(b)}</div>`,
+  'three-steps': (s, b) => `<div class="frame"><div class="num">${s.n}</div><div class="content"><h1 class="h1">${esc(s.fields.headline_pre)}<em>${esc(s.fields.headline_highlight)}</em></h1><ol class="steps">${s.fields.steps.map(st => `<li><div class="step-num-square">${st.n}</div><div class="step-circle">${ICONS[st.icon] || ICONS.chat}</div><div class="step-body">${esc(st.body_pre)}${st.body_strong1 ? `<strong>${esc(st.body_strong1)}</strong>` : ''}${esc(st.body_mid)}${st.body_strong2 ? `<strong>${esc(st.body_strong2)}</strong>` : ''}${esc(st.body_post)}</div></li>`).join('')}</ol><div class="closer-banner">${esc(s.fields.closer_banner)}</div></div>${renderBrand(b)}</div>`,
+  testimonials: (s, b) => `<div class="frame"><div class="num">${s.n}</div><div class="content"><h1 class="h1">${esc(s.fields.headline_pre)}<em>${esc(s.fields.headline_highlight)}</em></h1><div class="cards">${s.fields.cards.map(c => `<div class="card"><div class="avatar">${esc(c.initial)}</div><div><div class="stars">★ ★ ★ ★ ★</div><div class="quote">${esc(c.quote)}</div></div></div>`).join('')}</div></div>${renderBrand(b)}</div>`,
+  'why-us': (s, b) => `<div class="frame"><div class="num">${s.n}</div><div class="content"><h1 class="h1">${esc(s.fields.headline_pre)}<em>${esc(s.fields.headline_highlight)}</em>${esc(s.fields.headline_post)}</h1><ul class="benefit-list">${s.fields.items.map(it => `<li><span class="benefit-check">${ICONS.check_b}</span>${esc(it)}</li>`).join('')}</ul><div class="closer-banner">${esc(s.fields.closer_banner)}</div></div>${renderBrand(b)}</div>`,
+  urgency: (s, b) => `<div class="frame"><div class="num">${s.n}</div><div class="content"><div class="clock-wrap">${ICONS.clock}</div><h1 class="h1">${esc(s.fields.headline_pre)}<em>${esc(s.fields.headline_highlight)}</em></h1><div class="reasons">${s.fields.reasons.map(r => `<div class="reason"><span class="reason-icon">${ICONS[r.icon] || ICONS.alert}</span>${esc(r.text)}</div>`).join('')}</div><div class="closer">${esc(s.fields.closer_pre)}<em>${esc(s.fields.closer_highlight)}</em></div></div>${renderBrand(b)}</div>`,
+  cta: (s, b) => `<div class="frame"><div class="num">${s.n}</div><div class="content"><h1 class="h1">${esc(s.fields.headline_pre)}<em>${esc(s.fields.headline_highlight)}</em>${esc(s.fields.headline_post)}</h1><div class="offer-block"><span class="offer-caption">${esc(s.fields.offer_caption_pre)}<strong>${esc(s.fields.offer_caption_strong)}</strong>${esc(s.fields.offer_caption_post)}</span><span class="offer-big">${esc(s.fields.offer_big)}</span><span class="offer-detail">${esc(s.fields.offer_detail_pre)}<br><em>${esc(s.fields.offer_detail_em)}</em></span></div><div class="or-call">${esc(s.fields.phone_label)}</div><div class="phone-button">${ICONS.phone}${esc(s.fields.phone_number)}</div></div>${renderBrand(b)}</div>`,
+};
+
+/* ── state ─────────────────────────────────────────────────────── */
+let project = null;
+let feedback = {};
+const STORAGE_KEY = "carousel-review-feedback-v1";
+
+function loadFeedback() {
+  try { feedback = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); }
+  catch { feedback = {}; }
+}
+function saveFeedback() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(feedback));
+  updateCounters();
+}
+function carouselKey(c) { return `${project.client_slug}__${c.carousel_id}`; }
+function slideKey(c, slideIdx) { return `${carouselKey(c)}__s${slideIdx}`; }
+function getCarouselFeedback(c) {
+  const k = carouselKey(c);
+  if (!feedback[k]) feedback[k] = { note: "", status: null };
+  return feedback[k];
+}
+function getSlideNote(c, slideIdx) {
+  return feedback[slideKey(c, slideIdx)] || "";
+}
+function setSlideNote(c, slideIdx, value) {
+  if (value) feedback[slideKey(c, slideIdx)] = value;
+  else delete feedback[slideKey(c, slideIdx)];
+  saveFeedback();
+}
+
+function updateCounters() {
+  let notes = 0, approved = 0;
+  for (const c of (project ? project.carousels : [])) {
+    const cf = getCarouselFeedback(c);
+    if (cf.note && cf.note.trim()) notes++;
+    if (cf.status === 'approve') approved++;
+    for (let i = 0; i < c.slides.length; i++) {
+      if (getSlideNote(c, i).trim()) notes++;
+    }
+  }
+  document.getElementById("note-count").textContent = notes;
+  document.getElementById("approved-count").textContent = approved;
+}
+
+/* ── render ────────────────────────────────────────────────────── */
+function renderCarousel(c) {
+  const cf = getCarouselFeedback(c);
+  const statusClass = cf.status === 'approve' ? 'approved' : cf.status === 'changes' ? 'needs-changes' : '';
+  return `
+    <div class="carousel-card ${statusClass}" data-carousel="${esc(c.carousel_id)}">
+      <div class="card-head">
+        <div>
+          <h2>${esc(c.title)}</h2>
+          <div class="meta">${c.slides.length} slide${c.slides.length !== 1 ? 's' : ''}${c.format ? ' · ' + esc(c.format) : ''}</div>
+        </div>
+        <div class="card-actions">
+          <button class="status-pill approve ${cf.status === 'approve' ? 'active' : ''}" data-action="approve">✓ Approve</button>
+          <button class="status-pill changes ${cf.status === 'changes' ? 'active' : ''}" data-action="changes">✎ Request changes</button>
+        </div>
+      </div>
+      <div class="whole-note-label">Note for the whole carousel (e.g. "regenerate hooks with a brighter palette")</div>
+      <textarea class="note ${cf.note ? 'has-content' : ''}" data-whole="1" placeholder="Whole-carousel feedback…">${esc(cf.note)}</textarea>
+      <div class="slides-grid">
+        ${c.slides.map((s, i) => {
+          s.idx = i;
+          const layoutFn = LAYOUTS[s.layout] || (() => `<div class="frame">unknown layout: ${esc(s.layout)}</div>`);
+          const themeClass = s.theme === 'dark-deep' ? 'dark deep' : s.theme;
+          const note = getSlideNote(c, i);
+          return `<div class="slide-cell">
+            <div class="slide-thumb ${themeClass} ${note ? 'has-note' : ''}" data-layout="${esc(s.layout)}" data-slide-idx="${i}">
+              <div class="badge">${String(i + 1).padStart(2, '0')}</div>
+              <div class="note-dot"></div>
+              ${layoutFn(s, c.brand)}
+            </div>
+            <div class="slide-label">Slide ${i + 1} <strong>${esc(s.title || s.layout.replace(/-/g, ' '))}</strong></div>
+            <textarea class="slide-note ${note ? 'has-content' : ''}" data-slide-idx="${i}" placeholder="Note…">${esc(note)}</textarea>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+}
+
+function render() {
+  if (!project) return;
+  document.getElementById("subtitle").textContent =
+    `${project.carousels.length} carousel${project.carousels.length !== 1 ? 's' : ''} · client: ${project.client_name} · generated ${project.generated_at}. Type notes per slide or per carousel, set a status, then hit "Copy All Feedback".`;
+
+  // group by section
+  const bySection = {};
+  for (const c of project.carousels) {
+    const sec = c.section || 'Carousels';
+    if (!bySection[sec]) bySection[sec] = [];
+    bySection[sec].push(c);
+  }
+  const html = Object.entries(bySection).map(([sec, list]) =>
+    `<div class="section-title">${esc(sec)}</div>${list.map(renderCarousel).join('')}`
+  ).join('');
+  document.getElementById("sections").innerHTML = html;
+  updateCounters();
+}
+
+/* ── interactions ─────────────────────────────────────────────── */
+document.body.addEventListener("input", (e) => {
+  const card = e.target.closest(".carousel-card");
+  if (!card) return;
+  const carouselId = card.dataset.carousel;
+  const c = project.carousels.find((x) => x.carousel_id === carouselId);
+  if (!c) return;
+
+  if (e.target.matches('textarea[data-whole]')) {
+    getCarouselFeedback(c).note = e.target.value;
+    e.target.classList.toggle('has-content', !!e.target.value.trim());
+    saveFeedback();
+  } else if (e.target.matches('textarea.slide-note')) {
+    const idx = parseInt(e.target.dataset.slideIdx, 10);
+    setSlideNote(c, idx, e.target.value);
+    e.target.classList.toggle('has-content', !!e.target.value.trim());
+    const thumb = e.target.closest('.slide-cell').querySelector('.slide-thumb');
+    thumb.classList.toggle('has-note', !!e.target.value.trim());
+  }
+});
+
+document.body.addEventListener("click", (e) => {
+  if (e.target.matches('.status-pill')) {
+    const card = e.target.closest(".carousel-card");
+    const c = project.carousels.find((x) => x.carousel_id === card.dataset.carousel);
+    const action = e.target.dataset.action;        // approve | changes
+    const cf = getCarouselFeedback(c);
+    cf.status = (cf.status === action) ? null : action;
+    saveFeedback();
+    render();
+  }
+});
+
+/* ── copy / clear ─────────────────────────────────────────────── */
+function buildMarkdown() {
+  if (!project) return "";
+  const lines = [];
+  lines.push(`# Feedback for ${project.client_name}`);
+  lines.push(`_Generated ${project.generated_at} · reviewed ${new Date().toISOString().slice(0,10)}_`);
+  lines.push("");
+  for (const c of project.carousels) {
+    const cf = getCarouselFeedback(c);
+    const status = cf.status === 'approve' ? '✓ APPROVED' : cf.status === 'changes' ? '✎ NEEDS CHANGES' : '(no status)';
+    lines.push(`## ${c.title} — ${status}`);
+    if (cf.note && cf.note.trim()) {
+      lines.push(`**Whole-carousel note:** ${cf.note.trim()}`);
+      lines.push("");
+    }
+    let anySlideNote = false;
+    c.slides.forEach((s, i) => {
+      const note = getSlideNote(c, i).trim();
+      if (note) {
+        anySlideNote = true;
+        lines.push(`- **Slide ${i + 1} (${s.layout}):** ${note}`);
+      }
+    });
+    if (!cf.note?.trim() && !anySlideNote) lines.push("_(no notes)_");
+    lines.push("");
+  }
+  return lines.join("\n");
+}
+
+document.getElementById("copy-all").addEventListener("click", async () => {
+  const md = buildMarkdown();
+  try {
+    await navigator.clipboard.writeText(md);
+    const btn = document.getElementById("copy-all");
+    btn.classList.add("copied"); btn.textContent = "✓ Copied";
+    const toast = document.getElementById("toast");
+    toast.classList.add("show");
+    setTimeout(() => {
+      btn.classList.remove("copied"); btn.textContent = "Copy All Feedback";
+      toast.classList.remove("show");
+    }, 1800);
+  } catch (e) {
+    alert("Clipboard failed. Manually copy:\n\n" + md);
+  }
+});
+
+document.getElementById("clear-all").addEventListener("click", () => {
+  if (!confirm("Clear all notes and statuses? This can't be undone.")) return;
+  feedback = {};
+  saveFeedback();
+  render();
+});
+
+document.getElementById("theme-toggle").addEventListener("click", () => {
+  const isLight = document.documentElement.dataset.theme === "light";
+  if (isLight) {
+    document.documentElement.removeAttribute("data-theme");
+    try { localStorage.setItem("studio-theme", "dark"); } catch {}
+  } else {
+    document.documentElement.dataset.theme = "light";
+    try { localStorage.setItem("studio-theme", "light"); } catch {}
+  }
+});
+
+/* ── boot ─────────────────────────────────────────────────────── */
+(async () => {
+  loadFeedback();
+  const res = await fetch("/api/project");
+  project = await res.json();
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+client: hartman-injury-law
+timezone: America/New_York
+languages: [en, es]
+active_platforms:
+  instagram: true
+  tiktok: true
+  youtube: true
+  facebook: true
+  linkedin: true
+cadence_per_month:
+  reels: 14
+  carousels: 8
+  static: 4
+  lead_magnets: 6        # ~1–2 per week
+posting_times:           # local time (V1 = manual posting; these guide the calendar)
+  instagram: ["07:30", "17:30"]
+  tiktok:    ["12:00", "19:00"]
+  youtube:   ["16:00"]
+  facebook:  ["08:00"]
+  linkedin:  ["08:00"]
+dm_funnel: false         # V1 manual; flip on in V2 when BooSend/ManyChat is wired
+video_engine_default: remotion   # remotion | creatify
