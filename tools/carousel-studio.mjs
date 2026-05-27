@@ -1,15 +1,14 @@
 #!/usr/bin/env node
-// carousel-studio.mjs — local studio: edit slides inline, edit JSON in side
-// panel, save back to disk, optionally rerender any slide with gpt-image-1.
+// carousel-studio.mjs — local studio with two pages:
 //
-// Usage:
-//   export OPENAI_API_KEY=sk-...   # only needed for AI rerender
-//   node tools/carousel-studio.mjs
+//   /         → client-facing review dashboard (notes per slide,
+//                approve/request changes, "Copy All Feedback")
+//   /editor   → agency-side editor (inline edit + JSON tab + save)
 //
-// Then open http://localhost:3001
+// AI rerender, save, and load endpoints stay shared.
 
 import http from "node:http";
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync } from "node:fs";
 import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -17,6 +16,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 const PORT = Number(process.env.PORT) || 3001;
 const OUT_DIR = resolve(ROOT, "mockups", "ai-generated");
+const REVIEW_HTML = resolve(ROOT, "templates", "carousel-review.html");
 const EDITOR_HTML = resolve(ROOT, "templates", "carousel-editor.html");
 const PROMPTS_PATH = resolve(ROOT, "mockups", "carousel-prompts.json");
 const DATA_DIR = resolve(ROOT, "mockups", "data");
@@ -26,7 +26,7 @@ mkdirSync(DATA_DIR, { recursive: true });
 
 const OPENAI_KEY = process.env.OPENAI_API_KEY;
 
-// ── OpenAI image generation ────────────────────────────────────────────
+// ── OpenAI image generation ───────────────────────────────────────────
 const callOpenAI = async (prompt, quality = "medium") => {
   if (!OPENAI_KEY) throw new Error("OPENAI_API_KEY env var is not set");
   const res = await fetch("https://api.openai.com/v1/images/generations", {
@@ -61,16 +61,55 @@ const carouselPath = (id) => {
   return join(DATA_DIR, `${id}.json`);
 };
 
+// Bundle all carousel JSON files in data/ into a single "project" payload
+// for the review dashboard. Client name + generated date pulled from the
+// first file's fields (a real implementation would derive these from the
+// client config, but this is enough to ship the dashboard).
+const loadProject = () => {
+  const files = readdirSync(DATA_DIR).filter((f) => f.endsWith(".json"));
+  const carousels = files
+    .map((f) => {
+      const full = join(DATA_DIR, f);
+      const doc = JSON.parse(readFileSync(full, "utf8"));
+      return doc;
+    })
+    .sort((a, b) => a.title.localeCompare(b.title));
+
+  const first = carousels[0] || {};
+  return {
+    client_slug: first.client_slug || "unknown",
+    client_name:
+      first.client_slug === "hartman-injury-law" ? "Hartman Injury Law" :
+      first.client_slug || "Unknown client",
+    generated_at: new Date().toISOString().slice(0, 10),
+    carousels: carousels.map((c) => ({
+      ...c,
+      section: c.section || "Carousels",
+    })),
+  };
+};
+
 // ── HTTP server ───────────────────────────────────────────────────────
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://localhost:${PORT}`);
 
-  // GET / — editor HTML
+  // GET / — client review dashboard
   if (url.pathname === "/" && req.method === "GET") {
+    return sendText(res, 200, readFileSync(REVIEW_HTML, "utf8"), "text/html; charset=utf-8");
+  }
+
+  // GET /editor — agency-side editor
+  if (url.pathname === "/editor" && req.method === "GET") {
     return sendText(res, 200, readFileSync(EDITOR_HTML, "utf8"), "text/html; charset=utf-8");
   }
 
-  // GET /api/carousel/<id> — return the JSON document
+  // GET /api/project — bundle all carousels for the review dashboard
+  if (url.pathname === "/api/project" && req.method === "GET") {
+    try { return sendJSON(res, 200, loadProject()); }
+    catch (e) { return sendText(res, 500, e.message); }
+  }
+
+  // GET /api/carousel/<id> — single carousel doc (for the editor)
   if (url.pathname.startsWith("/api/carousel/") && req.method === "GET") {
     const id = url.pathname.replace("/api/carousel/", "");
     try {
@@ -80,13 +119,13 @@ const server = http.createServer(async (req, res) => {
     } catch (e) { return sendText(res, 400, e.message); }
   }
 
-  // POST /api/carousel/<id> — save the JSON document
+  // POST /api/carousel/<id> — save (used by the editor)
   if (url.pathname.startsWith("/api/carousel/") && req.method === "POST") {
     const id = url.pathname.replace("/api/carousel/", "");
     try {
       const file = carouselPath(id);
       const body = await readBody(req);
-      const parsed = JSON.parse(body);                  // throws on bad JSON
+      const parsed = JSON.parse(body);
       writeFileSync(file, JSON.stringify(parsed, null, 2) + "\n");
       console.log(`✓ saved ${id}.json (${body.length} bytes)`);
       return sendJSON(res, 200, { ok: true });
@@ -104,7 +143,7 @@ const server = http.createServer(async (req, res) => {
     return res.end(readFileSync(filePath));
   }
 
-  // POST /regenerate — gpt-image-1 call → save PNG → return URL
+  // POST /regenerate — gpt-image-1
   if (url.pathname === "/regenerate" && req.method === "POST") {
     try {
       const { slide, quality } = JSON.parse((await readBody(req)) || "{}");
@@ -134,11 +173,9 @@ server.listen(PORT, () => {
   console.log("┌─────────────────────────────────────────────────────────────────┐");
   console.log(`│  Carousel Studio   ▸ http://localhost:${PORT}                       │`);
   console.log("├─────────────────────────────────────────────────────────────────┤");
-  console.log("│  ▸ click any text on a slide to edit it inline                  │");
-  console.log("│  ▸ edit the JSON tab on the right for bulk changes              │");
-  console.log("│  ▸ ⌘S / Ctrl+S to save                                          │");
-  console.log("│  ▸ click 'AI ↻' on a slide to rerender via gpt-image-1          │");
-  console.log("│  ▸ ctrl-C to stop the server                                    │");
+  console.log(`│  /         → client review dashboard (notes + copy feedback)    │`);
+  console.log(`│  /editor   → agency editor (inline + JSON tab + save)           │`);
+  console.log("│  ▸ ctrl-C to stop                                               │");
   console.log("└─────────────────────────────────────────────────────────────────┘");
   if (!OPENAI_KEY) console.log("  ⚠  set OPENAI_API_KEY before clicking AI rerender");
   console.log("");
