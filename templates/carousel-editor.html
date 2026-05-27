@@ -118,7 +118,7 @@
   /* ── slide cards (rendered carousel) ───────────────────────────── */
   .slide {
     width: 100%;
-    aspect-ratio: 1080 / 1350;
+    aspect-ratio: 1080 / 1440;
     position: relative; overflow: hidden;
     border-radius: 10px;
     box-shadow: 0 16px 30px -16px rgba(0,0,0,0.7);
@@ -331,6 +331,7 @@
   <span class="spacer"></span>
   <span class="status" id="status">Idle</span>
   <button class="ghost" id="rerender-all-btn">AI rerender all</button>
+  <button class="ghost" id="export-btn">Export PNGs</button>
   <button id="save-btn">Save</button>
 </header>
 
@@ -338,14 +339,22 @@
   <div class="gallery-wrap"><div class="gallery" id="gallery"></div></div>
   <aside class="panel">
     <nav class="panel-tabs">
-      <div class="tab active" data-tab="json">JSON</div>
-      <div class="tab" data-tab="info">Info</div>
+      <div class="tab active" data-tab="info">Info &amp; Export</div>
+      <div class="tab" data-tab="json">Advanced (JSON)</div>
     </nav>
-    <section class="panel-content" id="tab-json">
-      <textarea id="jsonEditor" spellcheck="false"></textarea>
-      <div class="hint" id="jsonHint">Tip: edits in either pane sync live. Press <strong>Save</strong> (or ⌘S) to persist.</div>
-    </section>
-    <section class="panel-content" id="tab-info" style="display:none;">
+    <section class="panel-content" id="tab-info">
+      <div class="panel-section"><h4>How to edit</h4>
+        <div class="row" style="font-size:12px; color:var(--editor-mute); line-height:1.6; display:block; padding:6px 0;">
+          Click any text on any slide on the left and start typing. Changes save when you press <strong style="color:#fff;">⌘S</strong> or click <strong style="color:var(--brass-bright);">Save</strong>. No JSON knowledge needed.
+        </div>
+      </div>
+      <div class="panel-section"><h4>Export to PNG</h4>
+        <div class="row" style="font-size:12px; color:var(--editor-mute); display:block; padding:6px 0; line-height:1.6;">
+          Renders all 10 slides as <strong style="color:#fff;">1080×1440 PNG</strong> files via headless Chrome — pixel-perfect, ready to upload to Instagram.
+        </div>
+        <button id="export-panel-btn" style="background:var(--brass); color:var(--navy); border:0; padding:9px 16px; border-radius:6px; font-weight:800; cursor:pointer; width:100%; margin-top:8px; font-size:13px;">Export 10 PNGs</button>
+        <div id="export-status" style="margin-top:10px; font-size:12px; color:var(--editor-mute); line-height:1.5;"></div>
+      </div>
       <div class="panel-section"><h4>Document</h4>
         <div class="row"><span>Client</span><strong id="meta-client">—</strong></div>
         <div class="row"><span>Carousel</span><strong id="meta-carousel">—</strong></div>
@@ -356,11 +365,10 @@
         <div class="row"><span>Handle</span><strong id="meta-handle">—</strong></div>
         <div class="row"><span>Tagline</span><strong id="meta-tagline">—</strong></div>
       </div>
-      <div class="panel-section"><h4>Shortcuts</h4>
-        <div class="row"><span>Save</span><strong>⌘ S / Ctrl S</strong></div>
-        <div class="row"><span>Edit text</span><strong>click any text on a slide</strong></div>
-        <div class="row"><span>Bulk edit</span><strong>edit the JSON tab directly</strong></div>
-      </div>
+    </section>
+    <section class="panel-content" id="tab-json" style="display:none;">
+      <textarea id="jsonEditor" spellcheck="false"></textarea>
+      <div class="hint" id="jsonHint">Advanced: edit raw JSON to bulk-modify all slides. Inline and JSON edits stay in sync. ⌘S saves.</div>
     </section>
   </aside>
 </main>
@@ -688,6 +696,33 @@ document.body.addEventListener('click', async (e) => {
     e.target.textContent = slide.classList.contains('showing-ai') ? 'HTML' : 'AI';
   }
 });
+
+async function runExport() {
+  const topBtn = document.getElementById('export-btn');
+  const panelBtn = document.getElementById('export-panel-btn');
+  const out = document.getElementById('export-status');
+  [topBtn, panelBtn].forEach(b => { b.disabled = true; });
+  topBtn.textContent = 'Exporting…'; panelBtn.textContent = 'Rendering 10 slides…';
+  setStatus('Exporting via headless Chrome…', 'saving');
+  out.textContent = 'Saving first…';
+  try {
+    await save();
+    out.textContent = 'Booting Chrome…';
+    const res = await fetch('/api/export/hartman-settlement', { method: 'POST' });
+    if (!res.ok) throw new Error(await res.text());
+    const data = await res.json();
+    out.innerHTML = `<div style="color:var(--green); margin-bottom:6px;"><strong>✓ ${data.files.length} PNGs saved</strong></div><div>Folder: <code style="background:var(--editor-bg); padding:2px 6px; border-radius:3px;">${data.dir}</code></div><div style="margin-top:6px; opacity:0.8;">${data.files.map(f => `• ${f}`).join('<br>')}</div>`;
+    setStatus(`Exported ${data.files.length} PNGs`, 'saved');
+  } catch (e) {
+    out.innerHTML = `<div style="color:#ff8080;">Export failed: ${e.message}</div>`;
+    setStatus('Export failed', 'dirty');
+  } finally {
+    [topBtn, panelBtn].forEach(b => { b.disabled = false; });
+    topBtn.textContent = 'Export PNGs'; panelBtn.textContent = 'Export 10 PNGs';
+  }
+}
+document.getElementById('export-btn').addEventListener('click', runExport);
+document.getElementById('export-panel-btn').addEventListener('click', runExport);
 
 document.getElementById('rerender-all-btn').addEventListener('click', async () => {
   for (let i = 0; i < state.slides.length; i++) {

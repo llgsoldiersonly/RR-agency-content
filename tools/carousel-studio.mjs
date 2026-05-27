@@ -11,6 +11,7 @@ import http from "node:http";
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync } from "node:fs";
 import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { exportCarousel } from "./export-png.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
@@ -18,6 +19,7 @@ const PORT = Number(process.env.PORT) || 3001;
 const OUT_DIR = resolve(ROOT, "mockups", "ai-generated");
 const REVIEW_HTML = resolve(ROOT, "templates", "carousel-review.html");
 const EDITOR_HTML = resolve(ROOT, "templates", "carousel-editor.html");
+const RENDER_HTML = resolve(ROOT, "templates", "carousel-render.html");
 const PROMPTS_PATH = resolve(ROOT, "mockups", "carousel-prompts.json");
 const DATA_DIR = resolve(ROOT, "mockups", "data");
 
@@ -103,6 +105,32 @@ const server = http.createServer(async (req, res) => {
     return sendText(res, 200, readFileSync(EDITOR_HTML, "utf8"), "text/html; charset=utf-8");
   }
 
+  // GET /render — single-slide full-size renderer (used by Puppeteer)
+  if (url.pathname === "/render" && req.method === "GET") {
+    return sendText(res, 200, readFileSync(RENDER_HTML, "utf8"), "text/html; charset=utf-8");
+  }
+
+  // POST /api/export/<id> — render every slide as a 1080×1440 PNG
+  if (url.pathname.startsWith("/api/export/") && req.method === "POST") {
+    const id = url.pathname.replace("/api/export/", "");
+    try {
+      if (!/^[a-z0-9-]+$/i.test(id)) throw new Error("invalid carousel id");
+      console.log(`→ exporting ${id}…`);
+      const t0 = Date.now();
+      const result = await exportCarousel(id, {
+        baseUrl: `http://localhost:${PORT}`,
+        onProgress: ({ slide, total, status }) => {
+          if (status === "done") console.log(`  ✓ slide ${slide}/${total}`);
+        },
+      });
+      console.log(`✓ ${result.files.length} PNGs in ${((Date.now() - t0) / 1000).toFixed(1)}s → ${result.dir}`);
+      return sendJSON(res, 200, result);
+    } catch (e) {
+      console.error(`✗ export ${id} failed:`, e.message);
+      return sendText(res, 500, e.message);
+    }
+  }
+
   // GET /api/project — bundle all carousels for the review dashboard
   if (url.pathname === "/api/project" && req.method === "GET") {
     try { return sendJSON(res, 200, loadProject()); }
@@ -174,7 +202,8 @@ server.listen(PORT, () => {
   console.log(`│  Carousel Studio   ▸ http://localhost:${PORT}                       │`);
   console.log("├─────────────────────────────────────────────────────────────────┤");
   console.log(`│  /         → client review dashboard (notes + copy feedback)    │`);
-  console.log(`│  /editor   → agency editor (inline + JSON tab + save)           │`);
+  console.log(`│  /editor   → agency editor (inline edit + Export PNGs)          │`);
+  console.log(`│  /render   → single-slide renderer (used by export)             │`);
   console.log("│  ▸ ctrl-C to stop                                               │");
   console.log("└─────────────────────────────────────────────────────────────────┘");
   if (!OPENAI_KEY) console.log("  ⚠  set OPENAI_API_KEY before clicking AI rerender");

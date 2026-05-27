@@ -8,4 +8,6 @@ clients/*/content/*/static/*.png
 remotion/out/
 # AI-generated carousel slides from tools/carousel-studio.mjs
 mockups/ai-generated/*.png
+# Exported carousel PNGs (regenerable from JSON via studio Export button)
+mockups/exports/
 .DS_Store
