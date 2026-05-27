@@ -3,6 +3,15 @@
 <head>
 <meta charset="utf-8">
 <title>Design Carousels — Preview &amp; Feedback</title>
+<script>
+  // Read theme preference BEFORE first paint so the page doesn't flash.
+  (function () {
+    try {
+      const saved = localStorage.getItem("studio-theme");
+      if (saved === "light") document.documentElement.dataset.theme = "light";
+    } catch (e) { /* localStorage blocked — ignore */ }
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -25,6 +34,15 @@
     --slide-paper-deep: #EFEAD8;
     --slide-ink: #0D1B2F;
     --slide-ink-mid: #4A5468;
+  }
+  html[data-theme="light"] {
+    --bg: #f5f5f7;
+    --panel: #ffffff;
+    --panel-2: #f1f3f7;
+    --line: #e1e4ec;
+    --ink: #1a1f2e;
+    --mute: #5a6275;
+    --brass-bright: var(--brass-deep);     /* brighter brass hurts on light bg */
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -79,6 +97,13 @@
     background: var(--green); border-radius: 50%; margin-right: 6px;
     vertical-align: middle;
   }
+  .theme-toggle {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 38px; height: 38px; padding: 0; flex-shrink: 0;
+  }
+  .theme-toggle .theme-icon-light { display: none; }
+  html[data-theme="light"] .theme-toggle .theme-icon-dark { display: none; }
+  html[data-theme="light"] .theme-toggle .theme-icon-light { display: block; }
 
   /* ── section grouping ──────────────────────────────────────────── */
   .section-title {
@@ -354,6 +379,14 @@
       <span class="counter"><strong id="note-count">0</strong>notes</span>
       <span class="counter"><strong id="approved-count">0</strong>approved</span>
       <span class="save-tag">Auto-saved to your browser · refresh-safe</span>
+      <button class="btn-ghost theme-toggle" id="theme-toggle" title="Toggle light / dark mode" aria-label="Toggle theme">
+        <svg class="theme-icon theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+          <circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.07" y2="4.93"/>
+        </svg>
+        <svg class="theme-icon theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
     </div>
   </header>
   <main id="sections"></main>
@@ -590,6 +623,17 @@ document.getElementById("clear-all").addEventListener("click", () => {
   feedback = {};
   saveFeedback();
   render();
+});
+
+document.getElementById("theme-toggle").addEventListener("click", () => {
+  const isLight = document.documentElement.dataset.theme === "light";
+  if (isLight) {
+    document.documentElement.removeAttribute("data-theme");
+    try { localStorage.setItem("studio-theme", "dark"); } catch {}
+  } else {
+    document.documentElement.dataset.theme = "light";
+    try { localStorage.setItem("studio-theme", "light"); } catch {}
+  }
 });
 
 /* ── boot ─────────────────────────────────────────────────────── */

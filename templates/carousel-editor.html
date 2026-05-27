@@ -3,6 +3,15 @@
 <head>
 <meta charset="utf-8">
 <title>Carousel editor</title>
+<script>
+  // Read theme preference BEFORE first paint to avoid flash.
+  (function () {
+    try {
+      const saved = localStorage.getItem("studio-theme");
+      if (saved === "light") document.documentElement.dataset.theme = "light";
+    } catch (e) { /* localStorage blocked — ignore */ }
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -25,6 +34,13 @@
     --editor-mute: #7a8095;
     --accent: #4f8cff;
     --green: #36c47b;
+  }
+  html[data-theme="light"] {
+    --editor-bg: #f5f5f7;
+    --editor-panel: #ffffff;
+    --editor-line: #e1e4ec;
+    --editor-text: #1a1f2e;
+    --editor-mute: #6a7080;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; overflow: hidden; }
@@ -59,6 +75,13 @@
     border: 1px solid var(--editor-line);
   }
   .topbar button.ghost:hover { border-color: var(--brass); color: var(--brass-bright); }
+  .theme-toggle {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; padding: 0; flex-shrink: 0;
+  }
+  .theme-toggle .theme-icon-light { display: none; }
+  html[data-theme="light"] .theme-toggle .theme-icon-dark { display: none; }
+  html[data-theme="light"] .theme-toggle .theme-icon-light { display: block; }
 
   /* ── main split: slides gallery | json panel ───────────────────── */
   .main {
@@ -332,6 +355,14 @@
   <span class="status" id="status">Idle</span>
   <button class="ghost" id="rerender-all-btn">AI rerender all</button>
   <button class="ghost" id="export-btn">Export PNGs</button>
+  <button class="ghost theme-toggle" id="theme-toggle" title="Toggle light / dark mode" aria-label="Toggle theme">
+    <svg class="theme-icon theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+      <circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.07" y2="4.93"/>
+    </svg>
+    <svg class="theme-icon theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+  </button>
   <button id="save-btn">Save</button>
 </header>
 
@@ -723,6 +754,17 @@ async function runExport() {
 }
 document.getElementById('export-btn').addEventListener('click', runExport);
 document.getElementById('export-panel-btn').addEventListener('click', runExport);
+
+document.getElementById("theme-toggle").addEventListener("click", () => {
+  const isLight = document.documentElement.dataset.theme === "light";
+  if (isLight) {
+    document.documentElement.removeAttribute("data-theme");
+    try { localStorage.setItem("studio-theme", "dark"); } catch {}
+  } else {
+    document.documentElement.dataset.theme = "light";
+    try { localStorage.setItem("studio-theme", "light"); } catch {}
+  }
+});
 
 document.getElementById('rerender-all-btn').addEventListener('click', async () => {
   for (let i = 0; i < state.slides.length; i++) {
