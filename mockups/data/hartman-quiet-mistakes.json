@@ -1,0 +1,227 @@
+{
+  "client_slug": "hartman-injury-law",
+  "carousel_id": "quiet-mistakes",
+  "title": "5 quiet mistakes that hurt your claim",
+  "format": "instagram-carousel-3-4",
+  "section": "Education — PI",
+  "brand": {
+    "navy": "#0B2A4A",
+    "navy_deep": "#06192E",
+    "brass": "#C8A24B",
+    "brass_deep": "#9C7E36",
+    "paper": "#F5F1E8",
+    "wordmark_main": "Hartman",
+    "wordmark_sub": "Injury Law",
+    "handle": "@hartmaninjurylaw",
+    "tagline": "Hurt? Get Hartman.",
+    "geo_subtitle": "Tampa · Hillsborough · Pinellas"
+  },
+  "slides": [
+    {
+      "n": 1,
+      "layout": "hero",
+      "theme": "dark",
+      "fields": {
+        "lede": "A guide from your corner",
+        "headline_line1": "FIVE",
+        "headline_line2": "QUIET",
+        "headline_line3": "MISTAKES.",
+        "headline_highlight_line": 3,
+        "sub_pre": "Most happen in the first week. ",
+        "sub_strong": "Most are reversible if you act fast.",
+        "closer": "Tampa & Hillsborough County"
+      }
+    },
+    {
+      "n": 2,
+      "layout": "brutal-truth",
+      "theme": "light",
+      "fields": {
+        "headline_pre": "Calling ",
+        "headline_highlight": "their insurance",
+        "headline_post": " first.",
+        "sub_pre": "Their adjuster isn't there to help you. ",
+        "sub_strong": "They're paid to pay less.",
+        "list_heading": "What they do with the call",
+        "items": [
+          "Lock in a recorded statement.",
+          "Quote you a quick, low offer.",
+          "Save your words to use against you later."
+        ],
+        "closer_pre": "Let ",
+        "closer_highlight": "someone else make the call."
+      }
+    },
+    {
+      "n": 3,
+      "layout": "brutal-truth",
+      "theme": "light",
+      "fields": {
+        "headline_pre": "Posting ",
+        "headline_highlight": "the crash",
+        "headline_post": " online.",
+        "sub_pre": "Your feed becomes their evidence. ",
+        "sub_strong": "All of it.",
+        "list_heading": "What they screenshot",
+        "items": [
+          "A photo where you're smiling.",
+          "A caption you didn't mean.",
+          "Old posts that suggest a prior injury."
+        ],
+        "closer_pre": "Lock down ",
+        "closer_highlight": "the feed."
+      }
+    },
+    {
+      "n": 4,
+      "layout": "common-mistakes",
+      "theme": "dark",
+      "fields": {
+        "headline_pre": "All five, ",
+        "headline_highlight": "in one place.",
+        "items": [
+          "Calling their insurance first.",
+          "Posting about the crash online.",
+          "Skipping or spacing out doctor visits.",
+          "Taking the first offer they make.",
+          "Apologizing at the scene."
+        ],
+        "closer_pre": "Save this. ",
+        "closer_highlight": "Share with someone hurt."
+      }
+    },
+    {
+      "n": 5,
+      "layout": "brutal-truth",
+      "theme": "light",
+      "fields": {
+        "headline_pre": "Skipping ",
+        "headline_highlight": "doctor visits.",
+        "headline_post": "",
+        "sub_pre": "Gaps in treatment ",
+        "sub_strong": "read as 'you healed.'",
+        "list_heading": "What gaps do to value",
+        "items": [
+          "Insurers argue the injury wasn't real.",
+          "Records have nothing to point to.",
+          "Pain you push through stops being measured."
+        ],
+        "closer_pre": "Keep ",
+        "closer_highlight": "the appointments."
+      }
+    },
+    {
+      "n": 6,
+      "layout": "brutal-truth",
+      "theme": "light",
+      "fields": {
+        "headline_pre": "Taking ",
+        "headline_highlight": "the first offer.",
+        "headline_post": "",
+        "sub_pre": "First offers are written to close fast. ",
+        "sub_strong": "Not to be fair.",
+        "list_heading": "What the first number ignores",
+        "items": [
+          "Future care you'll still need.",
+          "Time off work that hasn't happened yet.",
+          "Pain that lingers past the case."
+        ],
+        "closer_pre": "First offer ",
+        "closer_highlight": "is rarely the real one."
+      }
+    },
+    {
+      "n": 7,
+      "layout": "urgency",
+      "theme": "dark-deep",
+      "fields": {
+        "headline_pre": "The clock ",
+        "headline_highlight": "is already running.",
+        "reasons": [
+          { "icon": "camera", "text": "Scene evidence disappears fast — skid marks, cameras, witnesses." },
+          { "icon": "alert",  "text": "Florida deadlines are strict and don't pause for healing." },
+          { "icon": "arrow",  "text": "Insurers know waiting helps them, not you." }
+        ],
+        "closer_pre": "Move early. ",
+        "closer_highlight": "It saves the case."
+      }
+    },
+    {
+      "n": 8,
+      "layout": "brutal-truth",
+      "theme": "light",
+      "fields": {
+        "headline_pre": "Saying ",
+        "headline_highlight": "\"sorry\"",
+        "headline_post": " at the scene.",
+        "sub_pre": "Politeness costs nothing — ",
+        "sub_strong": "until it costs the case.",
+        "list_heading": "How a word becomes evidence",
+        "items": [
+          "An apology reads as admission.",
+          "Officers note what you say.",
+          "Their adjuster files it for later."
+        ],
+        "closer_pre": "Check on people. ",
+        "closer_highlight": "Don't take blame."
+      }
+    },
+    {
+      "n": 9,
+      "layout": "three-steps",
+      "theme": "light",
+      "fields": {
+        "headline_pre": "What to do ",
+        "headline_highlight": "in the first 24 hours.",
+        "steps": [
+          {
+            "n": 1,
+            "icon": "camera",
+            "body_pre": "Photograph ",
+            "body_strong1": "everything",
+            "body_mid": " — the cars, the scene, your injuries.",
+            "body_strong2": "",
+            "body_post": ""
+          },
+          {
+            "n": 2,
+            "icon": "shield",
+            "body_pre": "See a doctor ",
+            "body_strong1": "today",
+            "body_mid": ", even if you feel \"fine.\"",
+            "body_strong2": "",
+            "body_post": ""
+          },
+          {
+            "n": 3,
+            "icon": "chat",
+            "body_pre": "",
+            "body_strong1": "",
+            "body_mid": "Don't talk to their insurer. Call us first.",
+            "body_strong2": "",
+            "body_post": ""
+          }
+        ],
+        "closer_banner": "No cost. No obligation."
+      }
+    },
+    {
+      "n": 10,
+      "layout": "cta",
+      "theme": "light",
+      "fields": {
+        "headline_pre": "Hurt in a ",
+        "headline_highlight": "Tampa crash",
+        "headline_post": "?",
+        "offer_caption_pre": "DM ",
+        "offer_caption_strong": "\"REVIEW\"",
+        "offer_caption_post": " for a",
+        "offer_big": "FREE",
+        "offer_detail_pre": "case review.",
+        "offer_detail_em": "No fee unless we win.",
+        "phone_label": "or call",
+        "phone_number": "(813) 555-0142"
+      }
+    }
+  ]
+}
