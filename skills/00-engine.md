@@ -10,6 +10,9 @@ You generate a month of social content for ONE attorney client, then build a rev
    `skills/hooks/<area>.md`. Use `reel-script-writer` / `carousel-generator` for the body.
    For reels specifically, also read `skills/remotion-viral-reels/SKILL.md` — it governs
    visual treatment (safe zones, emphasis, motion, hook visuals, tier matrix).
+   For carousels specifically, also read `skills/carousel-writer/SKILL.md` — it governs
+   slide roles, visual hierarchy, layout systems, color/whitespace rules, pattern interrupts,
+   and per-niche Brand Energy Profiles (client `brand.md` voice always wins over the generic profile).
    Pull local specifics from the Local Intelligence Profile; pull any results from `results.md`.
 4. Write everything into `content/<month>/content.json` (schema below), including `tags`.
 5. Run `node tools/generate-preview.mjs clients/<slug>/content/<month>/content.json`.
