@@ -235,9 +235,21 @@
 
   .slide-thumb .frame {
     position: absolute; inset: 0;
-    padding: 8.5cqw 7cqw 12cqw 7cqw;
+    /* Strict design spec: 120px top, 100px sides, 40px bottom. CSS Grid
+       rows 1fr/auto/1fr/auto centers content in row 2 and pins the
+       logo to row 4 at the bottom — height-independent. */
+    padding: 11.1cqw 9.3cqw 3.7cqw 9.3cqw;
+    display: grid;
+    grid-template-rows: 1fr auto 1fr auto;
+    place-items: center;
+    text-align: center;
+  }
+  .slide-thumb .content {
+    grid-row: 2;
     display: flex; flex-direction: column;
-    justify-content: center;
+    align-items: center; justify-content: center;
+    width: 100%;
+    gap: 2.4cqw;
   }
   .slide-thumb .num {
     position: absolute; top: 3.5cqw; left: 3.5cqw;
@@ -246,7 +258,7 @@
     font-size: 2cqw; line-height: 4cqw; text-align: center;
     border-radius: 0.5cqw;
   }
-  .slide-thumb .brand { margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 0.8cqw; padding-top: 2cqw; }
+  .slide-thumb .brand { grid-row: 4; display: flex; flex-direction: column; align-items: center; gap: 0.8cqw; }
   .slide-thumb .brand .mark { font-family: "Fraunces",serif; font-weight: 900; font-size: 3.8cqw; color: var(--brass); }
   .slide-thumb.light .brand .mark { color: var(--slide-navy); }
   .slide-thumb .brand .mark em { font-style: normal; font-weight: 500; }
@@ -260,7 +272,7 @@
   .slide-thumb .closer-banner { align-self: flex-start; background: var(--brass); color: var(--slide-navy); font-family: "Inter",sans-serif; font-weight: 900; font-size: 2.4cqw; text-transform: uppercase; padding: 1.4cqw 3cqw; border-radius: 0.6cqw; margin-top: 3cqw; }
 
   .slide-thumb[data-layout="hero"] { background: var(--slide-navy-deep); }
-  .slide-thumb[data-layout="hero"] .body { margin: auto 0; padding-top: 6cqw; }
+  .slide-thumb[data-layout="hero"] .body { display: contents; }
   .slide-thumb[data-layout="hero"] .lede { font-family: "Inter",sans-serif; font-weight: 600; font-size: 2cqw; letter-spacing: 0.04em; color: var(--slide-paper); opacity: 0.85; text-transform: uppercase; margin-bottom: 2.4cqw; }
   .slide-thumb[data-layout="hero"] .h1 { font-family: "Fraunces",serif; font-weight: 900; font-size: 8.6cqw; line-height: 0.94; letter-spacing: -0.032em; color: #fff; }
   .slide-thumb[data-layout="hero"] .h1 em { font-style: normal; color: var(--brass); }
@@ -269,7 +281,7 @@
   .slide-thumb[data-layout="hero"] .closer { color: var(--slide-paper); opacity: 0.7; font-size: 1.6cqw; letter-spacing: 0.18em; margin-top: 4cqw; text-align: center; }
 
   .slide-thumb[data-layout="brutal-truth"] { text-align: center; }
-  .slide-thumb[data-layout="brutal-truth"] .h1 { margin-top: 1cqw; font-family: "Fraunces",serif; font-weight: 900; font-size: 5.6cqw; line-height: 1; letter-spacing: -0.025em; color: var(--slide-navy); text-align: center; }
+  .slide-thumb[data-layout="brutal-truth"] .h1 { margin-top: 1cqw; font-family: "Fraunces",serif; font-weight: 900; font-size: 7cqw; line-height: 1; letter-spacing: -0.025em; color: var(--slide-navy); text-align: center; }
   .slide-thumb[data-layout="brutal-truth"] .h1 em { font-style: normal; color: var(--brass-deep); }
   .slide-thumb[data-layout="brutal-truth"] .sub { margin: 1.8cqw auto 0; font-family: "Inter",sans-serif; font-weight: 500; font-size: 2.3cqw; line-height: 1.35; color: var(--slide-ink-mid); max-width: 86%; text-align: center; }
   .slide-thumb[data-layout="brutal-truth"] .sub strong { color: var(--slide-navy); font-weight: 800; }
@@ -286,7 +298,7 @@
 
   .slide-thumb[data-layout="free-guide"] .banner-top { align-self: center; background: var(--brass); color: var(--slide-navy); font-family: "Inter",sans-serif; font-weight: 900; font-size: 3.2cqw; letter-spacing: 0.03em; text-transform: uppercase; padding: 1.4cqw 3cqw; border-radius: 0.5cqw; margin-top: 4cqw; }
   .slide-thumb[data-layout="free-guide"] .caption { text-align: center; margin-top: 3cqw; font-family: "Inter",sans-serif; font-weight: 700; font-size: 1.8cqw; letter-spacing: 0.16em; text-transform: uppercase; color: var(--slide-paper); opacity: 0.85; }
-  .slide-thumb[data-layout="free-guide"] .h1 { text-align: center; margin-top: 1.2cqw; font-family: "Fraunces",serif; font-weight: 900; font-size: 5.6cqw; line-height: 1; letter-spacing: -0.025em; color: #fff; }
+  .slide-thumb[data-layout="free-guide"] .h1 { text-align: center; margin-top: 1.2cqw; font-family: "Fraunces",serif; font-weight: 900; font-size: 7cqw; line-height: 1; letter-spacing: -0.025em; color: #fff; }
   .slide-thumb[data-layout="free-guide"] .h1 em { font-style: normal; color: var(--brass); }
   .slide-thumb[data-layout="free-guide"] .grid { margin-top: 4cqw; display: grid; grid-template-columns: 1fr 0.6fr; gap: 3cqw; align-items: center; }
   .slide-thumb[data-layout="free-guide"] .inside { font-family: "Inter",sans-serif; font-weight: 900; font-size: 1.7cqw; letter-spacing: 0.18em; text-transform: uppercase; color: var(--brass); margin-bottom: 1.6cqw; }
@@ -310,13 +322,13 @@
   .slide-thumb[data-layout="big-stat"] .body-text { margin: 3cqw auto 0; text-align: center; font-family: "Inter",sans-serif; font-weight: 500; font-size: 1.8cqw; line-height: 1.4; color: var(--slide-ink-mid); max-width: 88%; }
   .slide-thumb[data-layout="big-stat"] .body-text strong { color: var(--slide-navy); font-weight: 800; }
 
-  .slide-thumb[data-layout="common-mistakes"] .h1 { margin-top: 1cqw; font-family: "Fraunces",serif; font-weight: 900; font-size: 5cqw; line-height: 1.05; letter-spacing: -0.022em; color: #fff; text-align: center; }
+  .slide-thumb[data-layout="common-mistakes"] .h1 { margin-top: 1cqw; font-family: "Fraunces",serif; font-weight: 900; font-size: 7cqw; line-height: 1.05; letter-spacing: -0.022em; color: #fff; text-align: center; }
   .slide-thumb[data-layout="common-mistakes"] .h1 em { font-style: normal; color: var(--brass); }
   .slide-thumb[data-layout="common-mistakes"] ul.pill-list { margin-top: 3cqw; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1.8cqw; align-items: center; }
   .slide-thumb[data-layout="common-mistakes"] ul.pill-list li { display: flex; align-items: center; gap: 1.8cqw; background: rgba(245,241,232,0.06); border: 0.15cqw solid rgba(200,162,75,0.25); border-radius: 1.2cqw; padding: 1.8cqw 2.2cqw; font-family: "Inter",sans-serif; font-weight: 700; font-size: 2.1cqw; color: var(--slide-paper); }
   .slide-thumb[data-layout="common-mistakes"] .closer { text-align: center; }
 
-  .slide-thumb[data-layout="three-steps"] .h1 { margin-top: 1cqw; font-family: "Fraunces",serif; font-weight: 900; font-size: 5cqw; line-height: 1; letter-spacing: -0.022em; color: var(--slide-navy); text-align: center; }
+  .slide-thumb[data-layout="three-steps"] .h1 { margin-top: 1cqw; font-family: "Fraunces",serif; font-weight: 900; font-size: 7cqw; line-height: 1; letter-spacing: -0.022em; color: var(--slide-navy); text-align: center; }
   .slide-thumb[data-layout="three-steps"] .h1 em { font-style: normal; color: var(--brass-deep); }
   .slide-thumb[data-layout="three-steps"] ol.steps { margin-top: 3.4cqw; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 2.4cqw; align-items: center; }
   .slide-thumb[data-layout="three-steps"] ol.steps li { display: grid; grid-template-columns: 5cqw 6cqw 1fr; gap: 1.6cqw; align-items: center; max-width: 90%; }
@@ -327,7 +339,7 @@
   .slide-thumb[data-layout="three-steps"] .step-body strong { color: var(--brass-deep); }
   .slide-thumb[data-layout="three-steps"] .closer-banner { align-self: center; }
 
-  .slide-thumb[data-layout="testimonials"] .h1 { text-align: center; margin-top: 1cqw; font-family: "Fraunces",serif; font-weight: 900; font-size: 5cqw; line-height: 1.05; letter-spacing: -0.022em; color: #fff; }
+  .slide-thumb[data-layout="testimonials"] .h1 { text-align: center; margin-top: 1cqw; font-family: "Fraunces",serif; font-weight: 900; font-size: 7cqw; line-height: 1.05; letter-spacing: -0.022em; color: #fff; }
   .slide-thumb[data-layout="testimonials"] .h1 em { font-style: normal; color: var(--brass); }
   .slide-thumb[data-layout="testimonials"] .cards { margin-top: 3cqw; display: flex; flex-direction: column; gap: 1.8cqw; }
   .slide-thumb[data-layout="testimonials"] .card { display: grid; grid-template-columns: 6cqw 1fr; gap: 2cqw; align-items: center; background: rgba(245,241,232,0.06); border: 0.15cqw solid rgba(200,162,75,0.2); border-radius: 1.4cqw; padding: 1.8cqw; }
@@ -335,7 +347,7 @@
   .slide-thumb[data-layout="testimonials"] .quote { font-family: "Inter",sans-serif; font-weight: 600; font-size: 1.85cqw; line-height: 1.3; color: var(--slide-paper); }
   .slide-thumb[data-layout="testimonials"] .stars { color: var(--brass-bright); font-size: 1.5cqw; letter-spacing: 0.15em; margin-bottom: 0.3cqw; }
 
-  .slide-thumb[data-layout="why-us"] .h1 { margin-top: 1cqw; font-family: "Fraunces",serif; font-weight: 900; font-size: 5.2cqw; line-height: 1; letter-spacing: -0.025em; color: var(--slide-navy); text-align: center; }
+  .slide-thumb[data-layout="why-us"] .h1 { margin-top: 1cqw; font-family: "Fraunces",serif; font-weight: 900; font-size: 7cqw; line-height: 1; letter-spacing: -0.025em; color: var(--slide-navy); text-align: center; }
   .slide-thumb[data-layout="why-us"] .h1 em { font-style: normal; color: var(--brass-deep); }
   .slide-thumb[data-layout="why-us"] ul.benefit-list { margin-top: 3cqw; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1.8cqw; align-items: center; }
   .slide-thumb[data-layout="why-us"] ul.benefit-list li { display: flex; align-items: center; gap: 1.6cqw; font-family: "Inter",sans-serif; font-weight: 700; font-size: 2.05cqw; color: var(--slide-navy); }
@@ -346,7 +358,7 @@
   .slide-thumb[data-layout="urgency"] { background: var(--slide-navy-deep); }
   .slide-thumb[data-layout="urgency"] .clock-wrap { align-self: center; margin-top: 0; width: 16cqw; height: 16cqw; border-radius: 50%; border: 0.35cqw solid var(--brass); background: rgba(200,162,75,0.08); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 6cqw rgba(200,162,75,0.15); }
   .slide-thumb[data-layout="urgency"] .clock-wrap svg { width: 9cqw; height: 9cqw; }
-  .slide-thumb[data-layout="urgency"] .h1 { text-align: center; margin-top: 3cqw; font-family: "Fraunces",serif; font-weight: 900; font-size: 5.4cqw; line-height: 1; letter-spacing: -0.025em; color: #fff; }
+  .slide-thumb[data-layout="urgency"] .h1 { text-align: center; margin-top: 3cqw; font-family: "Fraunces",serif; font-weight: 900; font-size: 7.2cqw; line-height: 1; letter-spacing: -0.025em; color: #fff; }
   .slide-thumb[data-layout="urgency"] .h1 em { font-style: normal; color: var(--brass); }
   .slide-thumb[data-layout="urgency"] .reasons { margin-top: 3cqw; display: flex; flex-direction: column; gap: 1.6cqw; }
   .slide-thumb[data-layout="urgency"] .reason { display: flex; align-items: center; gap: 1.6cqw; font-family: "Inter",sans-serif; font-weight: 600; font-size: 1.95cqw; color: var(--slide-paper); }
@@ -354,7 +366,7 @@
   .reason-icon svg { width: 1.8cqw; height: 1.8cqw; }
   .slide-thumb[data-layout="urgency"] .closer { text-align: center; }
 
-  .slide-thumb[data-layout="cta"] .h1 { font-family: "Fraunces",serif; font-weight: 900; font-size: 4.4cqw; line-height: 1.02; letter-spacing: -0.022em; color: var(--slide-navy); max-width: 90%; }
+  .slide-thumb[data-layout="cta"] .h1 { font-family: "Fraunces",serif; font-weight: 900; font-size: 6.8cqw; line-height: 1.02; letter-spacing: -0.022em; color: var(--slide-navy); max-width: 90%; }
   .slide-thumb[data-layout="cta"] .h1 em { font-style: normal; color: var(--brass-deep); }
   .slide-thumb[data-layout="cta"] .offer-block { margin-top: 2.4cqw; display: flex; flex-direction: column; align-items: flex-start; }
   .slide-thumb[data-layout="cta"] .offer-caption { font-family: "Inter",sans-serif; font-weight: 700; font-size: 2.2cqw; color: var(--slide-ink-mid); }
@@ -427,16 +439,16 @@ function renderBrand(b) {
   return `<div class="brand"><div class="mark">${esc(b.wordmark_main)} <em>${esc(b.wordmark_sub)}</em></div><div class="subline">${esc(b.tagline)}</div></div>`;
 }
 const LAYOUTS = {
-  hero: (s, b) => `<div class="frame"><div class="num">${s.n}</div><div class="body"><div class="lede">${esc(s.fields.lede)}</div><h1 class="h1">${esc(s.fields.headline_line1)}<br>${esc(s.fields.headline_line2)}<br>${s.fields.headline_highlight_line === 3 ? `<em>${esc(s.fields.headline_line3)}</em>` : esc(s.fields.headline_line3)}</h1><p class="sub">${esc(s.fields.sub_pre)}<strong>${esc(s.fields.sub_strong)}</strong></p></div><div class="closer">${esc(s.fields.closer)}</div>${renderBrand(b)}</div>`,
-  'brutal-truth': (s, b) => `<div class="frame"><div class="num">${s.n}</div><h1 class="h1">${esc(s.fields.headline_pre)}<em>${esc(s.fields.headline_highlight)}</em>${esc(s.fields.headline_post)}</h1><p class="sub">${esc(s.fields.sub_pre)}<strong>${esc(s.fields.sub_strong)}</strong></p><div class="heading">${esc(s.fields.list_heading)}</div><ul class="x-list">${s.fields.items.map(it => `<li><span class="x-circle">${ICONS.x}</span>${esc(it)}</li>`).join('')}</ul><div class="closer">${esc(s.fields.closer_pre)}<em>${esc(s.fields.closer_highlight)}</em></div>${renderBrand(b)}</div>`,
-  'free-guide': (s, b) => `<div class="frame"><div class="num">${s.n}</div><div class="banner-top">${esc(s.fields.top_banner)}</div><div class="caption">${esc(s.fields.caption)}</div><h1 class="h1">${esc(s.fields.headline_pre)}<em>${esc(s.fields.headline_highlight)}</em>${esc(s.fields.headline_post)}</h1><div class="grid"><div><div class="inside">${esc(s.fields.list_heading)}</div><ul class="check-list">${s.fields.items.map(it => `<li><span class="check-circle">${ICONS.check}</span>${esc(it)}</li>`).join('')}</ul></div><div class="book"><div class="book-title">${s.fields.book_title_lines.map(esc).join('<br>')}</div><div class="book-mark">${esc(s.fields.book_mark)}</div></div></div><div class="closer-banner">${esc(s.fields.closer_banner)}</div>${renderBrand(b)}</div>`,
-  'big-stat': (s, b) => `<div class="frame"><div class="num">${s.n}</div><div class="stat-caption">${esc(s.fields.stat_caption)}</div><div class="bignum"><em>${esc(s.fields.stat_currency)}</em>${esc(s.fields.stat_number)}<em>${esc(s.fields.stat_plus)}</em></div><div class="stat-label">${esc(s.fields.stat_label)}</div><div class="badges">${s.fields.badges.map(bd => `<div class="badge"><div class="b-icon">${ICONS[bd.icon] || ICONS.shield}</div><div class="b-label">${esc(bd.label_line1)}<br>${esc(bd.label_line2)}</div></div>`).join('')}</div><p class="body-text">${esc(s.fields.body_pre)}<strong>${esc(s.fields.body_strong)}</strong>${esc(s.fields.body_post)}</p>${renderBrand(b)}</div>`,
-  'common-mistakes': (s, b) => `<div class="frame"><div class="num">${s.n}</div><h1 class="h1">${esc(s.fields.headline_pre)}<em>${esc(s.fields.headline_highlight)}</em></h1><ul class="pill-list">${s.fields.items.map(it => `<li><span class="x-circle">${ICONS.x}</span>${esc(it)}</li>`).join('')}</ul><div class="closer">${esc(s.fields.closer_pre)}<em>${esc(s.fields.closer_highlight)}</em></div>${renderBrand(b)}</div>`,
-  'three-steps': (s, b) => `<div class="frame"><div class="num">${s.n}</div><h1 class="h1">${esc(s.fields.headline_pre)}<em>${esc(s.fields.headline_highlight)}</em></h1><ol class="steps">${s.fields.steps.map(st => `<li><div class="step-num-square">${st.n}</div><div class="step-circle">${ICONS[st.icon] || ICONS.chat}</div><div class="step-body">${esc(st.body_pre)}${st.body_strong1 ? `<strong>${esc(st.body_strong1)}</strong>` : ''}${esc(st.body_mid)}${st.body_strong2 ? `<strong>${esc(st.body_strong2)}</strong>` : ''}${esc(st.body_post)}</div></li>`).join('')}</ol><div class="closer-banner">${esc(s.fields.closer_banner)}</div>${renderBrand(b)}</div>`,
-  testimonials: (s, b) => `<div class="frame"><div class="num">${s.n}</div><h1 class="h1">${esc(s.fields.headline_pre)}<em>${esc(s.fields.headline_highlight)}</em></h1><div class="cards">${s.fields.cards.map(c => `<div class="card"><div class="avatar">${esc(c.initial)}</div><div><div class="stars">★ ★ ★ ★ ★</div><div class="quote">${esc(c.quote)}</div></div></div>`).join('')}</div>${renderBrand(b)}</div>`,
-  'why-us': (s, b) => `<div class="frame"><div class="num">${s.n}</div><h1 class="h1">${esc(s.fields.headline_pre)}<em>${esc(s.fields.headline_highlight)}</em>${esc(s.fields.headline_post)}</h1><ul class="benefit-list">${s.fields.items.map(it => `<li><span class="benefit-check">${ICONS.check_b}</span>${esc(it)}</li>`).join('')}</ul><div class="closer-banner">${esc(s.fields.closer_banner)}</div>${renderBrand(b)}</div>`,
-  urgency: (s, b) => `<div class="frame"><div class="num">${s.n}</div><div class="clock-wrap">${ICONS.clock}</div><h1 class="h1">${esc(s.fields.headline_pre)}<em>${esc(s.fields.headline_highlight)}</em></h1><div class="reasons">${s.fields.reasons.map(r => `<div class="reason"><span class="reason-icon">${ICONS[r.icon] || ICONS.alert}</span>${esc(r.text)}</div>`).join('')}</div><div class="closer">${esc(s.fields.closer_pre)}<em>${esc(s.fields.closer_highlight)}</em></div>${renderBrand(b)}</div>`,
-  cta: (s, b) => `<div class="frame"><div class="num">${s.n}</div><h1 class="h1">${esc(s.fields.headline_pre)}<em>${esc(s.fields.headline_highlight)}</em>${esc(s.fields.headline_post)}</h1><div class="offer-block"><span class="offer-caption">${esc(s.fields.offer_caption_pre)}<strong>${esc(s.fields.offer_caption_strong)}</strong>${esc(s.fields.offer_caption_post)}</span><span class="offer-big">${esc(s.fields.offer_big)}</span><span class="offer-detail">${esc(s.fields.offer_detail_pre)}<br><em>${esc(s.fields.offer_detail_em)}</em></span></div><div class="or-call">${esc(s.fields.phone_label)}</div><div class="phone-button">${ICONS.phone}${esc(s.fields.phone_number)}</div>${renderBrand(b)}</div>`,
+  hero: (s, b) => `<div class="frame"><div class="num">${s.n}</div><div class="content"><div class="body"><div class="lede">${esc(s.fields.lede)}</div><h1 class="h1">${esc(s.fields.headline_line1)}<br>${esc(s.fields.headline_line2)}<br>${s.fields.headline_highlight_line === 3 ? `<em>${esc(s.fields.headline_line3)}</em>` : esc(s.fields.headline_line3)}</h1><p class="sub">${esc(s.fields.sub_pre)}<strong>${esc(s.fields.sub_strong)}</strong></p></div><div class="closer">${esc(s.fields.closer)}</div></div>${renderBrand(b)}</div>`,
+  'brutal-truth': (s, b) => `<div class="frame"><div class="num">${s.n}</div><div class="content"><h1 class="h1">${esc(s.fields.headline_pre)}<em>${esc(s.fields.headline_highlight)}</em>${esc(s.fields.headline_post)}</h1><p class="sub">${esc(s.fields.sub_pre)}<strong>${esc(s.fields.sub_strong)}</strong></p><div class="heading">${esc(s.fields.list_heading)}</div><ul class="x-list">${s.fields.items.map(it => `<li><span class="x-circle">${ICONS.x}</span>${esc(it)}</li>`).join('')}</ul><div class="closer">${esc(s.fields.closer_pre)}<em>${esc(s.fields.closer_highlight)}</em></div></div>${renderBrand(b)}</div>`,
+  'free-guide': (s, b) => `<div class="frame"><div class="num">${s.n}</div><div class="content"><div class="banner-top">${esc(s.fields.top_banner)}</div><div class="caption">${esc(s.fields.caption)}</div><h1 class="h1">${esc(s.fields.headline_pre)}<em>${esc(s.fields.headline_highlight)}</em>${esc(s.fields.headline_post)}</h1><div class="grid"><div><div class="inside">${esc(s.fields.list_heading)}</div><ul class="check-list">${s.fields.items.map(it => `<li><span class="check-circle">${ICONS.check}</span>${esc(it)}</li>`).join('')}</ul></div><div class="book"><div class="book-title">${s.fields.book_title_lines.map(esc).join('<br>')}</div><div class="book-mark">${esc(s.fields.book_mark)}</div></div></div><div class="closer-banner">${esc(s.fields.closer_banner)}</div></div>${renderBrand(b)}</div>`,
+  'big-stat': (s, b) => `<div class="frame"><div class="num">${s.n}</div><div class="content"><div class="stat-caption">${esc(s.fields.stat_caption)}</div><div class="bignum"><em>${esc(s.fields.stat_currency)}</em>${esc(s.fields.stat_number)}<em>${esc(s.fields.stat_plus)}</em></div><div class="stat-label">${esc(s.fields.stat_label)}</div><div class="badges">${s.fields.badges.map(bd => `<div class="badge"><div class="b-icon">${ICONS[bd.icon] || ICONS.shield}</div><div class="b-label">${esc(bd.label_line1)}<br>${esc(bd.label_line2)}</div></div>`).join('')}</div><p class="body-text">${esc(s.fields.body_pre)}<strong>${esc(s.fields.body_strong)}</strong>${esc(s.fields.body_post)}</p></div>${renderBrand(b)}</div>`,
+  'common-mistakes': (s, b) => `<div class="frame"><div class="num">${s.n}</div><div class="content"><h1 class="h1">${esc(s.fields.headline_pre)}<em>${esc(s.fields.headline_highlight)}</em></h1><ul class="pill-list">${s.fields.items.map(it => `<li><span class="x-circle">${ICONS.x}</span>${esc(it)}</li>`).join('')}</ul><div class="closer">${esc(s.fields.closer_pre)}<em>${esc(s.fields.closer_highlight)}</em></div></div>${renderBrand(b)}</div>`,
+  'three-steps': (s, b) => `<div class="frame"><div class="num">${s.n}</div><div class="content"><h1 class="h1">${esc(s.fields.headline_pre)}<em>${esc(s.fields.headline_highlight)}</em></h1><ol class="steps">${s.fields.steps.map(st => `<li><div class="step-num-square">${st.n}</div><div class="step-circle">${ICONS[st.icon] || ICONS.chat}</div><div class="step-body">${esc(st.body_pre)}${st.body_strong1 ? `<strong>${esc(st.body_strong1)}</strong>` : ''}${esc(st.body_mid)}${st.body_strong2 ? `<strong>${esc(st.body_strong2)}</strong>` : ''}${esc(st.body_post)}</div></li>`).join('')}</ol><div class="closer-banner">${esc(s.fields.closer_banner)}</div></div>${renderBrand(b)}</div>`,
+  testimonials: (s, b) => `<div class="frame"><div class="num">${s.n}</div><div class="content"><h1 class="h1">${esc(s.fields.headline_pre)}<em>${esc(s.fields.headline_highlight)}</em></h1><div class="cards">${s.fields.cards.map(c => `<div class="card"><div class="avatar">${esc(c.initial)}</div><div><div class="stars">★ ★ ★ ★ ★</div><div class="quote">${esc(c.quote)}</div></div></div>`).join('')}</div></div>${renderBrand(b)}</div>`,
+  'why-us': (s, b) => `<div class="frame"><div class="num">${s.n}</div><div class="content"><h1 class="h1">${esc(s.fields.headline_pre)}<em>${esc(s.fields.headline_highlight)}</em>${esc(s.fields.headline_post)}</h1><ul class="benefit-list">${s.fields.items.map(it => `<li><span class="benefit-check">${ICONS.check_b}</span>${esc(it)}</li>`).join('')}</ul><div class="closer-banner">${esc(s.fields.closer_banner)}</div></div>${renderBrand(b)}</div>`,
+  urgency: (s, b) => `<div class="frame"><div class="num">${s.n}</div><div class="content"><div class="clock-wrap">${ICONS.clock}</div><h1 class="h1">${esc(s.fields.headline_pre)}<em>${esc(s.fields.headline_highlight)}</em></h1><div class="reasons">${s.fields.reasons.map(r => `<div class="reason"><span class="reason-icon">${ICONS[r.icon] || ICONS.alert}</span>${esc(r.text)}</div>`).join('')}</div><div class="closer">${esc(s.fields.closer_pre)}<em>${esc(s.fields.closer_highlight)}</em></div></div>${renderBrand(b)}</div>`,
+  cta: (s, b) => `<div class="frame"><div class="num">${s.n}</div><div class="content"><h1 class="h1">${esc(s.fields.headline_pre)}<em>${esc(s.fields.headline_highlight)}</em>${esc(s.fields.headline_post)}</h1><div class="offer-block"><span class="offer-caption">${esc(s.fields.offer_caption_pre)}<strong>${esc(s.fields.offer_caption_strong)}</strong>${esc(s.fields.offer_caption_post)}</span><span class="offer-big">${esc(s.fields.offer_big)}</span><span class="offer-detail">${esc(s.fields.offer_detail_pre)}<br><em>${esc(s.fields.offer_detail_em)}</em></span></div><div class="or-call">${esc(s.fields.phone_label)}</div><div class="phone-button">${ICONS.phone}${esc(s.fields.phone_number)}</div></div>${renderBrand(b)}</div>`,
 };
 
 /* ── state ─────────────────────────────────────────────────────── */
